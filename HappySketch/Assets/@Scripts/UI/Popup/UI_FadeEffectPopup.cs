@@ -13,8 +13,6 @@ public class UI_FadeEffectPopup : UI_BasePopup
     private Action onFadeOutCallBack = null;
     private Action onFadeInCallBack = null;
 
-    bool isWait = false;
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -85,7 +83,7 @@ public class UI_FadeEffectPopup : UI_BasePopup
         if (fadeInEffectCondition != null)
         {
             yield return new WaitUntil(fadeInEffectCondition);
-            yield return new WaitForSeconds(1f); // 테스트를 위한 1초 대기 (임시)
+            yield return new WaitForSeconds(1f); // 1초 대기 (임시)
         }
 
         // FadeIn Effect

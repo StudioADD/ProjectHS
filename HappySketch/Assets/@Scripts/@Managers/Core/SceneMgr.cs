@@ -9,19 +9,20 @@ public class SceneMgr
     public BaseScene CurrentScene { get; private set; }
 
     private Define.EScene nextScene = Define.EScene.Unknown;
-    private bool isCompleteLoadingScene = false;
+
+    private int loadingProgress = 100; // 0 ~ 100
 
     public void SetCurrentScene(BaseScene currScene)
     {
         CurrentScene = currScene;
     }
 
-    public bool IsCompleteLoadingScene() => isCompleteLoadingScene;
+    public bool IsCompleteLoadingScene() => loadingProgress == 100;
+    public int GetLoadingSceneProgress() => loadingProgress;
 
     public void LoadScene(Define.EScene type)
     {
         nextScene = type;
-        isCompleteLoadingScene = false;
 
         UIFadeEffectParam param = new UIFadeEffectParam(IsCompleteLoadingScene, LoadSceneAsync);
         Managers.UI.OpenPopupUI<UI_FadeEffectPopup>(param);
@@ -36,10 +37,14 @@ public class SceneMgr
     private IEnumerator ILoadSceneAsync(Define.EScene type)
     {
         AsyncOperation AsyncLoad = SceneManager.LoadSceneAsync(GetSceneName(type));
-        
-        yield return new WaitUntil(() => AsyncLoad.isDone);
 
-        isCompleteLoadingScene = true;
+        loadingProgress = 0;
+        while (!AsyncLoad.isDone)
+        {
+            loadingProgress = (int)(AsyncLoad.progress * 100.0f);
+            yield return null;
+        }
+        loadingProgress = 100;
     }
 
     private string GetSceneName(Define.EScene type)
