@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InitBase : MonoBehaviour
+public abstract class InitBase : MonoBehaviour
 {
     protected bool _init = false;
 
@@ -16,7 +16,7 @@ public class InitBase : MonoBehaviour
     }
 
     /// <summary>
-    /// ÀçÁ¤ÀÇ ¹× È®ÀåÇÏÁö ¸»°í Init »ç¿ëÇØÁÖ¼¼¿ä.
+    /// ì¬ì •ì˜ ë° í™•ì¥í•˜ì§€ ë§ê³  Init ì‚¬ìš©í•´ì£¼ì„¸ìš”.
     /// </summary>
     protected virtual void Awake()
     {
