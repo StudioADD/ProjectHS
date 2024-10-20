@@ -1,0 +1,16 @@
+{
+  "Tests": [
+    {
+      "DataId": 0,
+      "TestName": "테스트1"
+    },
+    {
+      "DataId": 1,
+      "TestName": "테스트2"
+    },
+    {
+      "DataId": 2,
+      "TestName": "테스트3"
+    }
+  ]
+}
