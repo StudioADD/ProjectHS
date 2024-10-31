@@ -2,43 +2,19 @@
   "Tests": [
     {
       "DataId": 0,
-      "TestName": "ï¿½×½ï¿½Æ®1"
+      "TestName": "asdf"
     },
     {
       "DataId": 1,
-      "TestName": "ï¿½×½ï¿½Æ®2"
+      "TestName": "qwer"
     },
     {
       "DataId": 2,
-      "TestName": "ï¿½×½ï¿½Æ®3"
+      "TestName": "zxcv"
     },
     {
       "DataId": 3,
-      "TestName": "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
-    },
-    {
-      "DataId": 4,
-      "TestName": "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
-    },
-    {
-      "DataId": 5,
-      "TestName": "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
-    },
-    {
-      "DataId": 6,
-      "TestName": "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
-    },
-    {
-      "DataId": 7,
-      "TestName": "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
-    },
-    {
-      "DataId": 8,
-      "TestName": "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
-    },
-    {
-      "DataId": 9,
-      "TestName": "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+      "TestName": "¤±¤¤¤·¤©"
     }
   ]
 }
