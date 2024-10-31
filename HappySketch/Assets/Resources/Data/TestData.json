@@ -2,15 +2,43 @@
   "Tests": [
     {
       "DataId": 0,
-      "TestName": "테스트1"
+      "TestName": "�׽�Ʈ1"
     },
     {
       "DataId": 1,
-      "TestName": "테스트2"
+      "TestName": "�׽�Ʈ2"
     },
     {
       "DataId": 2,
-      "TestName": "테스트3"
+      "TestName": "�׽�Ʈ3"
+    },
+    {
+      "DataId": 3,
+      "TestName": "��������"
+    },
+    {
+      "DataId": 4,
+      "TestName": "��������"
+    },
+    {
+      "DataId": 5,
+      "TestName": "��������"
+    },
+    {
+      "DataId": 6,
+      "TestName": "��������"
+    },
+    {
+      "DataId": 7,
+      "TestName": "��������"
+    },
+    {
+      "DataId": 8,
+      "TestName": "��������"
+    },
+    {
+      "DataId": 9,
+      "TestName": "��������"
     }
   ]
 }
