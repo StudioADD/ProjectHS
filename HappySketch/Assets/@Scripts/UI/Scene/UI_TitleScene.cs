@@ -12,6 +12,7 @@ public class UI_TitleScene : UI_BaseScene
         return true;
     }
 
+    // Test
     public void OnClickGoToGameScene()
     {
         Managers.Scene.LoadScene(Define.EScene.GameScene);

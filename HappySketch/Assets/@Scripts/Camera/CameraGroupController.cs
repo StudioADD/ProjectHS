@@ -10,11 +10,6 @@ public class CameraGroupController : InitBase
 
     [SerializeField] Vector3 deltaPosVec;
 
-    private void Start()
-    {
-        SetInfo();
-    }
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -23,7 +18,7 @@ public class CameraGroupController : InitBase
         return true;
     }
 
-    private void SetInfo()
+    public void SetInfo()
     {
         // 각 카메라에 같은 세팅을 부여
         leftCamera.SetInfo(deltaPosVec);

@@ -241,7 +241,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Arrow",
+                    "name": "WASD",
                     "id": "010f4192-ce93-455a-ab01-4e7e6f1b5ac5",
                     "path": "2DVector(mode=1)",
                     "interactions": "",

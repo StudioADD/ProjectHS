@@ -4,9 +4,8 @@ using UnityEngine;
 
 public enum EObjectType
 {
-    Player,
-    Monster,
-
+    Creature,
+    
     Max
 }
 
