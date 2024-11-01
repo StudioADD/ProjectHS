@@ -21,7 +21,11 @@ public abstract class Creature : BaseObject
     protected virtual void Reset()
     {
         Collider = Util.GetOrAddComponent<BoxCollider>(this.gameObject);
+        Collider.isTrigger = true;
+
         Rigid = Util.GetOrAddComponent<Rigidbody>(this.gameObject);
+        Rigid.isKinematic = true;
+
         animator = Util.GetOrAddComponent<Animator>(this.gameObject);
     }
 
@@ -31,7 +35,11 @@ public abstract class Creature : BaseObject
             return false;
 
         Collider = GetComponent<BoxCollider>();
+        Collider.isTrigger = true;
+
         Rigid = GetComponent<Rigidbody>();
+        Rigid.isKinematic = true;
+
         animator = GetComponent<Animator>();
 
         return true;
@@ -51,6 +59,16 @@ public abstract class Creature : BaseObject
         Rigid.velocity = veloctiy;
     }
 
+    protected void InitRigidVelocityX()
+    {
+        Rigid.velocity = new Vector3(0, Rigid.velocity.y, Rigid.velocity.z);
+    }
+
+    protected void SetRigidVelocityX(float velocityX)
+    {
+        Rigid.velocity = new Vector3(velocityX, Rigid.velocity.y, Rigid.velocity.z);
+    }
+
     protected void InitRigidVelocityY()
     {
         Rigid.velocity = new Vector3(Rigid.velocity.x, 0, Rigid.velocity.z);
@@ -59,6 +77,16 @@ public abstract class Creature : BaseObject
     protected void SetRigidVelocityY(float velocityY)
     {
         Rigid.velocity = new Vector3(Rigid.velocity.x, velocityY, Rigid.velocity.z);
+    }
+
+    protected void InitRigidVelocityZ()
+    {
+        Rigid.velocity = new Vector3(Rigid.velocity.x, 0, Rigid.velocity.z);
+    }
+
+    protected void SetRigidVelocityZ(float velocityZ)
+    {
+        Rigid.velocity = new Vector3(Rigid.velocity.x, Rigid.velocity.y, velocityZ);
     }
 
     protected void InitRigidVelocity()

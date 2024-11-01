@@ -7,6 +7,8 @@ public class GameScene : BaseScene
 {
     [SerializeField] CameraGroupController cameraGroup;
 
+    BaseStage currStage;
+
     private void Start()
     {
         SetInfo();
@@ -20,6 +22,11 @@ public class GameScene : BaseScene
         SceneType = Define.EScene.GameScene;
 
         return true;
+    }
+
+    private void SetGame(int stageId)
+    {
+
     }
 
     private void SetInfo()

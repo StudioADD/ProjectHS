@@ -1,11 +1,13 @@
+using Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public enum EMonsterType
 {
-    SmallShark = 0,
-    BigShark = 1,
+    TestMonster = 0,
+    SmallShark,
+    BigShark,
 
     Max
 }
@@ -13,6 +15,8 @@ public enum EMonsterType
 public class Monster : Creature
 {
     public EMonsterType MonsterType { get; protected set; }
+
+    private JMonsterData data = null;
 
     public override bool Init()
     {
@@ -29,6 +33,12 @@ public class Monster : Creature
     {
         MonsterType = (EMonsterType)templateId;
 
-        // MonsterType에 따른 정보를 가지고 옴
+        data = Managers.Data.MonsterDict[(int)MonsterType];
+    }
+
+    private void Update()
+    {
+        if(data != null)
+            SetRigidVelocityX(data.MoveSpeed * -100f);
     }
 }

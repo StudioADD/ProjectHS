@@ -10,11 +10,12 @@ public interface ILoader<Key, Value>
 public class DataMgr
 {
     public Dictionary<int, JTestData> TestDict { get; private set; } = new Dictionary<int, JTestData>();
-
+    public Dictionary<int, JMonsterData> MonsterDict { get; private set; } = new Dictionary<int, JMonsterData>();
 
     public void Init()
     {
         TestDict = LoadJson<TestDataLoader, int, JTestData>("TestData").MakeDict();
+        MonsterDict = LoadJson<MonsterDataLoader, int, JMonsterData>("MonsterData").MakeDict();
     } 
 
     public Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>

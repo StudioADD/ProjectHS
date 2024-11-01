@@ -12,6 +12,12 @@ public class Managers : MonoBehaviour
     private static Managers s_instance;
     private static Managers Instance { get { Init(); return s_instance; } }
 
+    #region Contents
+    private GameMgr _game = new GameMgr();
+
+    public static GameMgr Game { get { return Instance?._game; } }
+    #endregion
+
     #region Core
     private DataMgr _data = new DataMgr();
     private InputMgr _input = null; // Init에서 생성

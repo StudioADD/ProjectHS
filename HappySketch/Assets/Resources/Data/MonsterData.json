@@ -1,0 +1,10 @@
+{
+  "Monsters": [
+    {
+      "DataId": 0,
+      "Name": "�׽�Ʈ ����",
+      "MoveSpeed": 100,
+      "Damage": 100
+    }
+  ]
+}

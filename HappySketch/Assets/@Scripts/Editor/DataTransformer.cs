@@ -19,6 +19,7 @@ public class DataTransformer : EditorWindow
     public static void ParseExcelDataToJson()
     {
         ParseExcelDataToJson<TestDataLoader, JTestData>("Test");
+        ParseExcelDataToJson<MonsterDataLoader, JMonsterData>("Monster");
 
         Debug.Log("DataTransformer Completed");
     }
