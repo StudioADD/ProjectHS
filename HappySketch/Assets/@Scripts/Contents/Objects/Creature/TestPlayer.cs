@@ -13,8 +13,7 @@ public class TestPlayer : Creature
 
     private void Update()
     {
-        if(Rigid != null)
-            SetRigidVelocity(moveDirection);
+        SetRigidVelocity(moveDirection);
     }
 
     public override bool Init()
@@ -23,6 +22,7 @@ public class TestPlayer : Creature
             return false;
 
         this.gameObject.tag = ETag.Player.ToString();
+        this.gameObject.layer = (int)ELayer.Player;
         CreatureType = ECreatureType.Player;
 
         return true;

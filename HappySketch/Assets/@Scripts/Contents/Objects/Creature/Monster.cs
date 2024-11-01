@@ -2,6 +2,7 @@ using Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public enum EMonsterType
 {
@@ -24,6 +25,7 @@ public class Monster : Creature
             return false;
 
         this.gameObject.tag = Define.ETag.Monster.ToString();
+        this.gameObject.layer = (int)ELayer.Monster;
         CreatureType = ECreatureType.Monster;
 
         return true;

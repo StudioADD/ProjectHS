@@ -26,6 +26,10 @@ public static class Define
 
         Water = 4,
         UI = 5,
+
+        Player = 6,
+        Monster = 7,
+
     }
 
     /// <summary>
@@ -40,7 +44,7 @@ public static class Define
         GameController,
 
         Monster,
-        Item,
+        CollisionTrigger,
     }
 
     public enum ETeamType
