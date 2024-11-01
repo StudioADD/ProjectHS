@@ -13,20 +13,31 @@ public enum ECreatureType
 public abstract class Creature : BaseObject
 {
     public ECreatureType CreatureType { get; protected set; }
-    public BoxCollider Collider { get; private set; }
     protected Rigidbody Rigid { get; private set; }
 
+    [SerializeField, ReadOnly]
+    protected CollisionTrigger collisionTrigger = null;
     protected Animator animator;
 
     protected virtual void Reset()
     {
-        Collider = Util.GetOrAddComponent<BoxCollider>(this.gameObject);
-        Collider.isTrigger = true;
-
         Rigid = Util.GetOrAddComponent<Rigidbody>(this.gameObject);
         Rigid.isKinematic = true;
 
         animator = Util.GetOrAddComponent<Animator>(this.gameObject);
+
+        collisionTrigger = Util.FindChild<CollisionTrigger>(this.gameObject, "CollisionTriggerObj", true);
+        
+        if(collisionTrigger == null)
+        {
+            GameObject go = new GameObject();
+            go.name = "CollisionTriggerObj";
+            go.AddComponent<CollisionTrigger>();
+            go.transform.parent = this.transform;
+            this.transform.localPosition = Vector3.zero;
+            
+            collisionTrigger = go.GetComponent<CollisionTrigger>();
+        }
     }
 
     public override bool Init()
@@ -34,20 +45,15 @@ public abstract class Creature : BaseObject
         if (base.Init() == false)
             return false;
 
-        Collider = GetComponent<BoxCollider>();
-        Collider.isTrigger = true;
-
         Rigid = GetComponent<Rigidbody>();
-        Rigid.isKinematic = true;
-
         animator = GetComponent<Animator>();
 
         return true;
     }
 
     public abstract void SetInfo(int templateId);
+    
     #region Rigid
-
     protected void SetRigidVelocity(Vector3 velocity)
     {
         Rigid.velocity = velocity;

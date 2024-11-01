@@ -13,7 +13,8 @@ public class TestPlayer : Creature
 
     private void Update()
     {
-        SetRigidVelocity(moveDirection);
+        if(Rigid != null)
+            SetRigidVelocity(moveDirection);
     }
 
     public override bool Init()
