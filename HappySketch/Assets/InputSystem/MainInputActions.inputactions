@@ -15,36 +15,18 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "WASDKey",
+                    "type": "Value",
+                    "id": "709873ec-a53c-4095-8149-1afe62e1317a",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "SpaceKey",
                     "type": "Button",
                     "id": "354b95dd-9076-4f08-9778-0797692fd590",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "AKey",
-                    "type": "Button",
-                    "id": "d18645b8-cfc8-44a4-9de9-c8b51ec68693",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "SKey",
-                    "type": "Button",
-                    "id": "fa27ae3a-c0d9-4ad5-9092-5c17ca2d10cc",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "DKey",
-                    "type": "Button",
-                    "id": "39259908-598d-4a90-b1b2-d8371751b97f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -183,39 +165,6 @@
                 },
                 {
                     "name": "",
-                    "id": "69de52c1-441a-4cc4-b651-97447cdf2e70",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "AKey",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "776c1c01-d1ec-415b-bef6-6cf5c667df8a",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "SKey",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "996111ec-491a-4849-9f67-90a3edff2762",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "DKey",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "58aa4d5a-dac2-4728-9975-a81f61bf1d2f",
                     "path": "<Keyboard>/f",
                     "interactions": "",
@@ -290,6 +239,61 @@
                     "action": "Num2Key",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "Arrow",
+                    "id": "010f4192-ce93-455a-ab01-4e7e6f1b5ac5",
+                    "path": "2DVector(mode=1)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WASDKey",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "10a33b4d-3f8b-413d-9b82-c2d4f19d1c83",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WASDKey",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "a905ed51-3b59-4c26-9184-3d472f713a88",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WASDKey",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "d61b6dd2-0fbd-46a8-83ad-350bff4a7753",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WASDKey",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "426ed450-325f-45f5-8a4c-e3865b668dd6",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WASDKey",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

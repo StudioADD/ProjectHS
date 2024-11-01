@@ -1,24 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Define;
 
-public class GameScene : BaseScene
+public enum EObjectType
 {
-    [SerializeField] CameraGroupController cameraGroup;
+    Player,
+    Monster,
+
+    Max
+}
+
+public abstract class BaseObject : InitBase
+{
+    public EObjectType ObjectType { get; protected set; }
 
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
 
-        SceneType = Define.EScene.GameScene;
-
         return true;
     }
 
-    public override void Clear()
-    {
-
-    }
+    
 }

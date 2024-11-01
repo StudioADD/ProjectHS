@@ -39,6 +39,13 @@ public static class Define
         Player,
         GameController,
 
+        Monster,
+        Item,
+    }
 
+    public enum ETeamType
+    {
+        Left,
+        Right,
     }
 }
