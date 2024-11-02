@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
+public class MonoSingleton<T> : MonoBehaviour where T : Component
 {
     public static bool Initialized { get; protected set; } = false;
 
@@ -27,6 +27,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
                     instance = obj.GetComponent<T>();
                 }
             }
+
             return instance;
         }
     }
