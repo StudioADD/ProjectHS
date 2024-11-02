@@ -13,16 +13,17 @@ public enum ECreatureType
 public abstract class Creature : BaseObject
 {
     public ECreatureType CreatureType { get; protected set; }
-    public BoxCollider Collider { get; private set; }
-    protected Rigidbody Rigid { get; private set; }
+
+    protected Collider col;
+    private Rigidbody rigid;
+    private Animator animator;
 
     [SerializeField, ReadOnly]
     protected CollisionTrigger collisionTrigger = null;
-    protected Animator animator;
 
     protected virtual void Reset()
     {
-        Rigid = Util.GetOrAddComponent<Rigidbody>(this.gameObject);
+        rigid = Util.GetOrAddComponent<Rigidbody>(this.gameObject);
         animator = Util.GetOrAddComponent<Animator>(this.gameObject);
 
         collisionTrigger = Util.FindChild<CollisionTrigger>(this.gameObject, "CollisionTriggerObj", true);
@@ -42,10 +43,10 @@ public abstract class Creature : BaseObject
         if (base.Init() == false)
             return false;
 
-        Rigid = GetComponent<Rigidbody>();
-        Rigid.freezeRotation = true;
+        rigid = GetComponent<Rigidbody>();
+        rigid.freezeRotation = true;
 
-        Collider = GetComponent<BoxCollider>();
+        col = GetComponent<BoxCollider>();
         animator = GetComponent<Animator>();
 
         if(collisionTrigger != null)
@@ -67,48 +68,48 @@ public abstract class Creature : BaseObject
     #region Rigid
     protected void SetRigidVelocity(Vector3 velocity)
     {
-        Rigid.velocity = velocity;
+        rigid.velocity = velocity;
     }
 
     protected void SetRigidVelocity(Vector2 velocity)
     {
-        Vector3 veloctiy = new Vector3(velocity.x, Rigid.velocity.y, velocity.y);
-        Rigid.velocity = veloctiy;
+        Vector3 veloctiy = new Vector3(velocity.x, rigid.velocity.y, velocity.y);
+        rigid.velocity = veloctiy;
     }
 
     protected void InitRigidVelocityX()
     {
-        Rigid.velocity = new Vector3(0, Rigid.velocity.y, Rigid.velocity.z);
+        rigid.velocity = new Vector3(0, rigid.velocity.y, rigid.velocity.z);
     }
 
     protected void SetRigidVelocityX(float velocityX)
     {
-        Rigid.velocity = new Vector3(velocityX, Rigid.velocity.y, Rigid.velocity.z);
+        rigid.velocity = new Vector3(velocityX, rigid.velocity.y, rigid.velocity.z);
     }
 
     protected void InitRigidVelocityY()
     {
-        Rigid.velocity = new Vector3(Rigid.velocity.x, 0, Rigid.velocity.z);
+        rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
     }
 
     protected void SetRigidVelocityY(float velocityY)
     {
-        Rigid.velocity = new Vector3(Rigid.velocity.x, velocityY, Rigid.velocity.z);
+        rigid.velocity = new Vector3(rigid.velocity.x, velocityY, rigid.velocity.z);
     }
 
     protected void InitRigidVelocityZ()
     {
-        Rigid.velocity = new Vector3(Rigid.velocity.x, 0, Rigid.velocity.z);
+        rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
     }
 
     protected void SetRigidVelocityZ(float velocityZ)
     {
-        Rigid.velocity = new Vector3(Rigid.velocity.x, Rigid.velocity.y, velocityZ);
+        rigid.velocity = new Vector3(rigid.velocity.x, rigid.velocity.y, velocityZ);
     }
 
     protected void InitRigidVelocity()
     {
-        Rigid.velocity = Vector3.zero;
+        rigid.velocity = Vector3.zero;
     }
     #endregion
 

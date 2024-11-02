@@ -24,7 +24,7 @@ public class TestPlayer : Creature
         this.gameObject.tag = ETag.Player.ToString();
         this.gameObject.layer = (int)ELayer.Player;
         CreatureType = ECreatureType.Player;
-
+        
         return true;
     }
 
