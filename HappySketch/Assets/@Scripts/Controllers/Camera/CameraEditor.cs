@@ -1,14 +1,8 @@
+#if UNITY_EDITOR
 using System;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static Define;
 
-/// <summary>
-/// 에디터에서만 사용하게 될 클래스
-/// </summary>
 public class CameraEditor : TeamCamera
 {
     [Header ("[ 카메라 세팅 영역 ]")]
@@ -30,16 +24,12 @@ public class CameraEditor : TeamCamera
     [Range(-10f, 10f)] 
     [SerializeField] float lookAtHeight = 0f;
 
-
-    private CameraInfoData cameraInfo;
-
     private void Update()
     {
         if(testTarget != null)
             SetTarget(testTarget);
 
-        cameraInfo = new CameraInfoData(fieldOfView, targetDistance, cameraHeight, lookAtHeight);
-        SetInfo(cameraInfo);
+        UpdateCameraInfo();
     }
 
     public override bool Init()
@@ -47,23 +37,28 @@ public class CameraEditor : TeamCamera
         if (base.Init() == false)
             return false;
 
+        stageType = EStageType.None;
+        cameraInfoData = new CameraInfoData(fieldOfView, targetDistance, cameraHeight, lookAtHeight);
+
         return true;
     }
 
     public void InitCameraInfo()
     {
+        stageType = EStageType.None;
         fieldOfView = 60f;
         targetDistance = 5f;
         cameraHeight = 5f;
         lookAtHeight = 0f;
     }
 
-    private void SetCameraInfo(CameraInfoData cameraInfoData)
+    private void UpdateCameraInfo()
     {
-        fieldOfView = cameraInfoData.fieldOfView;
-        targetDistance = cameraInfoData.targetDistance;
-        cameraHeight = cameraInfoData.cameraHeight;
-        lookAtHeight = cameraInfoData.lookAtHeight;
+        cameraInfoData.fieldOfView = fieldOfView;
+        cameraInfoData.targetDistance = targetDistance;
+        cameraInfoData.cameraHeight = cameraHeight;
+        cameraInfoData.lookAtHeight = lookAtHeight;
+        base.SetInfo(cameraInfoData);
     }
 
     public bool LoadCameraInfo()
@@ -74,18 +69,19 @@ public class CameraEditor : TeamCamera
             return false;
         }
 
-        string loadPath = Application.dataPath + AssetsPath.STAGE_JSONDATA_PATH + $"/CameraData{(int)stageType}.json";
-        
-        if(!File.Exists(loadPath))
+        string loadPath = Application.dataPath + DataPath.STAGE_JSONDATA_PATH + $"/CameraData{(int)stageType}.json";
+
+        bool isLoad = base.LoadCameraDataInfo(loadPath);
+
+        if(isLoad)
         {
-            Debug.LogWarning($"로드할 데이터가 없습니다.\n경로 : {loadPath}");
-            return false;
+            fieldOfView = cameraInfoData.fieldOfView;
+            targetDistance = cameraInfoData.targetDistance;
+            cameraHeight = cameraInfoData.cameraHeight;
+            lookAtHeight = cameraInfoData.lookAtHeight;
         }
 
-        string jsonData = File.ReadAllText(loadPath);
-        CameraInfoData cameraInfoData = JsonUtility.FromJson<CameraInfoData>(jsonData);
-        SetCameraInfo(cameraInfoData);
-        return true;
+        return isLoad;
     }
     
     public bool SaveCameraInfo()
@@ -96,12 +92,13 @@ public class CameraEditor : TeamCamera
             return false;
         }
 
-        string savePath = Application.dataPath + AssetsPath.STAGE_JSONDATA_PATH + $"/CameraData{(int)stageType}";
+        string savePath = Application.dataPath + DataPath.STAGE_JSONDATA_PATH + $"/CameraData{(int)stageType}";
         Util.Editor_FileDelete(savePath);
         
-        string jsonData = JsonUtility.ToJson(cameraInfo);
+        string jsonData = JsonUtility.ToJson(cameraInfoData);
         File.WriteAllText(savePath + ".json", jsonData);
 
         return true;
     }
 }
+#endif

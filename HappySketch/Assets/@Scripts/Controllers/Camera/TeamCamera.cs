@@ -1,5 +1,7 @@
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class CameraInfoData
@@ -23,7 +25,7 @@ public class TeamCamera : InitBase
     [SerializeField, ReadOnly] protected Camera cam;
     [SerializeField, ReadOnly] protected BaseObject target = null;
 
-    CameraInfoData cameraInfoData;
+    protected CameraInfoData cameraInfoData;
 
     private void LateUpdate()
     {
@@ -39,15 +41,14 @@ public class TeamCamera : InitBase
             return false;
 
         cam = GetComponent<Camera>();
-        // 카메라 공용 값 세팅이 필요함
-
+        
         return true;
     }
 
     public void SetInfo(CameraInfoData cameraInfoData)
     {
-        this.cameraInfoData = cameraInfoData;
         cam.fieldOfView = cameraInfoData.fieldOfView;
+        this.cameraInfoData = cameraInfoData;
     }
 
     public void SetTarget(BaseObject target) => this.target = target;
@@ -56,5 +57,19 @@ public class TeamCamera : InitBase
     {
         transform.position = target.transform.position + new Vector3(0, cameraInfoData.cameraHeight, cameraInfoData.targetDistance * -1);
         transform.LookAt(target.transform.position + new Vector3(0, cameraInfoData.lookAtHeight, 0));
+    }
+
+    protected bool LoadCameraDataInfo(string loadPath)
+    {
+        if (!File.Exists(loadPath))
+        {
+            Debug.LogWarning($"로드할 데이터가 없습니다.\n경로 : {loadPath}");
+            return false;
+        }
+
+        string jsonData = File.ReadAllText(loadPath);
+        cameraInfoData = JsonUtility.FromJson<CameraInfoData>(jsonData);
+        
+        return true;
     }
 }

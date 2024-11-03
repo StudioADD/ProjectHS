@@ -20,7 +20,7 @@ public class CameraGroupController : InitBase
 
     public void SetInfo()
     {
-        // 각 카메라에 같은 세팅을 부여
+        // 현재 스테이지 Id를 가져와서 각 카메라에 로드경로를 부여
 
     }
 

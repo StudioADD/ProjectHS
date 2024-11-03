@@ -230,7 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
   target: {fileID: 0}
-  stageType: 1
+  stageType: 0
   testTarget: {fileID: 483786395}
   fieldOfView: 60
   targetDistance: 5
