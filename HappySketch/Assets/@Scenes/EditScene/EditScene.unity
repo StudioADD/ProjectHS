@@ -234,7 +234,7 @@ MonoBehaviour:
   testTarget: {fileID: 483786395}
   fieldOfView: 60
   targetDistance: 5
-  cameraHeight: 0
+  cameraHeight: 5
   lookAtHeight: 0
 --- !u!1 &483786388
 GameObject:

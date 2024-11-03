@@ -12,23 +12,26 @@ using static Define;
 public class CameraEditor : TeamCamera
 {
     [Header ("[ 카메라 세팅 영역 ]")]
-    [SerializeField] EStageType stageType = EStageType.None;
-    [SerializeField] BaseObject testTarget;
+    [Space(5f)] [SerializeField]
+    EStageType stageType = EStageType.None;
+    
+    [Space(5f)] [SerializeField]
+    BaseObject testTarget;
 
-    [Range(0f, 180f)]
+    [Space(10f)] [Range(0f, 180f)] 
     [SerializeField] float fieldOfView = 60f;
 
-    [Range(5f, 15f)]
+    [Range(5f, 15f)] 
     [SerializeField] float targetDistance = 5f;
-
-    [Range(-10f, 10f)]
+    
+    [Range(-10f, 10f)] 
     [SerializeField] float cameraHeight = 5f;
-
-    [Range(-10f, 10f)]
+    
+    [Range(-10f, 10f)] 
     [SerializeField] float lookAtHeight = 0f;
 
-    private CameraInfoData cameraInfo;
 
+    private CameraInfoData cameraInfo;
 
     private void Update()
     {
@@ -63,12 +66,12 @@ public class CameraEditor : TeamCamera
         lookAtHeight = cameraInfoData.lookAtHeight;
     }
 
-    public void LoadCameraInfo()
+    public bool LoadCameraInfo()
     {
         if(stageType == EStageType.None)
         {
             Debug.LogWarning("스테이지 타입을 설정하지 않았습니다.");
-            return;
+            return false;
         }
 
         string loadPath = Application.dataPath + AssetsPath.STAGE_JSONDATA_PATH + $"/CameraData{(int)stageType}.json";
@@ -76,20 +79,21 @@ public class CameraEditor : TeamCamera
         if(!File.Exists(loadPath))
         {
             Debug.LogWarning($"로드할 데이터가 없습니다.\n경로 : {loadPath}");
-            return;
+            return false;
         }
 
         string jsonData = File.ReadAllText(loadPath);
         CameraInfoData cameraInfoData = JsonUtility.FromJson<CameraInfoData>(jsonData);
         SetCameraInfo(cameraInfoData);
+        return true;
     }
     
-    public void SaveCameraInfo()
+    public bool SaveCameraInfo()
     {
         if (stageType == EStageType.None)
         {
             Debug.LogWarning("스테이지 타입을 설정하지 않았습니다.");
-            return;
+            return false;
         }
 
         string savePath = Application.dataPath + AssetsPath.STAGE_JSONDATA_PATH + $"/CameraData{(int)stageType}";
@@ -97,5 +101,7 @@ public class CameraEditor : TeamCamera
         
         string jsonData = JsonUtility.ToJson(cameraInfo);
         File.WriteAllText(savePath + ".json", jsonData);
+
+        return true;
     }
 }

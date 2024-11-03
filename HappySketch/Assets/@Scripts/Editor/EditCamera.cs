@@ -17,6 +17,9 @@ public class EditCamera : Editor
         CameraEditor cameraEditor = (CameraEditor)target;
 
         GUILayout.Space(10);
+        GUILayout.Label("[ 카메라 에디터 ]", EditorStyles.boldLabel);
+
+        GUILayout.Space(10);
         isInitUnlocked = EditorGUILayout.Toggle("초기 세팅 잠금 해제 ", isInitUnlocked);
         GUILayout.Space(5);
         if (GUILayout.Button("초기 값으로 세팅") && isInitUnlocked)
@@ -26,18 +29,17 @@ public class EditCamera : Editor
             Debug.Log("초기 값으로 세팅 완료");
         }
 
-        GUILayout.Space(10);
-        GUILayout.Label("[ 카메라 에디터 ]", EditorStyles.boldLabel);
-
         // 데이터 불러오기
         GUILayout.Space(5);
         isLoadUnlocked = EditorGUILayout.Toggle("불러오기 잠금 해제 ", isLoadUnlocked);
         GUILayout.Space(5);
         if (GUILayout.Button("데이터 불러오기") && isLoadUnlocked)
         {
-            cameraEditor.LoadCameraInfo();
+            bool isLoad = cameraEditor.LoadCameraInfo();
             isLoadUnlocked = false;
-            Debug.Log("스테이지 데이터 불러오기 완료");
+            
+            if(isLoad)
+                Debug.Log("스테이지 데이터 불러오기 완료");
         }
 
         // 데이터 저장
@@ -46,9 +48,13 @@ public class EditCamera : Editor
         GUILayout.Space(5);
         if (GUILayout.Button("데이터 저장하기") && isSaveUnocked)
         {
-            cameraEditor.SaveCameraInfo();
+            bool isSave = cameraEditor.SaveCameraInfo();
             isSaveUnocked = false;
-            Debug.Log("스테이지 데이터 저장하기 완료");
+            
+            if(isSave)
+                Debug.Log("스테이지 데이터 저장하기 완료");
         }
+
+        GUILayout.Space(20);
     }
 }
