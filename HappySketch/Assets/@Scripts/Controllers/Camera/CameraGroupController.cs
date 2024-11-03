@@ -21,8 +21,7 @@ public class CameraGroupController : InitBase
     public void SetInfo()
     {
         // 각 카메라에 같은 세팅을 부여
-        leftCamera.SetInfo(deltaPosVec);
-        rightCamera.SetInfo(deltaPosVec);
+
     }
 
     public void SetTarget(BaseObject target, ETeamType type)

@@ -4,9 +4,8 @@ using UnityEngine;
 
 public enum EStageType
 {
-    SharkAvoidance = 0,
-
-    Max
+    None = 0,
+    SharkAvoidance,
 }
 
 public abstract class BaseStage : InitBase

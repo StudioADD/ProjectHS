@@ -66,4 +66,26 @@ public static class Util
         yield return new WaitForSeconds(waitTime);
         method();
     }
+
+#if UNITY_EDITOR
+    public static GameObject Editor_InstantiateObject(Transform transform)
+    {
+        GameObject tempObject = new GameObject();
+        GameObject go = GameObject.Instantiate(tempObject, transform);
+        GameObject.DestroyImmediate(tempObject);
+        return go;
+    }
+
+    public static void Editor_FileDelete(string path, string fileExtension = ".json")
+    {
+        if (fileExtension[0] != '.')
+            fileExtension = $".{fileExtension}";
+
+        if (File.Exists($"{path}{fileExtension}"))
+        {
+            File.Delete($"{path}{fileExtension}");
+            File.Delete($"{path}.meta");
+        }
+    }
+#endif
 }

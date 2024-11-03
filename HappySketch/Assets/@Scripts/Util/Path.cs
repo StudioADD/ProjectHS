@@ -7,7 +7,8 @@ using UnityEngine;
 /// </summary>
 public static class AssetsPath
 {
-
+    // Json Data
+    public const string STAGE_JSONDATA_PATH = "/Resources/Data/JsonData/StageData";
 }
 
 /// <summary>
