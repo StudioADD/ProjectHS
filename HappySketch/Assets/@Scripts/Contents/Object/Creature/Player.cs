@@ -300,7 +300,7 @@ public class Player : Creature
     protected virtual bool MoveStateCondition()
     {
 
-        if (moveDirection.x == 0 || _playerState != EPlayerState.Idle)
+        if (moveDirection.x == 0 || _playerState != EPlayerState.Idle) // 추후 IsJump 같은거 두고 막아야함
             return false;
 
 
@@ -349,7 +349,7 @@ public class Player : Creature
     #region Jump
     protected virtual bool JumpStateCondition()
     {
-        if(PlayerState == EPlayerState.Idle)
+        if(PlayerState == EPlayerState.Idle) // 추후 IsJump 같은거 false일때만
             return true;
 
         return false;
