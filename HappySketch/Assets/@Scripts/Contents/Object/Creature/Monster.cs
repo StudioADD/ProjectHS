@@ -19,9 +19,9 @@ public class Monster : Creature
 
     [SerializeField, ReadOnly] private JMonsterData data = null;
 
-    private void Start()
+    private void Start() // 임시
     {
-        SetInfo(0); // 임시
+        SetInfo(0); 
     }
 
     public override bool Init()
@@ -43,9 +43,9 @@ public class Monster : Creature
         data = Managers.Data.MonsterDict[(int)MonsterType];
     }
 
-    private void Update()
+    private void Update() // 임시
     {
         if(data != null)
-            SetRigidVelocityZ(data.MoveSpeed * -1f * Time.deltaTime);
+            SetRigidVelocityZ(data.MoveSpeed * -1f);
     }
 }

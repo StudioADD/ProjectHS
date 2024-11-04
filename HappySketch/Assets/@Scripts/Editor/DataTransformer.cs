@@ -11,6 +11,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Threading;
 using System.Security.Policy;
+using System.Text;
 
 public class DataTransformer : EditorWindow
 {
@@ -30,17 +31,35 @@ public class DataTransformer : EditorWindow
         Loader loader = new Loader();
         FieldInfo field = loader.GetType().GetFields()[0];
         field.SetValue(loader, ParseExcelDataToList<LoaderData>(filename));
-
+        string path = $"{Application.dataPath}/Resources/Data/{filename}Data.json";
         string jsonStr = JsonConvert.SerializeObject(loader, Formatting.Indented);
-        File.WriteAllText($"{Application.dataPath}/Resources/Data/{filename}Data.json", jsonStr);
-        AssetDatabase.Refresh();
+        File.WriteAllText(path, jsonStr, Encoding.UTF8);
+        AssetDatabase.Refresh();        
     }
+
+    private static Encoding GetTextEncodingInfo(string path)
+    {
+        Encoding enc;
+        using (StreamReader sr = new StreamReader(path, true))
+        {
+            enc = sr.CurrentEncoding;
+            sr.Close();
+        }
+
+        return enc;
+    }
+
+    public static void SaveToEUC_KR(string textFilePath)
+    {
+    }
+
 
     private static List<LoaderData> ParseExcelDataToList<LoaderData>(string filename) where LoaderData : new()
     {
         List<LoaderData> loaderDatas = new List<LoaderData>();
 
-        string[] lines = File.ReadAllText($"{Application.dataPath}/ExcelData/{filename}Data.csv").Split("\n");
+        string path = $"{Application.dataPath}/ExcelData/{filename}Data.csv";
+        string[] lines = File.ReadAllText(path, Encoding.GetEncoding("euc-kr")).Split("\n");
 
         for (int l = 1; l < lines.Length; l++)
         {
