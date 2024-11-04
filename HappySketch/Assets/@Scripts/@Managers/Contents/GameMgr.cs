@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class GameMgr
 {
-    public BaseStage CurrStage { get; private set; }
-
     private int currStageId = 1;
 
     public void Init()
     {
-
+        currStageId = 1;
     }
 
     public void Clear()
@@ -20,7 +18,7 @@ public class GameMgr
 
     public void StartGame()
     {
-
+        StartStage(currStageId);
     }
 
     public void EndGame()
@@ -30,7 +28,10 @@ public class GameMgr
 
     private void StartStage(int stageId)
     {
-
+        if(Managers.Scene.CurrScene is GameScene gameScene)
+        {
+            gameScene.SetInfo((EStageType)currStageId);
+        }
     }
     
     public void EndStage()

@@ -10,6 +10,12 @@ public class CameraGroupController : InitBase
 
     [SerializeField] Vector3 deltaPosVec;
 
+    protected virtual void Reset()
+    {
+        leftCamera = Util.FindChild<TeamCamera>(gameObject, "LeftCamera");
+        rightCamera = Util.FindChild<TeamCamera>(gameObject, "RightCamera");
+    }
+
     public override bool Init()
     {
         if (base.Init() == false)

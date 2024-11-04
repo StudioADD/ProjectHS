@@ -15,6 +15,9 @@ public class SceneMgr
     public void SetCurrentScene(BaseScene currScene)
     {
         CurrScene = currScene;
+
+        if (CurrScene.SceneType == Define.EScene.GameScene)
+            Managers.Game.Init();
     }
 
     public bool IsCompleteLoadingScene() => loadingProgress == 100;
