@@ -31,6 +31,8 @@ public static class PrefabPath
 
     // Object
     public const string OBJECT_PATH = "Object";
+    public const string OBJECT_PLAYER_PATH = "Object/Player";
+    public const string OBJECT_MONSTER_PATH = "Object/Monster";
 
     // UI
     public const string UI_PATH = "UI";

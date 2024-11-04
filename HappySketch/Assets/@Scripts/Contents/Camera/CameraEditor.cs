@@ -58,7 +58,7 @@ public class CameraEditor : TeamCamera
         cameraInfoData.targetDistance = targetDistance;
         cameraInfoData.cameraHeight = cameraHeight;
         cameraInfoData.lookAtHeight = lookAtHeight;
-        base.SetInfo(cameraInfoData);
+        base.SetInfo(stageType);
     }
 
     public bool LoadCameraInfo()
@@ -69,9 +69,7 @@ public class CameraEditor : TeamCamera
             return false;
         }
 
-        string loadPath = Application.dataPath + DataPath.STAGE_JSONDATA_PATH + $"/CameraData{(int)stageType}.json";
-
-        bool isLoad = base.LoadCameraDataInfo(loadPath);
+        bool isLoad = base.LoadCameraDataInfo(stageType);
 
         if(isLoad)
         {

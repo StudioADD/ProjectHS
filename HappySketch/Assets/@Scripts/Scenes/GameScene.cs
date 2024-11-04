@@ -8,6 +8,10 @@ public class GameScene : BaseScene
     [SerializeField] StageGroupController stageGroup;
     [SerializeField] CameraGroupController cameraGroup;
 
+    // 임시
+    [SerializeField, ReadOnly] TestPlayer leftPlayer;
+    [SerializeField, ReadOnly] TestPlayer rightPlayer;
+
     private void Start()
     {
         Managers.Game.StartGame();
@@ -31,11 +35,21 @@ public class GameScene : BaseScene
 
     public void SetInfo(EStageType stageType)
     {
-        // 스테이지 로드
         stageGroup.SetInfo(stageType);
-        
-        // 스테이지 정보를 가지고 각 카메라 타겟 세팅
-        cameraGroup.SetInfo();
+        // cameraGroup.SetInfo();
+
+        // 플레이어 소환 (임시 코드)
+        string prefabPath = $"{PrefabPath.OBJECT_PLAYER_PATH}/TestPlayer";
+        leftPlayer = Managers.Resource.Instantiate(prefabPath).GetComponent<TestPlayer>();
+        leftPlayer.transform.position = stageGroup.GetStagePlayerStartPos(ETeamType.Left);
+        leftPlayer.transform.position += Vector3.up * leftPlayer.GetColliderHeight();
+
+        rightPlayer = Managers.Resource.Instantiate(prefabPath).GetComponent<TestPlayer>();
+        rightPlayer.transform.position = stageGroup.GetStagePlayerStartPos(ETeamType.Right);
+        rightPlayer.transform.position += Vector3.up * rightPlayer.GetColliderHeight();
+
+        cameraGroup.SetTarget(leftPlayer, ETeamType.Left);
+        cameraGroup.SetTarget(rightPlayer, ETeamType.Right);
     }
     
     public override void Clear()

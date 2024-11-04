@@ -24,10 +24,10 @@ public class CameraGroupController : InitBase
         return true;
     }
 
-    public void SetInfo()
+    public void SetInfo(EStageType stageType)
     {
-        // 현재 스테이지 Id를 가져와서 각 카메라에 로드경로를 부여
-
+        leftCamera.SetInfo(stageType);
+        rightCamera.SetInfo(stageType);
     }
 
     public void SetTarget(BaseObject target, ETeamType type)

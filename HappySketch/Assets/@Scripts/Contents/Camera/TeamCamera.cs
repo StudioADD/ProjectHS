@@ -25,11 +25,11 @@ public class TeamCamera : InitBase
     [SerializeField, ReadOnly] protected Camera cam;
     [SerializeField, ReadOnly] protected BaseObject target = null;
 
-    protected CameraInfoData cameraInfoData;
+    protected CameraInfoData cameraInfoData = null;
 
     private void LateUpdate()
     {
-        if (target != null)
+        if (cameraInfoData != null && target != null)
         {
             FollowingTarget();
         }
@@ -45,10 +45,10 @@ public class TeamCamera : InitBase
         return true;
     }
 
-    public void SetInfo(CameraInfoData cameraInfoData)
+    public void SetInfo(EStageType stageType)
     {
+        LoadCameraDataInfo(stageType);
         cam.fieldOfView = cameraInfoData.fieldOfView;
-        this.cameraInfoData = cameraInfoData;
     }
 
     public void SetTarget(BaseObject target) => this.target = target;
@@ -59,8 +59,10 @@ public class TeamCamera : InitBase
         transform.LookAt(target.transform.position + new Vector3(0, cameraInfoData.lookAtHeight, 0));
     }
 
-    protected bool LoadCameraDataInfo(string loadPath)
+    protected bool LoadCameraDataInfo(EStageType stageType)
     {
+        string loadPath = Application.dataPath + DataPath.STAGE_JSONDATA_PATH + $"/CameraData{(int)stageType}.json";
+
         if (!File.Exists(loadPath))
         {
             Debug.LogWarning($"로드할 데이터가 없습니다.\n경로 : {loadPath}");

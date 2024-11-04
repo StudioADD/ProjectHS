@@ -7,8 +7,10 @@ public class SharkAvoidanceStage : BaseStage
     [field: SerializeField, ReadOnly]
     List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
     
-    protected void Reset()
+    protected override void Reset()
     {
+        base.Reset();
+
         Transform[] allChildren = this.GetComponentsInChildren<Transform>();
         foreach (Transform child in allChildren)
         {

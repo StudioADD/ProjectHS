@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public static class Util
@@ -65,6 +66,17 @@ public static class Util
     {
         yield return new WaitForSeconds(waitTime);
         method();
+    }
+
+    public static float GetColliderHeight(Collider collider)
+    {
+        if(collider is BoxCollider box)
+        {
+            return box.size.y;
+        }
+
+        Debug.Log($"{collider.name}의 콜라이더 타입 설정이 되지않음");
+        return 0f;
     }
 
 #if UNITY_EDITOR

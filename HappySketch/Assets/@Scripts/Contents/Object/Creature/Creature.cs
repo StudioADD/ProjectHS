@@ -13,7 +13,7 @@ public enum ECreatureType
 public abstract class Creature : BaseObject
 {
     public ECreatureType CreatureType { get; protected set; }
-
+    
     protected Collider col;
     private Rigidbody rigid;
     private Animator animator;
@@ -59,6 +59,11 @@ public abstract class Creature : BaseObject
     }
 
     public abstract void SetInfo(int templateId);
+
+    public float GetColliderHeight()
+    {
+        return Util.GetColliderHeight(col);
+    }
 
     public virtual void OnCollisionTriggerEnter(Collider other)
     {

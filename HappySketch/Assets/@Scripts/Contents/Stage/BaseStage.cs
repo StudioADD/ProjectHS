@@ -12,6 +12,14 @@ public abstract class BaseStage : InitBase
 {
     public EStageType StageType { get; protected set; }
 
+    [field: SerializeField, ReadOnly]
+    public Transform PlayerStartTr { get; private set; }
+
+    protected virtual void Reset()
+    {
+        PlayerStartTr = transform.Find("PlayerSpawnPoint");
+    }
+
     public override bool Init()
     {
         if (base.Init() == false)

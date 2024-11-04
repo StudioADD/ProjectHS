@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class StageGroupController : InitBase
 {
@@ -26,6 +27,18 @@ public class StageGroupController : InitBase
 
         leftStage.transform.position = Vector3.left * 50f;
         rightStage.transform.position = Vector3.right * 50f;
+    }
+
+    public Vector3 GetStagePlayerStartPos(ETeamType teamType)
+    {
+        if (teamType == ETeamType.Left)
+            return leftStage.PlayerStartTr.position;
+        else if (teamType == ETeamType.Right)
+            return rightStage.PlayerStartTr.position;
+        else
+            Debug.LogWarning("알 수 없는 팀이 들어옴");
+
+        return Vector3.zero;
     }
 
     public void Clear()

@@ -15,7 +15,7 @@ public class TestPlayer : Creature
     {
         SetRigidVelocity(moveDirection);
     }
-
+       
     public override bool Init()
     {
         if (base.Init() == false)
@@ -30,7 +30,7 @@ public class TestPlayer : Creature
 
     public override void SetInfo(int templateID = 0)
     {
-
+        
     }
 
     #region Input
