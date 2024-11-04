@@ -46,6 +46,6 @@ public class Monster : Creature
     private void Update() // 임시
     {
         if(data != null)
-            SetRigidVelocityZ(data.MoveSpeed * -1f);
+            SetRigidVelocityZ(data.MoveSpeed * -0.01f);
     }
 }
