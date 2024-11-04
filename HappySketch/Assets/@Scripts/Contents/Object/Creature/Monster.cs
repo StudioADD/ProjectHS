@@ -17,7 +17,12 @@ public class Monster : Creature
 {
     public EMonsterType MonsterType { get; protected set; }
 
-    private JMonsterData data = null;
+    [SerializeField, ReadOnly] private JMonsterData data = null;
+
+    private void Start()
+    {
+        SetInfo(0); // 임시
+    }
 
     public override bool Init()
     {
@@ -41,6 +46,6 @@ public class Monster : Creature
     private void Update()
     {
         if(data != null)
-            SetRigidVelocityX(data.MoveSpeed * -100f);
+            SetRigidVelocityZ(data.MoveSpeed * -1f * Time.deltaTime);
     }
 }

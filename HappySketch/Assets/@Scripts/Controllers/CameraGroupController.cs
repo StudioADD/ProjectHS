@@ -5,8 +5,8 @@ using static Define;
 
 public class CameraGroupController : InitBase
 {
-    [SerializeField] private TeamCamera leftCamera;      // Blue Team
-    [SerializeField] private TeamCamera rightCamera;     // Red Team
+    [SerializeField] TeamCamera leftCamera;      // Blue Team
+    [SerializeField] TeamCamera rightCamera;     // Red Team
 
     [SerializeField] Vector3 deltaPosVec;
 

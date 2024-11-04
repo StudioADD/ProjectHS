@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneMgr
 {
-    public BaseScene CurrentScene { get; private set; }
+    public BaseScene CurrScene { get; private set; }
 
     private Define.EScene nextScene = Define.EScene.Unknown;
 
@@ -14,7 +14,7 @@ public class SceneMgr
 
     public void SetCurrentScene(BaseScene currScene)
     {
-        CurrentScene = currScene;
+        CurrScene = currScene;
     }
 
     public bool IsCompleteLoadingScene() => loadingProgress == 100;
@@ -55,6 +55,6 @@ public class SceneMgr
 
     public void Clear()
     {
-        CurrentScene.Clear();
+        CurrScene.Clear();
     }
 }

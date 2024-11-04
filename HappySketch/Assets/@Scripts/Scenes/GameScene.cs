@@ -6,13 +6,7 @@ using static Define;
 public class GameScene : BaseScene
 {
     [SerializeField] CameraGroupController cameraGroup;
-
-    BaseStage currStage;
-
-    private void Start()
-    {
-        SetInfo();
-    }
+    [SerializeField] StageGroupController stageGroup;
 
     public override bool Init()
     {
@@ -24,16 +18,15 @@ public class GameScene : BaseScene
         return true;
     }
 
-    private void SetGame(int stageId)
+    public void SetInfo()
     {
+        // 스테이지 로드
+        // 
 
-    }
-
-    private void SetInfo()
-    {
+        // 스테이지 정보를 가지고 각 카메라 타겟 세팅
         cameraGroup.SetInfo();
     }
-
+    
     public override void Clear()
     {
 

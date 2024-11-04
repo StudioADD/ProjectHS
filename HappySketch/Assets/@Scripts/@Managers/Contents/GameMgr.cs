@@ -6,6 +6,8 @@ public class GameMgr
 {
     public BaseStage CurrStage { get; private set; }
 
+    private int currStageId = 1;
+
     public void Init()
     {
 
@@ -16,10 +18,23 @@ public class GameMgr
 
     }
 
-    public void StartStage(int stageId)
+    public void StartGame()
+    {
+
+    }
+
+    public void EndGame()
+    {
+
+    }
+
+    private void StartStage(int stageId)
     {
 
     }
     
+    public void EndStage()
+    {
 
+    }
 }

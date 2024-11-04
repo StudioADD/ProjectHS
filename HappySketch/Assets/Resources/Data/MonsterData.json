@@ -2,9 +2,9 @@
   "Monsters": [
     {
       "DataId": 0,
-      "Name": "�׽�Ʈ ����",
+      "Name": "ㅁㄴㅇㄹ",
       "MoveSpeed": 100,
-      "Damage": 100
+      "Damage": 0
     }
   ]
 }
