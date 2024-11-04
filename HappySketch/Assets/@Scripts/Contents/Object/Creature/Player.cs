@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
+using System;
 using static Define;
 
 
@@ -25,28 +26,36 @@ public class Player : Creature
 {
     [SerializeField]
     private float inputCooldown = 0.5f; // W와 S 키 쿨타임
+    [SerializeField, ReadOnly]
     private float inputTime = 0f;
     private bool IsInput = true; // 입력 가능여부
     [SerializeField]
     private float hitInputIgnoreTime = 1.0f; // Hit 상태에서 입력 무시 시간
     private float hitTime = 0;
-    private bool IsHit = false; // 히트상태 여부
     [SerializeField]
     private float jumpForce = 5f;
 
     [SerializeField]
     private bool isUsingWASD;
 
+    [SerializeField, ReadOnly]
+    private int Hp = 3;
+
+    [SerializeField, ReadOnly]
+    private int trackIndex = 2;
 
     #region playerState
-    [SerializeField, ReadOnly] protected bool isPlayerStateLock = false;
-    [SerializeField, ReadOnly] protected EPlayerState _playerState = EPlayerState.None;
+    [SerializeField, ReadOnly]
+    protected bool isPlayerStateLock = false;
+    [SerializeField, ReadOnly]
+    protected EPlayerState _playerState = EPlayerState.None;
     public virtual EPlayerState PlayerState
     {
         get { return _playerState; }
         protected set
         {
-            Debug.LogWarning(moveDirection);
+            Debug.LogWarning("playerSatae "  +_playerState);
+            Debug.LogWarning("value " + value);
             if (value != EPlayerState.Idle && isPlayerStateLock)
                 return;
 
@@ -94,7 +103,8 @@ public class Player : Creature
     #endregion
 
     #region inputControll
-    [SerializeField, ReadOnly] private bool _isPlayerInputControll = false;
+    [SerializeField, ReadOnly]
+    private bool _isPlayerInputControll = false;
 
     public bool IsPlayerInputControll
     {
@@ -127,6 +137,7 @@ public class Player : Creature
 
 
         IsPlayerInputControll = true;
+        trackIndex = 2;
         return true;
     }
 
@@ -167,9 +178,8 @@ public class Player : Creature
     public void OnArrowKey(Vector2 value)
     {
 
-        if (isPlayerStateLock == false && IsInput == true)
+        if (IsInput)
         {
-            Debug.LogWarning(IsInput);
             if (value.y > 0) // W 키
             {
                 // 위 진행시 따로 처리 예정
@@ -179,14 +189,13 @@ public class Player : Creature
                 moveDirection = value;
             }
             PlayerState = EPlayerState.Move;
+            IsInput = false;
+            inputTime = 0f;
         }
         else
             moveDirection = Vector2.zero;
 
     }
-
-
-
 
     public void OnJumpKey()
     {
@@ -208,14 +217,12 @@ public class Player : Creature
     {
         InitRigidVelocityX();
         isPlayerStateLock = false;
+
     }
 
     protected virtual void UpdateIdleState()
     {
-        if (inputTime < inputCooldown)
-            IsInput = false;
-        else
-            IsInput = true;
+        //InputUpdate();
     }
 
     protected virtual void IdleStateExit()
@@ -231,18 +238,17 @@ public class Player : Creature
     private Coroutine blinkCoroutine;
     protected virtual bool HitStateCondition()
     {
-        if (inputTime < inputCooldown)
-            return false;
+    
         return true;
     }
 
     protected virtual void HitStateEnter()
     {
+        Hp--;
         isPlayerStateLock = true;
         InitRigidVelocityY();
         inputTime = 0;
 
-        // 원래 위치 저장
 
         // 뒤로 밀려나기
         SetRigidVelocity(-transform.forward * hitBackDistance);
@@ -258,7 +264,6 @@ public class Player : Creature
         if (hitTime >= hitInputIgnoreTime)
         {
             hitTime = 0;
-            IsHit = false;
             PlayerState = EPlayerState.Idle; // 히트 상태 종료
         }
     }
@@ -267,8 +272,11 @@ public class Player : Creature
     {
         // 앞으로
         SetRigidVelocity(transform.forward * hitBackDistance);
+
         StopCoroutine(blinkCoroutine);
+
         isPlayerStateLock = false;
+
         if (playerRenderer != null)
         {
             playerRenderer.enabled = true; // 렌더러 활성화
@@ -291,7 +299,8 @@ public class Player : Creature
     #region Move
     protected virtual bool MoveStateCondition()
     {
-        if (moveDirection.x == 0)
+
+        if (moveDirection.x == 0 || _playerState != EPlayerState.Idle)
             return false;
 
 
@@ -301,19 +310,20 @@ public class Player : Creature
     protected virtual void MoveStateEnter()
     {
 
+        Movement();
+
+
     }
 
     protected virtual void UpdateMoveState()
     {
-        Debug.LogWarning(IsInput);
-        if (IsInput)
-        {
-            Movement();
-            IsInput = false;
-            inputTime = 0;
-        }
+        //InputUpdate();
+       
         if (moveDirection.x == 0)
             PlayerState = EPlayerState.Idle;
+
+
+
     }
 
     protected virtual void MoveStateExit()
@@ -323,15 +333,26 @@ public class Player : Creature
 
     private void Movement()
     {
-        SetRigidVelocity(moveDirection * 10f); // 추후 타일간 이동으로 바꾸면 될듯
+        Debug.LogWarning(trackIndex);
+        trackIndex += (int)moveDirection.x;
+        if (trackIndex < 0 || trackIndex > 3)
+        {
+            trackIndex -= (int)moveDirection.x;
+            return;
+        }
+
+        transform.position += new Vector3(moveDirection.x, 0, 0);
+
     }
     #endregion
 
     #region Jump
     protected virtual bool JumpStateCondition()
     {
+        if(PlayerState == EPlayerState.Idle)
+            return true;
 
-        return true;
+        return false;
     }
 
     protected virtual void JumpStateEnter()
@@ -343,8 +364,9 @@ public class Player : Creature
     protected virtual void UpdateJumpState()
     {
         //수정 요망 점프하자마자 바뀜 다른거 필요할듯
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 0.36f))
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1f))
         {
+
             if (hit.collider.CompareTag("Ground"))
             {
                 PlayerState = EPlayerState.Idle; // 바닥에 닿으면 Idle 상태로 변경
@@ -372,12 +394,10 @@ public class Player : Creature
                 {
                     timer -= 1.0f;
                 }
-                if (!IsInput)
-                    inputTime += Time.deltaTime; ;
-                if (IsHit)
-                    hitTime += Time.deltaTime; ;
             }
-
+            if (!IsInput)
+                inputTime += Time.deltaTime;
+            InputUpdate();
             switch (PlayerState)
             {
                 case EPlayerState.Idle: UpdateIdleState(); break;
@@ -402,6 +422,14 @@ public class Player : Creature
         {
             PlayerState = EPlayerState.Hit;
         }
+    }
+    protected void InputUpdate()
+    {
+
+        if (inputTime < inputCooldown)
+            IsInput = false;
+        else
+            IsInput = true;
     }
 
 }
