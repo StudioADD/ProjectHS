@@ -28,7 +28,7 @@ public class GameMgr
 
     private void StartStage(int stageId)
     {
-        if(Managers.Scene.CurrScene is GameScene gameScene)
+        if(Managers.Scene.CurrScene is GameSceneView gameScene)
         {
             gameScene.StartGame((EStageType)currStageId);
         }
