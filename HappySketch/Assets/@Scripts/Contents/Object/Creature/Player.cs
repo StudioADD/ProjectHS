@@ -8,6 +8,7 @@ using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
 using System;
 using static Define;
+using TMPro;
 
 
 public enum EPlayerState
@@ -19,6 +20,7 @@ public enum EPlayerState
 
     Hit,
 
+    Collect, //수집
     Dead
 }
 
@@ -28,7 +30,7 @@ public class Player : Creature
     private float inputCooldown = 0.5f; // W와 S 키 쿨타임
     [SerializeField, ReadOnly]
     private float inputTime = 0f;
-    private bool IsInput = true; // 입력 가능여부
+    private bool isInput = true; // 입력 가능여부
     [SerializeField]
     private float hitInputIgnoreTime = 1.0f; // Hit 상태에서 입력 무시 시간
     private float hitTime = 0;
@@ -39,11 +41,19 @@ public class Player : Creature
     private bool isUsingWASD;
 
     [SerializeField, ReadOnly]
-    private int Hp = 3;
+    private int hp = 3;
 
     [SerializeField, ReadOnly]
-    private int trackIndex = 2;
-
+    private int trackNum = 2;
+    [SerializeField, ReadOnly]
+    private bool isJump = false;
+    [SerializeField]
+    private int boosterCount = 0;
+    private const float boosterTime = 5f;
+    [SerializeField, ReadOnly]
+    private float boosterTimer = 0f;
+    [SerializeField, ReadOnly]
+    private bool isBooster = false;
     #region playerState
     [SerializeField, ReadOnly]
     protected bool isPlayerStateLock = false;
@@ -54,8 +64,7 @@ public class Player : Creature
         get { return _playerState; }
         protected set
         {
-            Debug.LogWarning("playerSatae "  +_playerState);
-            Debug.LogWarning("value " + value);
+
             if (value != EPlayerState.Idle && isPlayerStateLock)
                 return;
 
@@ -71,8 +80,8 @@ public class Player : Creature
                 case EPlayerState.Idle: isChangeState = IdleStateCondition(); break;
                 case EPlayerState.Move: isChangeState = MoveStateCondition(); break;
                 case EPlayerState.Jump: isChangeState = JumpStateCondition(); break;
-
                 case EPlayerState.Hit: isChangeState = HitStateCondition(); break;
+                case EPlayerState.Collect: break;
             }
             if (isChangeState == false)
                 return;
@@ -82,8 +91,8 @@ public class Player : Creature
                 case EPlayerState.Idle: IdleStateExit(); break;
                 case EPlayerState.Move: MoveStateExit(); break;
                 case EPlayerState.Jump: JumpStateExit(); break;
-
                 case EPlayerState.Hit: HitStateExit(); break;
+                case EPlayerState.Collect: break;
 
             }
 
@@ -95,8 +104,8 @@ public class Player : Creature
                 case EPlayerState.Idle: IdleStateEnter(); break;
                 case EPlayerState.Move: MoveStateEnter(); break;
                 case EPlayerState.Jump: JumpStateEnter(); break;
-
                 case EPlayerState.Hit: HitStateEnter(); break;
+                case EPlayerState.Collect: break;
             }
         }
     }
@@ -125,6 +134,8 @@ public class Player : Creature
             }
         }
     }
+    #endregion
+
     public override bool Init()
     {
         if (base.Init() == false)
@@ -137,7 +148,8 @@ public class Player : Creature
 
 
         IsPlayerInputControll = true;
-        trackIndex = 2;
+        trackNum = 2;
+        targetPosition = transform.position;
         return true;
     }
 
@@ -147,7 +159,7 @@ public class Player : Creature
 
         //세팅 필요한경우 
     }
-    #endregion
+
 
     #region Input
     private Vector2 moveDirection = Vector2.zero;
@@ -160,17 +172,17 @@ public class Player : Creature
         Managers.Input.OnWASDKeyEntered -= OnArrowKey;
         Managers.Input.OnSpaceKeyEntered -= OnJumpKey;
         Managers.Input.OnArrowKeyEntered -= OnArrowKey;
-
+        Managers.Input.OnSpaceKeyEntered -= OnBoosterKey;
         if (isConnect)
             if (isUsingWASD)
             {
                 Managers.Input.OnWASDKeyEntered += OnArrowKey;
-                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+                Managers.Input.OnSpaceKeyEntered += OnBoosterKey;
             }
             else
             {
                 Managers.Input.OnArrowKeyEntered += OnArrowKey;
-                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+                Managers.Input.OnSpaceKeyEntered += OnBoosterKey;
             }
 
 
@@ -178,28 +190,36 @@ public class Player : Creature
     public void OnArrowKey(Vector2 value)
     {
 
-        if (IsInput)
-        {
-            if (value.y > 0) // W 키
+        moveDirection = value;
+        PlayerState = EPlayerState.Move;
+
+        if (value.y > 0)
+            if (isInput)
             {
-                // 위 진행시 따로 처리 예정
+                // 위키 입력시 적용 예정
+
+                isInput = false;
+                inputTime = 0f;
+
+
             }
-            else
-            {
-                moveDirection = value;
-            }
-            PlayerState = EPlayerState.Move;
-            IsInput = false;
-            inputTime = 0f;
-        }
-        else
-            moveDirection = Vector2.zero;
+
 
     }
 
     public void OnJumpKey()
     {
         PlayerState = EPlayerState.Jump;
+    }
+    public void OnBoosterKey()
+    {
+        if (boosterCount == 3)
+        {
+            boosterTimer = 0;
+            isBooster = true;
+            inputCooldown = 0.25f;
+        }
+
     }
     #endregion
 
@@ -238,17 +258,23 @@ public class Player : Creature
     private Coroutine blinkCoroutine;
     protected virtual bool HitStateCondition()
     {
-    
+        if (isBooster)
+            return false;
         return true;
     }
 
     protected virtual void HitStateEnter()
     {
-        Hp--;
+        hp--;
         isPlayerStateLock = true;
         InitRigidVelocityY();
         inputTime = 0;
-
+        //move중에 히트시 해당위치로 이동
+        // 해당위치로 순간이동 말고 스무스하게 이동시킨후 뒤로 밀리게 할 방법이 있을까
+        if (transform.position != targetPosition)
+        {
+            transform.position = targetPosition;
+        }
 
         // 뒤로 밀려나기
         SetRigidVelocity(-transform.forward * hitBackDistance);
@@ -260,6 +286,7 @@ public class Player : Creature
 
     protected virtual void UpdateHitState()
     {
+
         hitTime += Time.deltaTime;
         if (hitTime >= hitInputIgnoreTime)
         {
@@ -297,10 +324,11 @@ public class Player : Creature
     #endregion
 
     #region Move
+    private Vector3 targetPosition; // 이동할 위치
     protected virtual bool MoveStateCondition()
     {
 
-        if (moveDirection.x == 0 || _playerState != EPlayerState.Idle) // 추후 IsJump 같은거 두고 막아야함
+        if (moveDirection.x == 0 || isJump) // 추후 IsJump 같은거 두고 막아야함
             return false;
 
 
@@ -309,19 +337,25 @@ public class Player : Creature
 
     protected virtual void MoveStateEnter()
     {
+        trackNum += (int)moveDirection.x;
+        if (trackNum < 0 || trackNum > 3)
+        {
+            trackNum -= (int)moveDirection.x;
+            moveDirection = Vector3.zero;
+        }
 
-        Movement();
-
+        targetPosition = transform.position + new Vector3(moveDirection.x, 0, 0);
 
     }
 
     protected virtual void UpdateMoveState()
     {
         //InputUpdate();
-       
-        if (moveDirection.x == 0)
-            PlayerState = EPlayerState.Idle;
-
+        Movement();
+        if (transform.position == targetPosition)
+        {
+            PlayerState = EPlayerState.Idle; ;
+        }
 
 
     }
@@ -333,15 +367,10 @@ public class Player : Creature
 
     private void Movement()
     {
-        Debug.LogWarning(trackIndex);
-        trackIndex += (int)moveDirection.x;
-        if (trackIndex < 0 || trackIndex > 3)
-        {
-            trackIndex -= (int)moveDirection.x;
-            return;
-        }
 
-        transform.position += new Vector3(moveDirection.x, 0, 0);
+
+        transform.position = Vector3.MoveTowards(this.transform.position, targetPosition, 0.03f); // 이동속도 data로 뺄수 있게 해줄것
+
 
     }
     #endregion
@@ -349,10 +378,10 @@ public class Player : Creature
     #region Jump
     protected virtual bool JumpStateCondition()
     {
-        if(PlayerState == EPlayerState.Idle) // 추후 IsJump 같은거 false일때만
-            return true;
+        if (isJump)
+            return false;
 
-        return false;
+        return true;
     }
 
     protected virtual void JumpStateEnter()
@@ -363,15 +392,7 @@ public class Player : Creature
 
     protected virtual void UpdateJumpState()
     {
-        //수정 요망 점프하자마자 바뀜 다른거 필요할듯
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, 1f))
-        {
 
-            if (hit.collider.CompareTag("Ground"))
-            {
-                PlayerState = EPlayerState.Idle; // 바닥에 닿으면 Idle 상태로 변경
-            }
-        }
     }
 
     protected virtual void JumpStateExit()
@@ -380,6 +401,33 @@ public class Player : Creature
     }
     #endregion
 
+    //Collect
+    #region Collect
+    protected virtual bool CollectStateCondition()
+    {
+
+
+        return true;
+    }
+
+    protected virtual void CollectStateEnter()
+    {
+        isPlayerStateLock = true;
+    }
+
+    protected virtual void UpdateCollectState()
+    {
+
+       //수집 시 필요한거 
+
+
+    }
+
+    protected virtual void CollectStateExit()
+    {
+        isPlayerStateLock = false;
+    }
+    #endregion
     #region co
     Coroutine coPlayerStateController = null;
     protected IEnumerator CoPlayerStateController()
@@ -395,8 +443,18 @@ public class Player : Creature
                     timer -= 1.0f;
                 }
             }
-            if (!IsInput)
+            if (!isInput)
                 inputTime += Time.deltaTime;
+            if (isBooster)
+            {
+                boosterTimer += Time.deltaTime;
+                if (boosterTimer >= boosterTime)
+                {
+                    isBooster = false;
+                    inputCooldown = 0.5f;
+                }
+            }
+
             InputUpdate();
             switch (PlayerState)
             {
@@ -422,14 +480,42 @@ public class Player : Creature
         {
             PlayerState = EPlayerState.Hit;
         }
+        else if (other.CompareTag("Booster"))
+        {
+            boosterCount++;
+            if (boosterCount > 3)
+                boosterCount = 3;
+        }
     }
     protected void InputUpdate()
     {
 
         if (inputTime < inputCooldown)
-            IsInput = false;
+            isInput = false;
         else
-            IsInput = true;
+            isInput = true;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.collider.CompareTag("Ground"))
+        {
+            isJump = true;
+        }
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.collider.CompareTag("Ground"))
+        {
+            isJump = false;
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Ground"))
+        {
+            isJump = false;
+        }
     }
 
 }
