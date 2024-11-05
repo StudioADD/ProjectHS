@@ -58,7 +58,6 @@ public class CameraEditor : TeamCamera
         cameraInfoData.targetDistance = targetDistance;
         cameraInfoData.cameraHeight = cameraHeight;
         cameraInfoData.lookAtHeight = lookAtHeight;
-        base.SetInfo(stageType);
     }
 
     public bool LoadCameraInfo()

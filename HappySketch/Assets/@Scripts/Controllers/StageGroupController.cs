@@ -25,8 +25,8 @@ public class StageGroupController : InitBase
         leftStage = Managers.Resource.Instantiate(prefabPath, this.transform).GetComponent<BaseStage>();
         rightStage = Managers.Resource.Instantiate(prefabPath, this.transform).GetComponent<BaseStage>();
 
-        leftStage.transform.position = Vector3.left * 50f;
-        rightStage.transform.position = Vector3.right * 50f;
+        leftStage.transform.position = Vector3.left * 10f;
+        rightStage.transform.position = Vector3.right * 10f;
     }
 
     public Vector3 GetStagePlayerStartPos(ETeamType teamType)

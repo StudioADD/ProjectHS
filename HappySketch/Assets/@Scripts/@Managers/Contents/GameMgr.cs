@@ -30,7 +30,7 @@ public class GameMgr
     {
         if(Managers.Scene.CurrScene is GameScene gameScene)
         {
-            gameScene.SetInfo((EStageType)currStageId);
+            gameScene.StartGame((EStageType)currStageId);
         }
     }
     

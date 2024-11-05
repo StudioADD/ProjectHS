@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using System;
 
+[Serializable]
 public class CameraInfoData
 {
     public float fieldOfView = 60f;
@@ -25,6 +27,7 @@ public class TeamCamera : InitBase
     [SerializeField, ReadOnly] protected Camera cam;
     [SerializeField, ReadOnly] protected BaseObject target = null;
 
+    [SerializeField, ReadOnly]
     protected CameraInfoData cameraInfoData = null;
 
     private void LateUpdate()
