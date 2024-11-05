@@ -26,34 +26,35 @@ public enum EPlayerState
 
 public class Player : Creature
 {
+    #region input 변수
     [SerializeField]
     private float inputCooldown = 0.5f; // W와 S 키 쿨타임
-    [SerializeField, ReadOnly]
-    private float inputTime = 0f;
-    private bool isInput = true; // 입력 가능여부
+    private float inputTime = 0f; // 입력시간 
+    #endregion
+
+    #region booster 변수
+    [SerializeField]
+    private int boosterCount = 0; // 부스터 게이지
+    private const float boosterTime = 5f;  // 부스터 시간
+    private float boosterTimer = 0f; // 부스터 현재시간
+    #endregion
+
+    #region hit 변수
     [SerializeField]
     private float hitInputIgnoreTime = 1.0f; // Hit 상태에서 입력 무시 시간
-    private float hitTime = 0;
-    [SerializeField]
-    private float jumpForce = 5f;
+    private float hitTime = 0; // hit시간
+    #endregion
 
     [SerializeField]
-    private bool isUsingWASD;
+    private float moveSpeed = 5f; // 이동거리
 
-    [SerializeField, ReadOnly]
-    private int hp = 3;
-
-    [SerializeField, ReadOnly]
-    private int trackNum = 2;
-    [SerializeField, ReadOnly]
-    private bool isJump = false;
     [SerializeField]
-    private int boosterCount = 0;
-    private const float boosterTime = 5f;
+    private bool isUsingArrow; // 방향키 or wad
+    private float jumpForce = 5f; // 점프 힘
+    private int trackNum = 2; // 현재 트랙 위치
     [SerializeField, ReadOnly]
-    private float boosterTimer = 0f;
-    [SerializeField, ReadOnly]
-    private bool isBooster = false;
+    private bool isJump = false; // 점프유무 3스테이지 용도
+
     #region playerState
     [SerializeField, ReadOnly]
     protected bool isPlayerStateLock = false;
@@ -149,7 +150,7 @@ public class Player : Creature
 
         IsPlayerInputControll = true;
         trackNum = 2;
-        targetPosition = transform.position;
+        targetPosition = beforePosition = transform.position;
         return true;
     }
 
@@ -174,7 +175,7 @@ public class Player : Creature
         Managers.Input.OnArrowKeyEntered -= OnArrowKey;
         Managers.Input.OnSpaceKeyEntered -= OnBoosterKey;
         if (isConnect)
-            if (isUsingWASD)
+            if (isUsingArrow)
             {
                 Managers.Input.OnWASDKeyEntered += OnArrowKey;
                 Managers.Input.OnSpaceKeyEntered += OnBoosterKey;
@@ -194,15 +195,16 @@ public class Player : Creature
         PlayerState = EPlayerState.Move;
 
         if (value.y > 0)
-            if (isInput)
+        {
+            if (inputTime < inputCooldown)
             {
-                // 위키 입력시 적용 예정
-
-                isInput = false;
                 inputTime = 0f;
-
-
             }
+            else
+            { //전진 쿨일때 전진 X
+                moveDirection = Vector2.zero;
+            }
+        }
 
 
     }
@@ -216,7 +218,7 @@ public class Player : Creature
         if (boosterCount == 3)
         {
             boosterTimer = 0;
-            isBooster = true;
+            boosterCount = 0;
             inputCooldown = 0.25f;
         }
 
@@ -226,8 +228,6 @@ public class Player : Creature
     #region Idle
     protected virtual bool IdleStateCondition()
     {
-        if (moveDirection != Vector2.zero)
-            return false;
 
 
         return true;
@@ -255,26 +255,27 @@ public class Player : Creature
     [SerializeField]
     private float hitBackDistance = 3.0f; // 뒤로 밀려나는 거리
     private Renderer playerRenderer; // 캐릭터의 렌더러
+
     private Coroutine blinkCoroutine;
     protected virtual bool HitStateCondition()
     {
-        if (isBooster)
+        if (boosterTimer >= 0)
             return false;
+        if (PlayerState == EPlayerState.Move)
+        {
+            transform.position = beforePosition;
+            trackNum -= (int)moveDirection.x;
+        }
         return true;
     }
 
     protected virtual void HitStateEnter()
     {
-        hp--;
         isPlayerStateLock = true;
         InitRigidVelocityY();
         inputTime = 0;
         //move중에 히트시 해당위치로 이동
-        // 해당위치로 순간이동 말고 스무스하게 이동시킨후 뒤로 밀리게 할 방법이 있을까
-        if (transform.position != targetPosition)
-        {
-            transform.position = targetPosition;
-        }
+
 
         // 뒤로 밀려나기
         SetRigidVelocity(-transform.forward * hitBackDistance);
@@ -308,6 +309,7 @@ public class Player : Creature
         {
             playerRenderer.enabled = true; // 렌더러 활성화
         }
+
     }
 
     private IEnumerator BlinkCoroutine()
@@ -321,36 +323,43 @@ public class Player : Creature
             yield return new WaitForSeconds(0.1f); // 0.1초 간격으로 깜박임
         }
     }
+
     #endregion
 
     #region Move
-    private Vector3 targetPosition; // 이동할 위치
+    private Vector3 targetPosition = Vector3.zero; // 이동할 위치
+    private Vector3 beforePosition = Vector3.zero;
     protected virtual bool MoveStateCondition()
     {
 
-        if (moveDirection.x == 0 || isJump) // 추후 IsJump 같은거 두고 막아야함
+        if (moveDirection.x == 0 && moveDirection.y <= 0 || isJump)
+            return false;
+        if (inputTime < inputCooldown && moveDirection.y > 0)
             return false;
 
+
+        if (trackNum + (int)moveDirection.x < 0 || trackNum + (int)moveDirection.x > 3)
+        {
+            return false;
+        }
 
         return true;
     }
 
     protected virtual void MoveStateEnter()
     {
-        trackNum += (int)moveDirection.x;
-        if (trackNum < 0 || trackNum > 3)
+        if (moveDirection.y > 0)
         {
-            trackNum -= (int)moveDirection.x;
-            moveDirection = Vector3.zero;
+            moveDirection.y *= moveSpeed;
         }
 
-        targetPosition = transform.position + new Vector3(moveDirection.x, 0, 0);
+        beforePosition = transform.position;
+        targetPosition = transform.position + new Vector3(moveDirection.x, 0, moveDirection.y);
 
     }
 
     protected virtual void UpdateMoveState()
     {
-        //InputUpdate();
         Movement();
         if (transform.position == targetPosition)
         {
@@ -362,16 +371,13 @@ public class Player : Creature
 
     protected virtual void MoveStateExit()
     {
-
+        if (hitTime > 0)
+            beforePosition = transform.position;
     }
 
     private void Movement()
     {
-
-
         transform.position = Vector3.MoveTowards(this.transform.position, targetPosition, 0.03f); // 이동속도 data로 뺄수 있게 해줄것
-
-
     }
     #endregion
 
@@ -401,7 +407,6 @@ public class Player : Creature
     }
     #endregion
 
-    //Collect
     #region Collect
     protected virtual bool CollectStateCondition()
     {
@@ -418,7 +423,7 @@ public class Player : Creature
     protected virtual void UpdateCollectState()
     {
 
-       //수집 시 필요한거 
+        //수집 시 필요한거 
 
 
     }
@@ -428,6 +433,7 @@ public class Player : Creature
         isPlayerStateLock = false;
     }
     #endregion
+
     #region co
     Coroutine coPlayerStateController = null;
     protected IEnumerator CoPlayerStateController()
@@ -443,19 +449,10 @@ public class Player : Creature
                     timer -= 1.0f;
                 }
             }
-            if (!isInput)
+            if (inputTime < inputCooldown)
                 inputTime += Time.deltaTime;
-            if (isBooster)
-            {
-                boosterTimer += Time.deltaTime;
-                if (boosterTimer >= boosterTime)
-                {
-                    isBooster = false;
-                    inputCooldown = 0.5f;
-                }
-            }
+            BoosterTimeUpdate();
 
-            InputUpdate();
             switch (PlayerState)
             {
                 case EPlayerState.Idle: UpdateIdleState(); break;
@@ -487,13 +484,18 @@ public class Player : Creature
                 boosterCount = 3;
         }
     }
-    protected void InputUpdate()
-    {
 
-        if (inputTime < inputCooldown)
-            isInput = false;
-        else
-            isInput = true;
+    private void BoosterTimeUpdate()
+    {
+        if (boosterTimer >= 0)
+        {
+            boosterTimer += Time.deltaTime;
+            if (boosterTimer >= boosterTime)
+            {
+                boosterTimer = -1;
+                inputCooldown = 0.5f;
+            }
+        }
     }
 
     private void OnCollisionExit(Collision collision)
