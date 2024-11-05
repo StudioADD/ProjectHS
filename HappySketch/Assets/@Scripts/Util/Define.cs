@@ -13,6 +13,8 @@ public static class Define
         TitleScene,
         LobbyScene,
         GameScene,
+        RuleScene,
+        IntroPlayerScene
     }
 
     /// <summary>

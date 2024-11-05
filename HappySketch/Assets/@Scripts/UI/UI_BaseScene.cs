@@ -13,4 +13,16 @@ public abstract class UI_BaseScene : InitBase
         Managers.UI.SetSceneUI(this);
         return true;
     }
+    
+    protected void ChangeSceneAfterTime(Define.EScene scene, float time)
+    {
+        StartCoroutine(WaitAndChangeScene(scene, time));
+    }
+
+    protected IEnumerator WaitAndChangeScene(Define.EScene scene, float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        Managers.Scene.LoadScene(scene);
+    }
 }
