@@ -36,7 +36,7 @@ public class Player : Creature
     [SerializeField]
     private int boosterCount = 0; // 부스터 게이지
     private const float boosterTime = 5f;  // 부스터 시간
-    private float boosterTimer = 0f; // 부스터 현재시간
+    private float boosterTimer = -1f; // 부스터 현재시간
     #endregion
 
     #region hit 변수
@@ -51,13 +51,14 @@ public class Player : Creature
     [SerializeField]
     private bool isUsingArrow; // 방향키 or wad
     private float jumpForce = 5f; // 점프 힘
+    [SerializeField, ReadOnly]
     private int trackNum = 2; // 현재 트랙 위치
     [SerializeField, ReadOnly]
     private bool isJump = false; // 점프유무 3스테이지 용도
 
     #region playerState
     [SerializeField, ReadOnly]
-    protected bool isPlayerStateLock = false;
+    protected bool isInputRock = false; 
     [SerializeField, ReadOnly]
     protected EPlayerState _playerState = EPlayerState.None;
     public virtual EPlayerState PlayerState
@@ -65,9 +66,6 @@ public class Player : Creature
         get { return _playerState; }
         protected set
         {
-
-            if (value != EPlayerState.Idle && isPlayerStateLock)
-                return;
 
             if (_playerState == EPlayerState.Dead)
                 return;
@@ -177,12 +175,12 @@ public class Player : Creature
         if (isConnect)
             if (isUsingArrow)
             {
-                Managers.Input.OnWASDKeyEntered += OnArrowKey;
+                Managers.Input.OnArrowKeyEntered += OnArrowKey;
                 Managers.Input.OnSpaceKeyEntered += OnBoosterKey;
             }
             else
             {
-                Managers.Input.OnArrowKeyEntered += OnArrowKey;
+                Managers.Input.OnWASDKeyEntered += OnArrowKey;
                 Managers.Input.OnSpaceKeyEntered += OnBoosterKey;
             }
 
@@ -190,6 +188,8 @@ public class Player : Creature
     }
     public void OnArrowKey(Vector2 value)
     {
+        if (isInputRock)
+            return;
 
         moveDirection = value;
         PlayerState = EPlayerState.Move;
@@ -211,10 +211,15 @@ public class Player : Creature
 
     public void OnJumpKey()
     {
+        if (isInputRock)
+            return;
+
         PlayerState = EPlayerState.Jump;
     }
     public void OnBoosterKey()
     {
+        if (isInputRock)
+            return;
         if (boosterCount == 3)
         {
             boosterTimer = 0;
@@ -236,7 +241,6 @@ public class Player : Creature
     protected virtual void IdleStateEnter()
     {
         InitRigidVelocityX();
-        isPlayerStateLock = false;
 
     }
 
@@ -271,11 +275,10 @@ public class Player : Creature
 
     protected virtual void HitStateEnter()
     {
-        isPlayerStateLock = true;
         InitRigidVelocityY();
         inputTime = 0;
         //move중에 히트시 해당위치로 이동
-
+        isInputRock = true;
 
         // 뒤로 밀려나기
         SetRigidVelocity(-transform.forward * hitBackDistance);
@@ -303,7 +306,7 @@ public class Player : Creature
 
         StopCoroutine(blinkCoroutine);
 
-        isPlayerStateLock = false;
+        isInputRock = false;
 
         if (playerRenderer != null)
         {
@@ -331,6 +334,8 @@ public class Player : Creature
     private Vector3 beforePosition = Vector3.zero;
     protected virtual bool MoveStateCondition()
     {
+        if (isInputRock)
+            return false;
 
         if (moveDirection.x == 0 && moveDirection.y <= 0 || isJump)
             return false;
@@ -348,6 +353,8 @@ public class Player : Creature
 
     protected virtual void MoveStateEnter()
     {
+
+        trackNum += (int)moveDirection.x;
         if (moveDirection.y > 0)
         {
             moveDirection.y *= moveSpeed;
@@ -417,7 +424,7 @@ public class Player : Creature
 
     protected virtual void CollectStateEnter()
     {
-        isPlayerStateLock = true;
+
     }
 
     protected virtual void UpdateCollectState()
@@ -429,8 +436,7 @@ public class Player : Creature
     }
 
     protected virtual void CollectStateExit()
-    {
-        isPlayerStateLock = false;
+    { 
     }
     #endregion
 
