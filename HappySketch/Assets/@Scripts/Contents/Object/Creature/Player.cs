@@ -9,6 +9,7 @@ using UnityEngine.UIElements;
 using System;
 using static Define;
 using TMPro;
+using UnityEngine.Playables;
 
 
 public enum EPlayerState
@@ -19,7 +20,6 @@ public enum EPlayerState
     Jump,
 
     Hit,
-
     Collect, //수집
     Dead
 }
@@ -31,7 +31,8 @@ public class Player : Creature
     private float inputCooldown = 0.5f; // W와 S 키 쿨타임
     private float inputTime = 0f; // 입력시간 
     #endregion
-
+    [SerializeField, ReadOnly]
+    private float distance = 0f;
     #region booster 변수
     [SerializeField]
     private int boosterCount = 0; // 부스터 게이지
@@ -42,7 +43,8 @@ public class Player : Creature
     #region hit 변수
     [SerializeField]
     private float hitInputIgnoreTime = 1.0f; // Hit 상태에서 입력 무시 시간
-    private float hitTime = 0; // hit시간
+    [SerializeField,ReadOnly]
+    private float hitTime = -1; // hit시간
     #endregion
 
     [SerializeField]
@@ -58,7 +60,7 @@ public class Player : Creature
 
     #region playerState
     [SerializeField, ReadOnly]
-    protected bool isInputRock = false; 
+    protected bool isInputRock = false;
     [SerializeField, ReadOnly]
     protected EPlayerState _playerState = EPlayerState.None;
     public virtual EPlayerState PlayerState
@@ -80,7 +82,7 @@ public class Player : Creature
                 case EPlayerState.Move: isChangeState = MoveStateCondition(); break;
                 case EPlayerState.Jump: isChangeState = JumpStateCondition(); break;
                 case EPlayerState.Hit: isChangeState = HitStateCondition(); break;
-                case EPlayerState.Collect: break;
+                case EPlayerState.Collect:  break;
             }
             if (isChangeState == false)
                 return;
@@ -97,6 +99,7 @@ public class Player : Creature
 
             _playerState = value;
             // 추후 애니메이션 재생 들어가야함
+            PlayAnimation(value);
 
             switch (value)
             {
@@ -176,12 +179,12 @@ public class Player : Creature
             if (isUsingArrow)
             {
                 Managers.Input.OnArrowKeyEntered += OnArrowKey;
-                Managers.Input.OnSpaceKeyEntered += OnBoosterKey;
+                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
             }
             else
             {
                 Managers.Input.OnWASDKeyEntered += OnArrowKey;
-                Managers.Input.OnSpaceKeyEntered += OnBoosterKey;
+                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
             }
 
 
@@ -258,18 +261,11 @@ public class Player : Creature
     #region Hit
     [SerializeField]
     private float hitBackDistance = 3.0f; // 뒤로 밀려나는 거리
-    private Renderer playerRenderer; // 캐릭터의 렌더러
 
-    private Coroutine blinkCoroutine;
     protected virtual bool HitStateCondition()
     {
         if (boosterTimer >= 0)
             return false;
-        if (PlayerState == EPlayerState.Move)
-        {
-            transform.position = beforePosition;
-            trackNum -= (int)moveDirection.x;
-        }
         return true;
     }
 
@@ -277,57 +273,39 @@ public class Player : Creature
     {
         InitRigidVelocityY();
         inputTime = 0;
-        //move중에 히트시 해당위치로 이동
         isInputRock = true;
-
+        hitTime = 0;
+        if (PlayerState == EPlayerState.Move)
+        {
+            transform.position = beforePosition;
+            trackNum -= (int)moveDirection.x;
+        }
         // 뒤로 밀려나기
         SetRigidVelocity(-transform.forward * hitBackDistance);
+       
 
-        // 렌더러 가져오기
-        playerRenderer = GetComponent<Renderer>();
-        blinkCoroutine = StartCoroutine(BlinkCoroutine()); // 깜박임 코루틴 시작
     }
 
     protected virtual void UpdateHitState()
     {
-
         hitTime += Time.deltaTime;
         if (hitTime >= hitInputIgnoreTime)
         {
-            hitTime = 0;
-            PlayerState = EPlayerState.Idle; // 히트 상태 종료
+            hitTime = -1;
+            PlayerState = EPlayerState.Idle; // 기절 상태 종료
         }
     }
 
     protected virtual void HitStateExit()
     {
-        // 앞으로
+
         SetRigidVelocity(transform.forward * hitBackDistance);
 
-        StopCoroutine(blinkCoroutine);
-
         isInputRock = false;
-
-        if (playerRenderer != null)
-        {
-            playerRenderer.enabled = true; // 렌더러 활성화
-        }
-
-    }
-
-    private IEnumerator BlinkCoroutine()
-    {
-        while (hitTime < hitInputIgnoreTime)
-        {
-            if (playerRenderer != null)
-            {
-                playerRenderer.enabled = !playerRenderer.enabled; // 가시성을 토글
-            }
-            yield return new WaitForSeconds(0.1f); // 0.1초 간격으로 깜박임
-        }
     }
 
     #endregion
+
 
     #region Move
     private Vector3 targetPosition = Vector3.zero; // 이동할 위치
@@ -358,6 +336,7 @@ public class Player : Creature
         if (moveDirection.y > 0)
         {
             moveDirection.y *= moveSpeed;
+            distance += moveSpeed;
         }
 
         beforePosition = transform.position;
@@ -405,7 +384,8 @@ public class Player : Creature
 
     protected virtual void UpdateJumpState()
     {
-
+        if(!isJump)
+            PlayerState = EPlayerState.Idle;
     }
 
     protected virtual void JumpStateExit()
@@ -436,7 +416,7 @@ public class Player : Creature
     }
 
     protected virtual void CollectStateExit()
-    { 
+    {
     }
     #endregion
 
@@ -464,7 +444,6 @@ public class Player : Creature
                 case EPlayerState.Idle: UpdateIdleState(); break;
                 case EPlayerState.Move: UpdateMoveState(); break;
                 case EPlayerState.Jump: UpdateJumpState(); break;
-
                 case EPlayerState.Hit: UpdateHitState(); break;
 
             }
@@ -475,6 +454,47 @@ public class Player : Creature
         coPlayerStateController = null;
     }
     #endregion
+
+    #region Animation
+    protected void PlayAnimation(EPlayerState state)
+    {
+        if (animator == null)
+            return;
+
+        animator.Play(state.ToString());
+    }
+
+    protected bool IsState(AnimatorStateInfo stateInfo, EPlayerState state)
+    {
+        return stateInfo.IsName(state.ToString());
+    }
+
+    public bool IsState(EPlayerState state)
+    {
+        if (animator == null)
+            return false;
+
+        return IsState(animator.GetCurrentAnimatorStateInfo(0), state);
+    }
+
+    public bool IsEndCurrentState(EPlayerState state)
+    {
+        if (animator == null)
+        {
+            Debug.LogWarning("animator is Null");
+            return false;
+        }
+
+        // 다른 애니메이션이 재생 중
+        if (!IsState(state))
+            return false;
+
+        //return IsEndState(animator.GetCurrentAnimatorStateInfo(0));
+        return true;
+    }
+    #endregion
+
+
 
     // 임시 hit
     private void OnTriggerEnter(Collider other)

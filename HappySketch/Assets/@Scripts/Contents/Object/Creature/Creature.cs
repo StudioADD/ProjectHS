@@ -16,7 +16,7 @@ public abstract class Creature : BaseObject
     
     protected Collider col;
     private Rigidbody rigid;
-    private Animator animator;
+    protected Animator animator;
 
     [SerializeField, ReadOnly]
     protected CollisionTrigger collisionTrigger = null;
