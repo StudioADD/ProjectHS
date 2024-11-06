@@ -29,10 +29,10 @@ public class Player : Creature
     #region input 변수
     [SerializeField]
     private float inputCooldown = 0.5f; // W와 S 키 쿨타임
+    [SerializeField,ReadOnly]
     private float inputTime = 0f; // 입력시간 
     #endregion
-    [SerializeField, ReadOnly]
-    private float distance = 0f;
+
     #region booster 변수
     [SerializeField]
     private int boosterCount = 0; // 부스터 게이지
@@ -43,7 +43,7 @@ public class Player : Creature
     #region hit 변수
     [SerializeField]
     private float hitInputIgnoreTime = 1.0f; // Hit 상태에서 입력 무시 시간
-    [SerializeField,ReadOnly]
+    [SerializeField, ReadOnly]
     private float hitTime = -1; // hit시간
     #endregion
 
@@ -70,10 +70,14 @@ public class Player : Creature
         {
 
             if (_playerState == EPlayerState.Dead)
+            {
                 return;
+            }
 
             if (_playerState == value)
+            {
                 return;
+            }
 
             bool isChangeState = true;
             switch (value)
@@ -82,10 +86,12 @@ public class Player : Creature
                 case EPlayerState.Move: isChangeState = MoveStateCondition(); break;
                 case EPlayerState.Jump: isChangeState = JumpStateCondition(); break;
                 case EPlayerState.Hit: isChangeState = HitStateCondition(); break;
-                case EPlayerState.Collect:  break;
+                case EPlayerState.Collect: break;
             }
             if (isChangeState == false)
+            {
                 return;
+            }
 
             switch (_playerState)
             {
@@ -123,7 +129,9 @@ public class Player : Creature
         protected set
         {
             if (_isPlayerInputControll == value)
+            {
                 return;
+            }
 
             _isPlayerInputControll = value;
             ConnectInputActions(value);
@@ -132,7 +140,9 @@ public class Player : Creature
             {
 
                 if (coPlayerStateController == null)
+                {
                     coPlayerStateController = StartCoroutine(CoPlayerStateController());
+                }
             }
         }
     }
@@ -141,7 +151,9 @@ public class Player : Creature
     public override bool Init()
     {
         if (base.Init() == false)
+        {
             return false;
+        }
 
         this.gameObject.tag = ETag.Player.ToString();
         this.gameObject.layer = (int)ELayer.Player;
@@ -176,6 +188,7 @@ public class Player : Creature
         Managers.Input.OnArrowKeyEntered -= OnArrowKey;
         Managers.Input.OnSpaceKeyEntered -= OnBoosterKey;
         if (isConnect)
+        {
             if (isUsingArrow)
             {
                 Managers.Input.OnArrowKeyEntered += OnArrowKey;
@@ -184,22 +197,25 @@ public class Player : Creature
             else
             {
                 Managers.Input.OnWASDKeyEntered += OnArrowKey;
-                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+                Managers.Input.OnSpaceKeyEntered += OnBoosterKey;
             }
+        }
 
 
     }
     public void OnArrowKey(Vector2 value)
     {
         if (isInputRock)
+        {
             return;
+        }
 
         moveDirection = value;
         PlayerState = EPlayerState.Move;
 
         if (value.y > 0)
         {
-            if (inputTime < inputCooldown)
+            if (inputTime >= inputCooldown)
             {
                 inputTime = 0f;
             }
@@ -215,14 +231,18 @@ public class Player : Creature
     public void OnJumpKey()
     {
         if (isInputRock)
+        {
             return;
+        }
 
         PlayerState = EPlayerState.Jump;
     }
     public void OnBoosterKey()
     {
         if (isInputRock)
+        {
             return;
+        }
         if (boosterCount == 3)
         {
             boosterTimer = 0;
@@ -249,7 +269,7 @@ public class Player : Creature
 
     protected virtual void UpdateIdleState()
     {
-        //InputUpdate();
+
     }
 
     protected virtual void IdleStateExit()
@@ -265,7 +285,9 @@ public class Player : Creature
     protected virtual bool HitStateCondition()
     {
         if (boosterTimer >= 0)
+        {
             return false;
+        }
         return true;
     }
 
@@ -275,19 +297,21 @@ public class Player : Creature
         inputTime = 0;
         isInputRock = true;
         hitTime = 0;
-        if (PlayerState == EPlayerState.Move)
-        {
-            transform.position = beforePosition;
-            trackNum -= (int)moveDirection.x;
-        }
+
+        
+
+
         // 뒤로 밀려나기
-        SetRigidVelocity(-transform.forward * hitBackDistance);
-       
+        beforePosition = transform.position;
+        targetPosition = transform.position;
+        targetPosition.z -= hitBackDistance;
+
 
     }
 
     protected virtual void UpdateHitState()
     {
+        Movement();
         hitTime += Time.deltaTime;
         if (hitTime >= hitInputIgnoreTime)
         {
@@ -299,8 +323,6 @@ public class Player : Creature
     protected virtual void HitStateExit()
     {
 
-        SetRigidVelocity(transform.forward * hitBackDistance);
-
         isInputRock = false;
     }
 
@@ -308,17 +330,25 @@ public class Player : Creature
 
 
     #region Move
+    [SerializeField, ReadOnly]
     private Vector3 targetPosition = Vector3.zero; // 이동할 위치
+    [SerializeField, ReadOnly]
     private Vector3 beforePosition = Vector3.zero;
     protected virtual bool MoveStateCondition()
     {
         if (isInputRock)
+        {
             return false;
+        }
 
         if (moveDirection.x == 0 && moveDirection.y <= 0 || isJump)
+        {
             return false;
+        }
         if (inputTime < inputCooldown && moveDirection.y > 0)
+        {
             return false;
+        }
 
 
         if (trackNum + (int)moveDirection.x < 0 || trackNum + (int)moveDirection.x > 3)
@@ -336,7 +366,6 @@ public class Player : Creature
         if (moveDirection.y > 0)
         {
             moveDirection.y *= moveSpeed;
-            distance += moveSpeed;
         }
 
         beforePosition = transform.position;
@@ -349,7 +378,7 @@ public class Player : Creature
         Movement();
         if (transform.position == targetPosition)
         {
-            PlayerState = EPlayerState.Idle; ;
+            PlayerState = EPlayerState.Idle;
         }
 
 
@@ -357,13 +386,17 @@ public class Player : Creature
 
     protected virtual void MoveStateExit()
     {
-        if (hitTime > 0)
-            beforePosition = transform.position;
+        Debug.LogWarning(targetPosition != transform.position);
+        if(targetPosition != transform.position)
+        {
+            transform.position = beforePosition;
+        }
+        Debug.LogWarning(inputTime);
     }
 
     private void Movement()
     {
-        transform.position = Vector3.MoveTowards(this.transform.position, targetPosition, 0.03f); // 이동속도 data로 뺄수 있게 해줄것
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.02f/inputCooldown); // 이동속도 data로 뺄수 있게 해줄것
     }
     #endregion
 
@@ -371,7 +404,9 @@ public class Player : Creature
     protected virtual bool JumpStateCondition()
     {
         if (isJump)
+        {
             return false;
+        }
 
         return true;
     }
@@ -384,8 +419,11 @@ public class Player : Creature
 
     protected virtual void UpdateJumpState()
     {
-        if(!isJump)
+        if (rigid.velocity.y == 0)
+        {
             PlayerState = EPlayerState.Idle;
+        }
+
     }
 
     protected virtual void JumpStateExit()
@@ -436,7 +474,9 @@ public class Player : Creature
                 }
             }
             if (inputTime < inputCooldown)
+            {
                 inputTime += Time.deltaTime;
+            }
             BoosterTimeUpdate();
 
             switch (PlayerState)
@@ -459,7 +499,9 @@ public class Player : Creature
     protected void PlayAnimation(EPlayerState state)
     {
         if (animator == null)
+        {
             return;
+        }
 
         animator.Play(state.ToString());
     }
@@ -472,7 +514,9 @@ public class Player : Creature
     public bool IsState(EPlayerState state)
     {
         if (animator == null)
+        {
             return false;
+        }
 
         return IsState(animator.GetCurrentAnimatorStateInfo(0), state);
     }
@@ -487,29 +531,14 @@ public class Player : Creature
 
         // 다른 애니메이션이 재생 중
         if (!IsState(state))
+        {
             return false;
+        }
 
         //return IsEndState(animator.GetCurrentAnimatorStateInfo(0));
         return true;
     }
     #endregion
-
-
-
-    // 임시 hit
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Monster"))
-        {
-            PlayerState = EPlayerState.Hit;
-        }
-        else if (other.CompareTag("Booster"))
-        {
-            boosterCount++;
-            if (boosterCount > 3)
-                boosterCount = 3;
-        }
-    }
 
     private void BoosterTimeUpdate()
     {
@@ -523,6 +552,25 @@ public class Player : Creature
             }
         }
     }
+
+
+    // 임시 hit
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Monster"))
+        {
+            PlayerState = EPlayerState.Hit;
+        }
+        else if (other.CompareTag("Booster"))
+        {
+            boosterCount++;
+            if (boosterCount > 3)
+            {
+                boosterCount = 3;
+            }
+        }
+    }
+
 
     private void OnCollisionExit(Collision collision)
     {
