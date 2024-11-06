@@ -16,7 +16,7 @@ public abstract class BaseStage : InitBase
 
     [field: SerializeField, ReadOnly]
     public Transform PlayerStartTr { get; private set; }
-
+      
     protected virtual void Reset()
     {
         PlayerStartTr = transform.Find("PlayerSpawnPoint");

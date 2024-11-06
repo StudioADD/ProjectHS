@@ -20,8 +20,6 @@ public class StageGroupController : InitBase
     {
         string prefabPath = $"{PrefabPath.STAGE_PATH}/{stageType}";
 
-        Debug.Log(prefabPath);
-
         leftStage = Managers.Resource.Instantiate(prefabPath, this.transform).GetComponent<BaseStage>();
         rightStage = Managers.Resource.Instantiate(prefabPath, this.transform).GetComponent<BaseStage>();
 
