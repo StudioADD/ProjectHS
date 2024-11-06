@@ -396,7 +396,7 @@ public class Player : Creature
 
     private void Movement()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.02f/inputCooldown); // 이동속도 data로 뺄수 있게 해줄것
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed / inputCooldown* Time.deltaTime); // 이동속도 data로 뺄수 있게 해줄것
     }
     #endregion
 
@@ -488,6 +488,7 @@ public class Player : Creature
 
             }
 
+            //yield return new WaitForSeconds(0.01f);
             yield return null;
         }
 
