@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace MomDra
 {
-    public class GameSceneView : MonoBehaviour
+    public class GameSceneStage1View : GameSceneView
     {
         [SerializeField]
         private Image progressing;
@@ -13,15 +13,10 @@ namespace MomDra
         [SerializeField]
         private Image[] items;
 
-        private GameScenePresenter gameScenePresenter;
-
-        public void SetGameScenePresenter(GameScenePresenter gameScenePresenter)
-        {
-            this.gameScenePresenter = gameScenePresenter;
-        }
-
         public void UpdateItemCount(int count)
         {
+            Debug.Log($"아이템 개수: {count}");
+
             for(int i = 0; i < count; ++i)
             {
                 items[i].gameObject.SetActive(true);
@@ -35,6 +30,8 @@ namespace MomDra
 
         public void UpdateProgressRatio(float ratio)
         {
+            Debug.Log($"현재 진행 상황: {ratio}");
+
             progressing.fillAmount = ratio;
         }
     }

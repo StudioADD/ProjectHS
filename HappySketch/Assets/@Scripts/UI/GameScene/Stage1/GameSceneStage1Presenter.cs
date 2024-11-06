@@ -4,20 +4,18 @@ using UnityEngine;
 
 namespace MomDra
 {
-    public class GameScenePresenter
+    public class GameSceneStage1Presenter : GameScenePresenter
     {
-        private GameSceneView view;
-
-        // 내 모델로 테스트 해보자
-        //private GameSceneModel model;
-
-        public GameScenePresenter(GameSceneView view)
+        public GameSceneStage1Presenter(GameSceneView view, GameSceneModel model) : base(view, model)
         {
-            this.view = view;
             // 여기서 모델의 이벤트 등록이 필요하다
             // 모델에서는 이벤트를 발생 시켜야 한다
 
-            view.SetGameScenePresenter(this);
+            if (model is GameSceneStage1Model model1)
+            {
+                model1.ProgressEvent.AddListener(SetProgressRatio);
+                model1.ItemCountEvent.AddListener(SetItemCount);
+            }
         }
 
         /// <summary>
@@ -26,7 +24,8 @@ namespace MomDra
         /// <param name="count"> 아이템 수: 0 ~ 3 </param>
         public void SetItemCount(int count)
         {
-            view.UpdateItemCount(count);
+            if (view is GameSceneStage1View view1)
+                view1.UpdateItemCount(count);
         }
 
         /// <summary>
@@ -35,7 +34,8 @@ namespace MomDra
         /// <param name="ratio">비율: 0 ~ 1 </param>
         public void SetProgressRatio(float ratio)
         {
-            view.UpdateProgressRatio(ratio);
+            if (view is GameSceneStage1View view1)
+                view1.UpdateProgressRatio(ratio);
         }
     }
 }

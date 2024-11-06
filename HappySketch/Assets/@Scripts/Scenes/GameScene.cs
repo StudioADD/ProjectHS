@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
-public class GameSceneView : BaseScene
+public class GameScene : BaseScene
 {
     [SerializeField] StageGroupController stageGroup;
     [SerializeField] CameraGroupController cameraGroup;

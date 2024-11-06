@@ -6,6 +6,8 @@ public enum EStageType
 {
     None = 0,
     SharkAvoidance,
+    Stage2,
+    Stage3
 }
 
 public abstract class BaseStage : InitBase
