@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace MomDra
 {
-    public class GameSceneStage2View : GameSceneView
+    public class GameSceneStage2View : GameSceneViewBase
     {
         // UI 요소들
 

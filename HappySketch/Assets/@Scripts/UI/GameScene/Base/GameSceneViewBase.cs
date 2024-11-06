@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 namespace MomDra
 {
-    public class GameSceneView : MonoBehaviour
+    public abstract class GameSceneViewBase : MonoBehaviour
     {
-        protected GameScenePresenter gameScenePresenter;
+        protected GameScenePresenterBase gameScenePresenter;
 
-        public void SetGameScenePresenter(GameScenePresenter gameScenePresenter)
+        public void SetGameScenePresenter(GameScenePresenterBase gameScenePresenter)
         {
             this.gameScenePresenter = gameScenePresenter;
         }

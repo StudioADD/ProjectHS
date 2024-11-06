@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace MomDra
 {
-    public class GameSceneStage2Model : GameSceneModel
+    public class GameSceneStage2Model : GameSceneModelBase
     {
        
     }

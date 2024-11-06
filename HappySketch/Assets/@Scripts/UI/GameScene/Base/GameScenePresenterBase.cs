@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace MomDra
 {
-    public class GameScenePresenter
+    public class GameScenePresenterBase
     {
-        protected GameSceneView view;
-        protected GameSceneModel model;
+        protected GameSceneViewBase view;
+        protected GameSceneModelBase model;
 
-        public GameScenePresenter(GameSceneView view, GameSceneModel model)
+        public GameScenePresenterBase(GameSceneViewBase view, GameSceneModelBase model)
         {
             this.view = view;
             this.model = model;

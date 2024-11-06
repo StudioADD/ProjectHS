@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace MomDra
 {
-    public class GameSceneModel : MonoBehaviour
+    public class GameSceneModelBase : MonoBehaviour
     {
        
     }

@@ -50,6 +50,9 @@ public class GameScene : BaseScene
 
         cameraGroup.SetTarget(leftPlayer, ETeamType.Left);
         cameraGroup.SetTarget(rightPlayer, ETeamType.Right);
+
+        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
+            uI_GameScene.StartStage(stageType);
     }
     
     public override void Clear()
