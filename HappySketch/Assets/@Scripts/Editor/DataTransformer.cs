@@ -34,7 +34,7 @@ public class DataTransformer : EditorWindow
         string path = $"{Application.dataPath}/Resources/Data/{filename}Data.json";
         string jsonStr = JsonConvert.SerializeObject(loader, Formatting.Indented);
         File.WriteAllText(path, jsonStr, Encoding.UTF8);
-        AssetDatabase.Refresh();        
+        AssetDatabase.Refresh();
     }
 
     private static Encoding GetTextEncodingInfo(string path)
@@ -48,11 +48,6 @@ public class DataTransformer : EditorWindow
 
         return enc;
     }
-
-    public static void SaveToEUC_KR(string textFilePath)
-    {
-    }
-
 
     private static List<LoaderData> ParseExcelDataToList<LoaderData>(string filename) where LoaderData : new()
     {

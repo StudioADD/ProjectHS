@@ -78,3 +78,31 @@ public class TeamCamera : InitBase
         return true;
     }
 }
+
+
+public class A : MonoBehaviour
+{
+    [SerializeField] B b;
+
+    public void Test()
+    {
+        b.OnTriggerEvent -= OnTriggerEvent;
+        b.OnTriggerEvent += OnTriggerEvent;
+    }
+
+    public void OnTriggerEvent(Collider other)
+    {
+
+    }
+}
+
+public class B : MonoBehaviour
+{
+    public event Action<Collider> OnTriggerEvent;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        OnTriggerEvent?.Invoke(other);
+        // C# ? -> 이새기 널이야? -> 널 아니면 뒤에 실행.
+    }
+}

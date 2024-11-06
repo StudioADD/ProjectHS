@@ -8,7 +8,7 @@ using UnityEngine;
 public static class DataPath
 {
     // Json Data
-    public const string STAGE_JSONDATA_PATH = "/Resources/Data/JsonData/StageData";
+    public const string STAGE_JSONDATA_PATH = "/Resources/Data/StageData";
 }
 
 /// <summary>
