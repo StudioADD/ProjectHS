@@ -10,6 +10,7 @@ using System;
 using static Define;
 using TMPro;
 using UnityEngine.Playables;
+using System.Text;
 
 
 public enum EPlayerState
@@ -18,18 +19,23 @@ public enum EPlayerState
     Idle,
     Move,
     Jump,
-
+    Run,
     Hit,
-    Collect, //수집
+    LeftCollect, //수집
+    RightCollect, //수집
+
     Dead
 }
 
 public class Player : Creature
 {
+    [SerializeField]
+    private EStageType stageType;
+
     #region input 변수
     [SerializeField]
     private float inputCooldown = 0.5f; // W와 S 키 쿨타임
-    [SerializeField,ReadOnly]
+    [SerializeField, ReadOnly]
     private float inputTime = 0f; // 입력시간 
     #endregion
 
@@ -86,7 +92,9 @@ public class Player : Creature
                 case EPlayerState.Move: isChangeState = MoveStateCondition(); break;
                 case EPlayerState.Jump: isChangeState = JumpStateCondition(); break;
                 case EPlayerState.Hit: isChangeState = HitStateCondition(); break;
-                case EPlayerState.Collect: break;
+                case EPlayerState.LeftCollect: isChangeState = LeftCollectStateCondition(); break;
+                case EPlayerState.RightCollect: isChangeState = RightCollectStateCondition(); break;
+                case EPlayerState.Run: isChangeState = RunStateCondition(); break;
             }
             if (isChangeState == false)
             {
@@ -99,12 +107,13 @@ public class Player : Creature
                 case EPlayerState.Move: MoveStateExit(); break;
                 case EPlayerState.Jump: JumpStateExit(); break;
                 case EPlayerState.Hit: HitStateExit(); break;
-                case EPlayerState.Collect: break;
+                case EPlayerState.LeftCollect: LeftCollectStateExit(); break;
+                case EPlayerState.RightCollect: RightCollectStateExit(); break;
+                case EPlayerState.Run: RunStateExit(); break;
 
             }
 
             _playerState = value;
-            // 추후 애니메이션 재생 들어가야함
             PlayAnimation(value);
 
             switch (value)
@@ -113,7 +122,9 @@ public class Player : Creature
                 case EPlayerState.Move: MoveStateEnter(); break;
                 case EPlayerState.Jump: JumpStateEnter(); break;
                 case EPlayerState.Hit: HitStateEnter(); break;
-                case EPlayerState.Collect: break;
+                case EPlayerState.LeftCollect: LeftCollectStateEnter(); break;
+                case EPlayerState.RightCollect: LeftCollectStateEnter(); break;
+                case EPlayerState.Run: RunStateEnter(); break;
             }
         }
     }
@@ -158,20 +169,26 @@ public class Player : Creature
         this.gameObject.tag = ETag.Player.ToString();
         this.gameObject.layer = (int)ELayer.Player;
         CreatureType = ECreatureType.Player;
-        PlayerState = EPlayerState.Idle;
+        //PlayerState = EPlayerState.Idle;
 
 
         IsPlayerInputControll = true;
         trackNum = 2;
         targetPosition = beforePosition = transform.position;
+        SetInfo((int)stageType);
         return true;
     }
 
     public override void SetInfo(int templateID = 0)
     {
-        //base.SetInfo(templateID);
+        stageType = (EStageType)templateID;
+        switch (stageType)
+        {
+            case EStageType.None: PlayerState = EPlayerState.Run; break; // 추후 스테이지2 나오면  바꿔야함
+            case EStageType.SharkAvoidance: PlayerState = EPlayerState.Idle; break;
+        }
 
-        //세팅 필요한경우 
+
     }
 
 
@@ -180,30 +197,43 @@ public class Player : Creature
 
     private void ConnectInputActions(bool isConnect)
     {
-        // 추후 wasd 따로 나누고 arrow 도 나눠서 캐릭터 2개 나눠야함
+
+        switch (stageType)
+        {
+            case EStageType.None: Stage2ConnectInputActions(isConnect); break;
+            case EStageType.SharkAvoidance: SharkAvoidanceConnectInputActions(isConnect); break;
+                // 스테이지 추가
+        }
 
 
-        Managers.Input.OnWASDKeyEntered -= OnArrowKey;
-        Managers.Input.OnSpaceKeyEntered -= OnJumpKey;
-        Managers.Input.OnArrowKeyEntered -= OnArrowKey;
-        Managers.Input.OnSpaceKeyEntered -= OnBoosterKey;
+
+
+    }
+
+    #region SharkAvoidance
+
+    public void SharkAvoidanceConnectInputActions(bool isConnect)
+    {
+        Managers.Input.OnWASDKeyEntered -= OnArrowKeySharkAvoidance;
+        Managers.Input.OnArrowKeyEntered -= OnArrowKeySharkAvoidance;
+        Managers.Input.OnSpaceKeyEntered -= OnBoosterKeySharkAvoidance;
+        Managers.Input.OnEndKeyEntered -= OnBoosterKeySharkAvoidance;
         if (isConnect)
         {
             if (isUsingArrow)
             {
-                Managers.Input.OnArrowKeyEntered += OnArrowKey;
-                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+                Managers.Input.OnArrowKeyEntered += OnArrowKeySharkAvoidance;
+                Managers.Input.OnEndKeyEntered += OnBoosterKeySharkAvoidance;
             }
             else
             {
-                Managers.Input.OnWASDKeyEntered += OnArrowKey;
-                Managers.Input.OnSpaceKeyEntered += OnBoosterKey;
+                Managers.Input.OnWASDKeyEntered += OnArrowKeySharkAvoidance;
+                Managers.Input.OnSpaceKeyEntered += OnBoosterKeySharkAvoidance;
             }
         }
-
-
     }
-    public void OnArrowKey(Vector2 value)
+
+    public void OnArrowKeySharkAvoidance(Vector2 value)
     {
         if (isInputRock)
         {
@@ -228,16 +258,7 @@ public class Player : Creature
 
     }
 
-    public void OnJumpKey()
-    {
-        if (isInputRock)
-        {
-            return;
-        }
-
-        PlayerState = EPlayerState.Jump;
-    }
-    public void OnBoosterKey()
+    public void OnBoosterKeySharkAvoidance()
     {
         if (isInputRock)
         {
@@ -251,6 +272,65 @@ public class Player : Creature
         }
 
     }
+    #endregion
+
+    #region stage2
+    public void Stage2ConnectInputActions(bool isConnect)
+    {
+        Managers.Input.OnWASDKeyEntered -= OnArrowKeySharkAvoidance;
+        Managers.Input.OnArrowKeyEntered -= OnArrowKeySharkAvoidance;
+        Managers.Input.OnSpaceKeyEntered -= OnBoosterKeySharkAvoidance;
+        Managers.Input.OnEndKeyEntered -= OnBoosterKeySharkAvoidance;
+        Managers.Input.OnWASDKeyEntered -= OnArrowKeyStage2;
+        Managers.Input.OnArrowKeyEntered -= OnArrowKeyStage2;
+        Managers.Input.OnSpaceKeyEntered -= OnJumpKey;
+        if (isConnect)
+        {
+            if (isUsingArrow)
+            {
+                Managers.Input.OnArrowKeyEntered += OnArrowKeyStage2;
+                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+            }
+            else
+            {
+                Managers.Input.OnWASDKeyEntered += OnArrowKeyStage2;
+                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+            }
+        }
+
+    }
+
+    public void OnArrowKeyStage2(Vector2 value)
+    {
+
+        if (value.x > 0)
+        {
+
+            PlayerState = EPlayerState.RightCollect;
+        }
+        else if (value.x < 0)
+        {
+            PlayerState = EPlayerState.LeftCollect;
+        }
+
+
+    }
+
+    #endregion
+
+    #region stage3
+
+    public void OnJumpKey()
+    {
+        if (isInputRock)
+        {
+            return;
+        }
+
+        PlayerState = EPlayerState.Jump;
+    }
+    #endregion
+
     #endregion
 
     #region Idle
@@ -294,11 +374,10 @@ public class Player : Creature
     protected virtual void HitStateEnter()
     {
         InitRigidVelocityY();
-        inputTime = 0;
         isInputRock = true;
         hitTime = 0;
 
-        
+
 
 
         // 뒤로 밀려나기
@@ -316,7 +395,10 @@ public class Player : Creature
         if (hitTime >= hitInputIgnoreTime)
         {
             hitTime = -1;
-            PlayerState = EPlayerState.Idle; // 기절 상태 종료
+            if (stageType == EStageType.None)
+                PlayerState = EPlayerState.Run;
+            else
+                PlayerState = EPlayerState.Idle; // 기절 상태 종료
         }
     }
 
@@ -386,17 +468,16 @@ public class Player : Creature
 
     protected virtual void MoveStateExit()
     {
-        Debug.LogWarning(targetPosition != transform.position);
-        if(targetPosition != transform.position)
+        if (targetPosition != transform.position)
         {
             transform.position = beforePosition;
+            trackNum -= (int)moveDirection.x;
         }
-        Debug.LogWarning(inputTime);
     }
 
     private void Movement()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed / inputCooldown* Time.deltaTime); // 이동속도 data로 뺄수 있게 해줄것
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed / inputCooldown * Time.deltaTime); // 이동속도 data로 뺄수 있게 해줄것
     }
     #endregion
 
@@ -419,9 +500,10 @@ public class Player : Creature
 
     protected virtual void UpdateJumpState()
     {
+        Running();
         if (rigid.velocity.y == 0)
         {
-            PlayerState = EPlayerState.Idle;
+            PlayerState = EPlayerState.Run;
         }
 
     }
@@ -432,28 +514,101 @@ public class Player : Creature
     }
     #endregion
 
-    #region Collect
-    protected virtual bool CollectStateCondition()
+    #region Run
+    protected virtual bool RunStateCondition()
     {
-
 
         return true;
     }
 
-    protected virtual void CollectStateEnter()
+    protected virtual void RunStateEnter()
+    {
+
+        beforePosition = transform.position;
+        targetPosition =  new Vector3(0, transform.position.y, 1000); // 추후 트랙 끝 position 받아올것
+
+    }
+
+    protected virtual void UpdateRunState()
+    {
+        Running();
+
+        if (transform.position == targetPosition)
+        {
+            PlayerState = EPlayerState.Idle;
+        }
+
+
+    }
+
+    protected virtual void RunStateExit()
+    {
+
+    }
+    protected void Running()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.01f); // 추후 2스테이지 data로 뺄것
+    }
+
+
+    #endregion
+
+
+    #region Left Collect
+    protected virtual bool LeftCollectStateCondition()
+    {
+        if (PlayerState != EPlayerState.Run)
+            return false;
+        return true;
+    }
+
+    protected virtual void LeftCollectStateEnter()
     {
 
     }
 
-    protected virtual void UpdateCollectState()
+    protected virtual void UpdateLeftCollectState()
     {
-
+        Running();
         //수집 시 필요한거 
-
+        if (IsEndCurrentState(PlayerState))
+        {
+            PlayerState = EPlayerState.Run;
+        }
 
     }
 
-    protected virtual void CollectStateExit()
+    protected virtual void LeftCollectStateExit()
+    {
+    }
+    #endregion
+
+
+    #region Right Collect
+    protected virtual bool RightCollectStateCondition()
+    {
+        if (PlayerState != EPlayerState.Run)
+            return false;
+        return true;
+    }
+
+    protected virtual void RightCollectStateEnter()
+    {
+
+    }
+
+    protected virtual void UpdateRightCollectState()
+    {
+        Running();
+        //수집 시 필요한거 
+        if (IsEndCurrentState(PlayerState))
+        {
+            PlayerState = EPlayerState.Run;
+        }
+
+    }
+
+    protected virtual void RightCollectStateExit()
     {
     }
     #endregion
@@ -473,6 +628,7 @@ public class Player : Creature
                     timer -= 1.0f;
                 }
             }
+
             if (inputTime < inputCooldown)
             {
                 inputTime += Time.deltaTime;
@@ -485,8 +641,11 @@ public class Player : Creature
                 case EPlayerState.Move: UpdateMoveState(); break;
                 case EPlayerState.Jump: UpdateJumpState(); break;
                 case EPlayerState.Hit: UpdateHitState(); break;
-
+                case EPlayerState.Run: UpdateRunState(); break;
+                    case EPlayerState.LeftCollect : UpdateLeftCollectState(); break;
+                    case EPlayerState.RightCollect : UpdateRightCollectState(); break;  
             }
+
 
             //yield return new WaitForSeconds(0.01f);
             yield return null;
@@ -536,8 +695,8 @@ public class Player : Creature
             return false;
         }
 
-        //return IsEndState(animator.GetCurrentAnimatorStateInfo(0));
-        return true;
+        return (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
+        
     }
     #endregion
 
