@@ -53,5 +53,6 @@ public static class Define
     {
         Left,
         Right,
+        Both
     }
 }

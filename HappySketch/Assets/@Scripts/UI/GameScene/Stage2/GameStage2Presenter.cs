@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace MomDra
 {
-    public class GameStage2Presenter : GameScenePresenterBase
+    public class GameStage2Presenter : PresenterBase
     {
-        public GameStage2Presenter(GameSceneViewBase view, GameSceneModelBase model) : base(view, model)
+        public GameStage2Presenter(ViewBase view, ModelBase model) : base(view, model)
         {
             // 여기서 모델의 이벤트 등록이 필요하다
             // 모델에서는 이벤트를 발생 시켜야 한다

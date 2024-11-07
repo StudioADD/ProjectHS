@@ -17,7 +17,6 @@ public class UI_TestPopup : UI_BasePopup
     public override void OpenPopupUI()
     {
         base.OpenPopupUI();
-
         Debug.Log("Open!!");
     }
 

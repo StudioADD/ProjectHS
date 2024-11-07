@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace MomDra
 {
-    public class GameSceneStage1View : GameSceneViewBase
+    public class GameSceneStage1View : ViewBase
     {
         [SerializeField]
         private Image progressing;

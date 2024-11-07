@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TitleScene : BaseScene
+public class TitleSceneModel : BaseScene
 {
     public override bool Init()
     {

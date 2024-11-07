@@ -9,8 +9,8 @@ using UnityEngine.UI;
 
 public class UI_GameScene : UI_BaseScene
 {
-    private GameScenePresenterBase currPresentLeft;
-    private GameScenePresenterBase currPresentRight;
+    private PresenterBase currPresentLeft;
+    private PresenterBase currPresentRight;
 
     public override bool Init()
     {
@@ -38,7 +38,7 @@ public class UI_GameScene : UI_BaseScene
         }
     }
 
-    private void SetStageUI<T> (EStageType stageType) where T : GameScenePresenterBase
+    private void SetStageUI<T> (EStageType stageType) where T : PresenterBase
     {
         // 여기서 UI Prefab을 생성하야 함!
         // View 정보 가저와야 함
@@ -59,15 +59,20 @@ public class UI_GameScene : UI_BaseScene
         rectTransform.pivot = anchor;
         rectTransform.anchoredPosition = Vector3.zero;
         
-        GameSceneViewBase leftView = leftObject.GetComponent<GameSceneViewBase>();
-        GameSceneViewBase rightView = rightObject.GetComponent<GameSceneViewBase>();
+        ViewBase leftView = leftObject.GetComponent<ViewBase>();
+        ViewBase rightView = rightObject.GetComponent<ViewBase>();
 
         // Model은 어떻게 가져올까?
         // 여기서 생성하면 안됨, 그냥 한번 넣어본 코드임
-        GameSceneModelBase leftModel = new GameSceneModelBase();
-        GameSceneModelBase rightModel = new GameSceneModelBase();
+        ModelBase leftModel = new ModelBase();
+        ModelBase rightModel = new ModelBase();
 
         currPresentLeft = Activator.CreateInstance(typeof(T), leftView, leftModel) as T;
         currPresentRight = Activator.CreateInstance(typeof(T), rightView, rightModel) as T;
+    }
+
+    public void ReceiveData(UIDataBase data)
+    {
+
     }
 }
