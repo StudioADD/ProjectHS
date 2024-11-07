@@ -19,16 +19,3 @@ public class UIFadeEffectParam : UIParam
         this.onFadeInCallBack = onFadeInCallBack;
     }
 }
-
-
-#region UI Object
-public class UIObjectParam { }
-
-public class UIStageParam : UIObjectParam { }
-
-public class UI상어피하기Param : UIStageParam 
-{
-    
-}
-
-#endregion
