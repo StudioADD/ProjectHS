@@ -99,6 +99,14 @@ public class UIMgr
             popupPool[name] = popup;
         }
     }
+    
+    public class UI_BaseObject
+    {
+        public virtual void SetInfo()
+        {
+
+        }
+    }
 
     public T OpenPopupUI<T>(UIParam param = null) where T : UI_BasePopup
     {

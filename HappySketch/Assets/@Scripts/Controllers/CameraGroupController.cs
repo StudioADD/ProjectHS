@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Define;
+using static UnityEngine.GraphicsBuffer;
 
 public class CameraGroupController : InitBase
 {
@@ -24,10 +25,10 @@ public class CameraGroupController : InitBase
         return true;
     }
 
-    public void SetInfo(EStageType stageType)
+    public void SetInfo(EStageType stageType, int stageDisX)
     {
-        leftCamera.SetInfo(stageType);
-        rightCamera.SetInfo(stageType);
+        leftCamera.SetInfo(stageType, stageDisX * -1);
+        rightCamera.SetInfo(stageType, stageDisX);
     }
 
     public void SetTarget(BaseObject target, ETeamType type)

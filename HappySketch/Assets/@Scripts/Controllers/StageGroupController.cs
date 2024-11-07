@@ -16,15 +16,15 @@ public class StageGroupController : InitBase
         return true;
     }
 
-    public void SetInfo(EStageType stageType)
+    public void SetInfo(EStageType stageType, int stageDistance)
     {
         string prefabPath = $"{PrefabPath.STAGE_PATH}/{stageType}";
 
         leftStage = Managers.Resource.Instantiate(prefabPath, this.transform).GetComponent<BaseStage>();
         rightStage = Managers.Resource.Instantiate(prefabPath, this.transform).GetComponent<BaseStage>();
 
-        leftStage.transform.position = Vector3.left * 10f;
-        rightStage.transform.position = Vector3.right * 10f;
+        leftStage.transform.position = Vector3.left * stageDistance;
+        rightStage.transform.position = Vector3.right * stageDistance;
     }
 
     public Vector3 GetStagePlayerStartPos(ETeamType teamType)

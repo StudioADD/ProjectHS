@@ -8,9 +8,10 @@ public class GameScene : BaseScene
     [SerializeField] StageGroupController stageGroup;
     [SerializeField] CameraGroupController cameraGroup;
 
-    // 임시
-    [SerializeField, ReadOnly] TestPlayer leftPlayer;
-    [SerializeField, ReadOnly] TestPlayer rightPlayer; 
+    [SerializeField, ReadOnly] Player leftPlayer;
+    [SerializeField, ReadOnly] Player rightPlayer;
+
+    const int STAGE_DISTANCE = 10;
 
     private void Start()
     {
@@ -35,18 +36,19 @@ public class GameScene : BaseScene
 
     public void StartGame(EStageType stageType)
     {
-        stageGroup.SetInfo(stageType);
-        cameraGroup.SetInfo(stageType);
+        stageGroup.SetInfo(stageType, STAGE_DISTANCE);
+        cameraGroup.SetInfo(stageType, STAGE_DISTANCE);
 
-        // 플레이어 소환 (임시 코드)
-        string prefabPath = $"{PrefabPath.OBJECT_PLAYER_PATH}/TestPlayer";
-        leftPlayer = Managers.Resource.Instantiate(prefabPath).GetComponent<TestPlayer>();
+        // 맘에 안드는 상태 (임시)
+        leftPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/LeftPlayer").GetComponent<Player>();
         leftPlayer.transform.position = stageGroup.GetStagePlayerStartPos(ETeamType.Left);
         leftPlayer.transform.position += Vector3.up * leftPlayer.GetColliderHeight();
+        leftPlayer.SetInfo((int)stageType);
 
-        rightPlayer = Managers.Resource.Instantiate(prefabPath).GetComponent<TestPlayer>();
+        rightPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/RightPlayer").GetComponent<Player>();
         rightPlayer.transform.position = stageGroup.GetStagePlayerStartPos(ETeamType.Right);
         rightPlayer.transform.position += Vector3.up * rightPlayer.GetColliderHeight();
+        rightPlayer.SetInfo((int)stageType);
 
         cameraGroup.SetTarget(leftPlayer, ETeamType.Left);
         cameraGroup.SetTarget(rightPlayer, ETeamType.Right);
@@ -59,4 +61,30 @@ public class GameScene : BaseScene
     {
 
     }
+
+
+    #region Test
+
+    public void ConnectInputAction(bool isConnect)
+    {
+        Managers.Input.OnVKeyEntered -= StageClear;
+        Managers.Input.OnCKeyEntered -= EndGame;
+
+        if (isConnect)
+        {
+            Managers.Input.OnVKeyEntered += StageClear;
+            Managers.Input.OnCKeyEntered += EndGame;
+        }
+    }
+
+    public void StageClear()
+    {
+        // 
+    }
+
+    public void EndGame()
+    {
+        // 결과 UI를 띄울까?
+    }
+    #endregion
 }
