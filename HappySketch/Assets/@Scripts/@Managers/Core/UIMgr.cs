@@ -100,12 +100,21 @@ public class UIMgr
         }
     }
     
-    public class UI_BaseObject
+    public T SpawnObjectUI<T>(Transform parent = null, UIParam param = null) where T : UI_BaseObject
     {
-        public virtual void SetInfo()
-        {
+        string name = typeof(T).Name;
 
-        }
+        GameObject go = Managers.Resource.Instantiate($"{PrefabPath.UI_OBJECT_PATH}/{name}");
+        UI_BaseObject objUI = go.GetOrAddComponent<UI_BaseObject>();
+        objUI.CloseObjectUI();
+
+        if(param != null)
+            objUI.SetInfo(param);
+
+        objUI.transform.SetParent(parent);
+        objUI.OpenObjectUI();
+
+        return objUI as T;
     }
 
     public T OpenPopupUI<T>(UIParam param = null) where T : UI_BasePopup

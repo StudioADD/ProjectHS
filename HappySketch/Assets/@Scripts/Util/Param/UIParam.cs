@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class UIParam { }
 
+#region PopupUI Param
 public class UIFadeEffectParam : UIParam
 {
     public Func<bool> fadeInEffectCondition;
@@ -19,3 +20,8 @@ public class UIFadeEffectParam : UIParam
         this.onFadeInCallBack = onFadeInCallBack;
     }
 }
+#endregion
+
+#region ObjectUI Param
+
+#endregion

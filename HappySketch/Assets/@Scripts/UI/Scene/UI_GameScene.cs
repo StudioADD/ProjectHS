@@ -66,8 +66,8 @@ public class UI_GameScene : UI_BaseScene
         ViewBase leftView = leftObject.GetComponent<ViewBase>();
         ViewBase rightView = rightObject.GetComponent<ViewBase>();
 
-        currPresentLeft = Activator.CreateInstance(typeof(T), leftView) as T;
-        currPresentRight = Activator.CreateInstance(typeof(T), rightView) as T;
+        // currPresentLeft = Activator.CreateInstance(typeof(T), leftView) as T;
+        // currPresentRight = Activator.CreateInstance(typeof(T), rightView) as T;
     }
 
     public void ReceiveData(UIDataBase data)
