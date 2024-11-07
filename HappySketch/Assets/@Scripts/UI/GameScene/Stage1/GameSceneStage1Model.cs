@@ -8,7 +8,6 @@ namespace MomDra
 {
     public class GameSceneStage1Model : ModelBase
     {
-        public UnityEvent<float> ProgressEvent;
-        public UnityEvent<int> ItemCountEvent;
+        
     }
 }

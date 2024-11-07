@@ -12,6 +12,8 @@ public class UI_GameScene : UI_BaseScene
     private PresenterBase currPresentLeft;
     private PresenterBase currPresentRight;
 
+    private EStageType currStageType;
+
     public override bool Init()
     {
         if (base.Init() == false)
@@ -22,17 +24,19 @@ public class UI_GameScene : UI_BaseScene
 
     public void StartStage(EStageType stageType)
     {
+        currStageType = stageType;
+
         switch (stageType)
         {
             case EStageType.SharkAvoidance:
                 SetStageUI<GameStage1Presenter>(stageType);
                 break;
 
-            case EStageType.Stage2:
+            case EStageType.CollectingCandy:
                 SetStageUI<GameStage2Presenter>(stageType);
                 break;
 
-            case EStageType.Stage3:
+            case EStageType.CrossingBridge:
                 SetStageUI<GameStage2Presenter>(stageType);
                 break;
         }
@@ -62,16 +66,16 @@ public class UI_GameScene : UI_BaseScene
         ViewBase leftView = leftObject.GetComponent<ViewBase>();
         ViewBase rightView = rightObject.GetComponent<ViewBase>();
 
-        // Model은 어떻게 가져올까?
-        // 여기서 생성하면 안됨, 그냥 한번 넣어본 코드임
-        ModelBase leftModel = new ModelBase();
-        ModelBase rightModel = new ModelBase();
-
-        currPresentLeft = Activator.CreateInstance(typeof(T), leftView, leftModel) as T;
-        currPresentRight = Activator.CreateInstance(typeof(T), rightView, rightModel) as T;
+        currPresentLeft = Activator.CreateInstance(typeof(T), leftView) as T;
+        currPresentRight = Activator.CreateInstance(typeof(T), rightView) as T;
     }
 
     public void ReceiveData(UIDataBase data)
+    {
+            
+    }
+
+    public void ReceiveCommonData()
     {
 
     }

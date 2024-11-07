@@ -6,16 +6,10 @@ namespace MomDra
 {
     public class GameStage1Presenter : PresenterBase
     {
-        public GameStage1Presenter(ViewBase view, ModelBase model) : base(view, model)
+        public GameStage1Presenter(ViewBase view) : base(view)
         {
             // 여기서 모델의 이벤트 등록이 필요하다
             // 모델에서는 이벤트를 발생 시켜야 한다
-
-            if (model is GameSceneStage1Model model1)
-            {
-                model1.ProgressEvent.AddListener(SetProgressRatio);
-                model1.ItemCountEvent.AddListener(SetItemCount);
-            }
         }
 
         /// <summary>

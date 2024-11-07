@@ -7,12 +7,10 @@ namespace MomDra
     public class PresenterBase
     {
         protected ViewBase view;
-        protected ModelBase model;
 
-        public PresenterBase(ViewBase view, ModelBase model)
+        public PresenterBase(ViewBase view)
         {
             this.view = view;
-            this.model = model;
             view.SetPresenter(this);
         }
     }

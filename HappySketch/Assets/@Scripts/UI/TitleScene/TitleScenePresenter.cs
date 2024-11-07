@@ -6,7 +6,7 @@ namespace MomDra
 {
     public class TitleScenePresenter : PresenterBase
     {
-        public TitleScenePresenter(ViewBase view, ModelBase model) : base(view, model)
+        public TitleScenePresenter(ViewBase view) : base(view)
         {
             // Model의 이벤트 등록
         }
@@ -18,10 +18,7 @@ namespace MomDra
 
         public void PlayButtonClicked()
         {
-            if(model is TitleSceneModel titleModel)
-            {
-                   
-            }
+            
         }
     }
 }
