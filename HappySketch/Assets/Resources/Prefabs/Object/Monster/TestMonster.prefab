@@ -99,6 +99,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d5d19257dfa79e4797e3717b08c7621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collisionTrigger: {fileID: 0}
+  data:
+    DataId: 0
+    Name: 
+    MoveSpeed: 0
+    Damage: 0
 --- !u!65 &3072890290520652853
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -145,7 +151,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 48
   m_CollisionDetection: 0
 --- !u!95 &1195150716124174925
 Animator:
