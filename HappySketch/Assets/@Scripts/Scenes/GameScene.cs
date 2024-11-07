@@ -13,11 +13,6 @@ public class GameScene : BaseScene
 
     const int STAGE_DISTANCE = 10;
 
-    private void Start()
-    {
-        Managers.Game.StartGame();
-    }
-
     protected virtual void Reset()
     {
         stageGroup = Util.FindChild<StageGroupController>(gameObject);

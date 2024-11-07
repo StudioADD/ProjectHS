@@ -15,10 +15,15 @@ public class UI_StageInstructionWindow : InitBase
         return true;
     }
 
+    private void StartStage()
+    {
+        Managers.Game.StartGame();
+        // OnStageInstruction?.Invoke();
+    }
     #region OnClick Event
     public void OnClickExit()
     {
-        OnStageInstruction?.Invoke();
+        
 
         gameObject.SetActive(false);
     }
