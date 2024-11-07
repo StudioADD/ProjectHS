@@ -55,8 +55,6 @@ public class Shark : Creature
     {
         while (IsStart)
         {
-            Debug.LogWarning("start");
-            Debug.LogWarning(transform.forward);
             transform.Translate(transform.forward * -moveSpeed*Time.deltaTime);
 
 

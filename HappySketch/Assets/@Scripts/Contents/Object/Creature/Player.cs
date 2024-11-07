@@ -19,9 +19,13 @@ public enum EPlayerState
     None,
     Idle,
     Move,
+    JumpUp,
     Jump,
+    Landing,
+
     Run,
     Hit,
+    Dizz,
     LeftCollect, //수집
     RightCollect, //수집
 
@@ -57,6 +61,7 @@ public class Player : Creature
     [SerializeField]
     private float moveSpeed = 5f; // 이동거리
 
+    private ETeamType teamType;
     [SerializeField]
     private bool isUsingArrow; // 방향키 or wad
     private float jumpForce = 5f; // 점프 힘
@@ -91,7 +96,9 @@ public class Player : Creature
             {
                 case EPlayerState.Idle: isChangeState = IdleStateCondition(); break;
                 case EPlayerState.Move: isChangeState = MoveStateCondition(); break;
+                case EPlayerState.JumpUp: isChangeState = JumpStateCondition(); break;
                 case EPlayerState.Jump: isChangeState = JumpStateCondition(); break;
+                case EPlayerState.Landing: isChangeState = JumpStateCondition(); break;
                 case EPlayerState.Hit: isChangeState = HitStateCondition(); break;
                 case EPlayerState.LeftCollect: isChangeState = LeftCollectStateCondition(); break;
                 case EPlayerState.RightCollect: isChangeState = RightCollectStateCondition(); break;
@@ -106,7 +113,9 @@ public class Player : Creature
             {
                 case EPlayerState.Idle: IdleStateExit(); break;
                 case EPlayerState.Move: MoveStateExit(); break;
+                case EPlayerState.JumpUp: JumpUpStateExit(); break;
                 case EPlayerState.Jump: JumpStateExit(); break;
+                case EPlayerState.Landing: LandingStateExit(); break;
                 case EPlayerState.Hit: HitStateExit(); break;
                 case EPlayerState.LeftCollect: LeftCollectStateExit(); break;
                 case EPlayerState.RightCollect: RightCollectStateExit(); break;
@@ -115,13 +124,15 @@ public class Player : Creature
             }
 
             _playerState = value;
-            PlayAnimation(value);
+            //PlayAnimation(value);
 
             switch (value)
             {
                 case EPlayerState.Idle: IdleStateEnter(); break;
                 case EPlayerState.Move: MoveStateEnter(); break;
+                case EPlayerState.JumpUp: JumpUpStateEnter(); break;
                 case EPlayerState.Jump: JumpStateEnter(); break;
+                case EPlayerState.Landing: LandingStateEnter(); break;
                 case EPlayerState.Hit: HitStateEnter(); break;
                 case EPlayerState.LeftCollect: LeftCollectStateEnter(); break;
                 case EPlayerState.RightCollect: LeftCollectStateEnter(); break;
@@ -189,7 +200,7 @@ public class Player : Creature
             case EStageType.SharkAvoidance: PlayerState = EPlayerState.Idle; break;
         }
 
-
+        animator.SetInteger("nStageType", templateID);
     }
 
 
@@ -240,21 +251,30 @@ public class Player : Creature
         {
             return;
         }
-
+        if (value.x == 0 && value.y <= 0)
+        {
+            return;
+        }
         moveDirection = value;
-        PlayerState = EPlayerState.Move;
+
 
         if (value.y > 0)
         {
             if (inputTime >= inputCooldown)
             {
+
                 inputTime = 0f;
             }
             else
             { //전진 쿨일때 전진 X
                 moveDirection = Vector2.zero;
+                PlayerState = EPlayerState.Idle;
+                return;
             }
         }
+        PlayerState = EPlayerState.Move;
+        Debug.LogWarning("1111");
+        animator.SetTrigger("TriggerInput");
 
 
     }
@@ -328,7 +348,7 @@ public class Player : Creature
             return;
         }
 
-        PlayerState = EPlayerState.Jump;
+        PlayerState = EPlayerState.JumpUp;
     }
     #endregion
 
@@ -387,7 +407,7 @@ public class Player : Creature
         targetPosition = transform.position;
         targetPosition.z -= hitBackDistance;
 
-         
+
     }
 
     protected virtual void UpdateHitState()
@@ -425,11 +445,7 @@ public class Player : Creature
             return false;
         }
 
-        if (moveDirection.x == 0 && moveDirection.y <= 0 || isJump)
-        {
-            return false;
-        }
-        if (inputTime < inputCooldown && moveDirection.y > 0)
+        if (rigid.velocity.y != 0)
         {
             return false;
         }
@@ -445,7 +461,7 @@ public class Player : Creature
 
     protected virtual void MoveStateEnter()
     {
-
+        isInputRock = true;
         trackNum += (int)moveDirection.x;
         if (moveDirection.y > 0)
         {
@@ -470,6 +486,7 @@ public class Player : Creature
 
     protected virtual void MoveStateExit()
     {
+        isInputRock = false;
         if (targetPosition != transform.position)
         {
             transform.position = beforePosition;
@@ -483,13 +500,41 @@ public class Player : Creature
     }
     #endregion
 
+    #region JumpUp
+    protected virtual bool JumpUpStateCondition()
+    {
+
+        return true;
+    }
+
+    protected virtual void JumpUpStateEnter()
+    {
+
+
+
+    }
+
+    protected virtual void UpdateJumpUpState()
+    {
+
+        if (IsEndCurrentState(PlayerState))
+        {
+            PlayerState = EPlayerState.Jump;
+        }
+
+    }
+
+
+    protected virtual void JumpUpStateExit()
+    {
+
+    }
+    #endregion
+
     #region Jump
     protected virtual bool JumpStateCondition()
     {
-        if (isJump)
-        {
-            return false;
-        }
+
 
         return true;
     }
@@ -497,7 +542,7 @@ public class Player : Creature
     protected virtual void JumpStateEnter()
     {
         beforePosition = transform.position;
-        targetPosition = transform.position + Vector3.forward*moveSpeed; // 추후 이동거리로 뺄것
+        targetPosition = transform.position + Vector3.forward * moveSpeed; // 추후 이동거리로 뺄것
         // 목표 위치로의 벡터 계산
         Vector3 direction = targetPosition - transform.position;
 
@@ -510,7 +555,7 @@ public class Player : Creature
         InitRigidVelocityY();
         SetRigidVelocity(velocity);
 
-       
+
     }
 
     protected virtual void UpdateJumpState()
@@ -518,13 +563,47 @@ public class Player : Creature
 
         if (rigid.velocity.y == 0)
         {
-            PlayerState = EPlayerState.Run;
+            PlayerState = EPlayerState.Landing;
         }
 
     }
 
-    
+
     protected virtual void JumpStateExit()
+    {
+
+    }
+    #endregion
+
+    #region Landing
+    protected virtual bool LandingStateCondition()
+    {
+
+        return true;
+    }
+
+    protected virtual void LandingStateEnter()
+    {
+
+    }
+
+    protected virtual void UpdateLandingState()
+    {
+
+        if (IsEndCurrentState(PlayerState))
+        {
+            switch (stageType)
+            {
+                case EStageType.None: PlayerState = EPlayerState.Run; break;
+
+            }
+
+        }
+
+    }
+
+
+    protected virtual void LandingStateExit()
     {
 
     }
@@ -541,7 +620,7 @@ public class Player : Creature
     {
 
         beforePosition = transform.position;
-        targetPosition =  new Vector3(0, transform.position.y, 1000); // 추후 트랙 끝 position 받아올것
+        targetPosition = new Vector3(0, transform.position.y, 1000); // 추후 트랙 끝 position 받아올것
 
     }
 
@@ -563,7 +642,7 @@ public class Player : Creature
     }
     protected void Running()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.01f * moveSpeed ); // 추후 2스테이지 data로 뺄것
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.01f * moveSpeed); // 추후 2스테이지 data로 뺄것
     }
 
 
@@ -655,11 +734,13 @@ public class Player : Creature
             {
                 case EPlayerState.Idle: UpdateIdleState(); break;
                 case EPlayerState.Move: UpdateMoveState(); break;
+                case EPlayerState.JumpUp: UpdateJumpUpState(); break;
                 case EPlayerState.Jump: UpdateJumpState(); break;
+                case EPlayerState.Landing: UpdateLandingState(); break;
                 case EPlayerState.Hit: UpdateHitState(); break;
                 case EPlayerState.Run: UpdateRunState(); break;
-                    case EPlayerState.LeftCollect : UpdateLeftCollectState(); break;
-                    case EPlayerState.RightCollect : UpdateRightCollectState(); break;  
+                case EPlayerState.LeftCollect: UpdateLeftCollectState(); break;
+                case EPlayerState.RightCollect: UpdateRightCollectState(); break;
             }
 
 
@@ -712,7 +793,7 @@ public class Player : Creature
         }
 
         return (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
-        
+
     }
     #endregion
 
@@ -743,6 +824,10 @@ public class Player : Creature
             if (boosterCount > 3)
             {
                 boosterCount = 3;
+            }
+            else
+            {
+                (Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, teamType, boosterCount));
             }
         }
     }
