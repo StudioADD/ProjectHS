@@ -10,7 +10,7 @@ public class GameScene : BaseScene
 
     // 임시
     [SerializeField, ReadOnly] TestPlayer leftPlayer;
-    [SerializeField, ReadOnly] TestPlayer rightPlayer;
+    [SerializeField, ReadOnly] TestPlayer rightPlayer; 
 
     private void Start()
     {
@@ -33,10 +33,10 @@ public class GameScene : BaseScene
         return true;
     }
 
-    public void SetInfo(EStageType stageType)
+    public void StartGame(EStageType stageType)
     {
         stageGroup.SetInfo(stageType);
-        // cameraGroup.SetInfo();
+        cameraGroup.SetInfo(stageType);
 
         // 플레이어 소환 (임시 코드)
         string prefabPath = $"{PrefabPath.OBJECT_PLAYER_PATH}/TestPlayer";
@@ -50,6 +50,9 @@ public class GameScene : BaseScene
 
         cameraGroup.SetTarget(leftPlayer, ETeamType.Left);
         cameraGroup.SetTarget(rightPlayer, ETeamType.Right);
+
+        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
+            uI_GameScene.StartStage(stageType);
     }
     
     public override void Clear()

@@ -88,6 +88,14 @@ public static class Util
         return go;
     }
 
+    public static GameObject Editor_InstantiateObject(GameObject original, Transform transform = null)
+    {
+        GameObject go = GameObject.Instantiate(original, transform);
+        go.name = original.name;
+        GameObject.DestroyImmediate(original);
+        return go;
+    }
+
     public static void Editor_FileDelete(string path, string fileExtension = ".json")
     {
         if (fileExtension[0] != '.')

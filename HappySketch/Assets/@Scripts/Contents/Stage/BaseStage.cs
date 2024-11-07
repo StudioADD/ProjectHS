@@ -6,6 +6,8 @@ public enum EStageType
 {
     None = 0,
     SharkAvoidance,
+    Stage2,
+    Stage3
 }
 
 public abstract class BaseStage : InitBase
@@ -14,7 +16,7 @@ public abstract class BaseStage : InitBase
 
     [field: SerializeField, ReadOnly]
     public Transform PlayerStartTr { get; private set; }
-
+      
     protected virtual void Reset()
     {
         PlayerStartTr = transform.Find("PlayerSpawnPoint");

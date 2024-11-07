@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class UI_TitleScene : UI_BaseScene
 {
+
+
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
 
         return true;
-    }
+    }  
 
     // Test
     public void OnClickGoToGameScene()

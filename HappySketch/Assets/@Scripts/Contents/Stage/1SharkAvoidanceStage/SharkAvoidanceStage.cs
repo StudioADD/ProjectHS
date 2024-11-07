@@ -34,7 +34,17 @@ public class SharkAvoidanceStage : BaseStage
 
     }
 
-    #region Test Input
 
+
+    #region Test Input
+    protected void ConnectInputActions(bool isConnect)
+    {
+
+
+        if(isConnect)
+        {
+
+        }
+    }
     #endregion
 }

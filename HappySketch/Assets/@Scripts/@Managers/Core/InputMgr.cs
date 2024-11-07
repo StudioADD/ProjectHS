@@ -36,6 +36,7 @@ public class InputMgr : MonoBehaviour
     public event Action OnVKeyEntered;
     public event Action OnNum1KeyEntered;
     public event Action OnNum2KeyEntered;
+    public event Action OnEndKeyEntered;
 
     public void Init()
     {
@@ -117,6 +118,11 @@ public class InputMgr : MonoBehaviour
     public void OnNum2Key()
     {
         OnNum2KeyEntered?.Invoke();
+    }
+    public void OnEndKey()
+    {
+        OnEndKeyEntered?.Invoke();
+
     }
     #endregion
 }

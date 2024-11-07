@@ -15,8 +15,8 @@ public abstract class Creature : BaseObject
     public ECreatureType CreatureType { get; protected set; }
     
     protected Collider col;
-    private Rigidbody rigid;
-    private Animator animator;
+    protected Rigidbody rigid;
+    protected Animator animator;
 
     [SerializeField, ReadOnly]
     protected CollisionTrigger collisionTrigger = null;

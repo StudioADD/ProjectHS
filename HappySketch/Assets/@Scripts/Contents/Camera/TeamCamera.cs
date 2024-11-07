@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using System;
 
+[Serializable]
 public class CameraInfoData
 {
     public float fieldOfView = 60f;
@@ -25,6 +27,7 @@ public class TeamCamera : InitBase
     [SerializeField, ReadOnly] protected Camera cam;
     [SerializeField, ReadOnly] protected BaseObject target = null;
 
+    [SerializeField, ReadOnly]
     protected CameraInfoData cameraInfoData = null;
 
     private void LateUpdate()
@@ -73,5 +76,33 @@ public class TeamCamera : InitBase
         cameraInfoData = JsonUtility.FromJson<CameraInfoData>(jsonData);
         
         return true;
+    }
+}
+
+
+public class A : MonoBehaviour
+{
+    [SerializeField] B b;
+
+    public void Test()
+    {
+        b.OnTriggerEvent -= OnTriggerEvent;
+        b.OnTriggerEvent += OnTriggerEvent;
+    }
+
+    public void OnTriggerEvent(Collider other)
+    {
+
+    }
+}
+
+public class B : MonoBehaviour
+{
+    public event Action<Collider> OnTriggerEvent;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        OnTriggerEvent?.Invoke(other);
+        // C# ? -> 이새기 널이야? -> 널 아니면 뒤에 실행.
     }
 }

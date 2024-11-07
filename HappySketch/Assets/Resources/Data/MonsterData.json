@@ -5,6 +5,30 @@
       "Name": "ㅁㄴㅇㄹ",
       "MoveSpeed": 100,
       "Damage": 0
+    },
+    {
+      "DataId": 1,
+      "Name": "qwer",
+      "MoveSpeed": 1,
+      "Damage": 0
+    },
+    {
+      "DataId": 2,
+      "Name": "asd",
+      "MoveSpeed": 2,
+      "Damage": 0
+    },
+    {
+      "DataId": 3,
+      "Name": "fzxc",
+      "MoveSpeed": 3,
+      "Damage": 0
+    },
+    {
+      "DataId": 4,
+      "Name": "sd",
+      "MoveSpeed": 4,
+      "Damage": 0
     }
   ]
 }
