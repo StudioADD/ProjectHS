@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace MomDra
 {
-    public abstract class ViewBase : MonoBehaviour
+    public abstract class ViewBase : UI_BaseObject
     {
         protected PresenterBase presenter;
 

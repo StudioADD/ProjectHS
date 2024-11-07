@@ -14,10 +14,14 @@ public class UI_GameScene : UI_BaseScene
 
     private EStageType currStageType;
 
+    private Action<UITeamData>[] stageHandle;
+
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
+
+        stageHandle = new Action<UITeamData>[] { HandleSharkAvoidance, HandleCollectingCandy, HandleCrossingBridge };
 
         return true;
     }
@@ -25,36 +29,23 @@ public class UI_GameScene : UI_BaseScene
     public void StartStage(EStageType stageType)
     {
         currStageType = stageType;
-
-        switch (stageType)
-        {
-            case EStageType.SharkAvoidance:
-                SetStageUI<GameStage1Presenter>(stageType);
-                break;
-
-            case EStageType.CollectingCandy:
-                SetStageUI<GameStage2Presenter>(stageType);
-                break;
-
-            case EStageType.CrossingBridge:
-                SetStageUI<GameStage2Presenter>(stageType);
-                break;
-        }
+        SetStageUI(stageType);
     }
 
-    private void SetStageUI<T> (EStageType stageType) where T : PresenterBase
+    private void SetStageUI(EStageType stageType)
     {
         // 여기서 UI Prefab을 생성하야 함!
         // View 정보 가저와야 함
 
         // Prefab을 생성해야 함!
-        string prefabPath = $"{PrefabPath.UI_GAME_SCENE_PATH}/UI_{stageType}";
+        string name = $"UI_{stageType}";
+        string prefabPath = $"{PrefabPath.UI_OBJECT_PATH}/{name}";
 
         GameObject leftObject = Managers.Resource.Instantiate(prefabPath, transform);
         GameObject rightObject = Managers.Resource.Instantiate(prefabPath, transform);
 
-        leftObject.name = $"{leftObject.name}_Left";
-        rightObject.name = $"{rightObject.name}_Right";
+        leftObject.name = $"{name}_Left";
+        rightObject.name = $"{name}_Right";
 
         RectTransform rectTransform = rightObject.GetComponent<RectTransform>();
         Vector2 anchor = new Vector2(1f, 0.5f);
@@ -62,20 +53,79 @@ public class UI_GameScene : UI_BaseScene
         rectTransform.anchorMax = anchor;
         rectTransform.pivot = anchor;
         rectTransform.anchoredPosition = Vector3.zero;
-        
+
         ViewBase leftView = leftObject.GetComponent<ViewBase>();
         ViewBase rightView = rightObject.GetComponent<ViewBase>();
 
-        // currPresentLeft = Activator.CreateInstance(typeof(T), leftView) as T;
-        // currPresentRight = Activator.CreateInstance(typeof(T), rightView) as T;
+        switch (stageType)
+        {
+            case EStageType.SharkAvoidance:
+                currPresentLeft = new SharkAvoidancePresenter(leftView);
+                currPresentRight = new SharkAvoidancePresenter(rightView);
+                break;
+
+            case EStageType.CollectingCandy:
+                currPresentLeft = new CollectCandyPresenter(leftView);
+                currPresentRight = new CollectCandyPresenter(rightView);
+                break;
+
+            case EStageType.CrossingBridge:
+                // BrigePresenter 설정
+                //currPresentLeft = new SharkAvoidancePresenter(leftView);
+                //currPresentRight = new SharkAvoidancePresenter(rightView);
+                break;
+        }
     }
 
     public void ReceiveData(UIDataBase data)
     {
-            
+        switch(data)
+        {
+            case UITeamData teamData:
+                stageHandle[(int)data.StageType](teamData);
+                break;
+
+            case UICommonData commonData:
+                HandleCommonData(commonData);
+                break;
+        }
     }
 
-    public void ReceiveCommonData()
+    private void HandleSharkAvoidance(UITeamData teamData)
+    {
+        switch (teamData.TeamType)
+        {
+            case ETeamType.Left:
+                {
+                    if (teamData is UIBoosterCountData boosterCountData)
+                    {
+                        (currPresentLeft as SharkAvoidancePresenter).SetItemCount(boosterCountData.BoosterCount);
+                    }
+                }
+                break;
+
+            case ETeamType.Right:
+                {
+                    if (teamData is UIBoosterCountData boosterCountData)
+                    {
+                        (currPresentRight as SharkAvoidancePresenter).SetItemCount(boosterCountData.BoosterCount);
+                    }
+                }
+                break;
+        }
+    }
+
+    private void HandleCollectingCandy(UITeamData teamData)
+    {
+
+    }
+
+    private void HandleCrossingBridge(UITeamData teamData)
+    {
+
+    }
+
+    private void HandleCommonData(UICommonData commonData)
     {
 
     }

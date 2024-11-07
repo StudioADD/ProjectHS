@@ -38,5 +38,4 @@ public static class PrefabPath
     public const string UI_PATH = "UI";
     public const string UI_POPUP_PATH = "UI/Popup";
     public const string UI_OBJECT_PATH = "UI/Object";
-    public const string UI_GAME_SCENE_PATH = "UI/GameScene";
 }

@@ -4,12 +4,11 @@ using UnityEngine;
 
 namespace MomDra
 {
-    public class GameStage1Presenter : PresenterBase
+    public class SharkAvoidancePresenter : PresenterBase
     {
-        public GameStage1Presenter(ViewBase view) : base(view)
+        public SharkAvoidancePresenter(ViewBase view) : base(view)
         {
-            // 여기서 모델의 이벤트 등록이 필요하다
-            // 모델에서는 이벤트를 발생 시켜야 한다
+
         }
 
         /// <summary>

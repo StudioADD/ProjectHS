@@ -27,8 +27,6 @@ public abstract class BaseStage : InitBase
         if (base.Init() == false)
             return false;
 
-
-
         return true;
     }
 

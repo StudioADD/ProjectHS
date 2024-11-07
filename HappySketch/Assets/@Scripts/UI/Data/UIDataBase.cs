@@ -5,21 +5,37 @@ using static Define;
 
 public class UIDataBase
 {
-    EStageType stageType;
-    ETeamType teamType;
+    public EStageType StageType { get; }
 
-    public UIDataBase(EStageType stageType, ETeamType teamType)
+    public UIDataBase(EStageType stageType)
     {
-        this.stageType = stageType;
-        this.teamType = teamType;
+        this.StageType = stageType;
     }
 }
 
-public class BoosterCountData : UIDataBase
+public class UICommonData : UIDataBase
+{
+    public UICommonData(EStageType stageType) : base(stageType)
+    {
+
+    }
+}
+
+public class UITeamData : UIDataBase
+{
+    public ETeamType TeamType { get; }
+
+    public UITeamData(EStageType stageType, ETeamType teamType) : base(stageType)
+    {
+        this.TeamType = teamType;
+    }
+}
+
+public class UIBoosterCountData : UITeamData
 {
     public int BoosterCount { get; set; }
 
-    public BoosterCountData(EStageType stageType, ETeamType teamType, int boosterCount) : base(stageType, teamType)
+    public UIBoosterCountData(EStageType stageType, ETeamType teamType, int boosterCount) : base(stageType, teamType)
     {
         this.BoosterCount = boosterCount;
     }
