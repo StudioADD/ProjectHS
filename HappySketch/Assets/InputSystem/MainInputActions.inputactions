@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "EndKey",
+                    "type": "Button",
+                    "id": "0b9c550d-baf1-438a-ae8a-f85f99c99bb7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -294,6 +303,17 @@
                     "action": "WASDKey",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "6d31e634-85de-4209-9a7e-6fcffaf808ef",
+                    "path": "<Keyboard>/end",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "EndKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

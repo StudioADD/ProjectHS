@@ -11,6 +11,7 @@ using static Define;
 using TMPro;
 using UnityEngine.Playables;
 using System.Text;
+using static UnityEngine.GraphicsBuffer;
 
 
 public enum EPlayerState
@@ -381,11 +382,12 @@ public class Player : Creature
 
 
         // 뒤로 밀려나기
+        this.transform.position = new Vector3(transform.position.x, beforePosition.y, transform.position.z);
         beforePosition = transform.position;
         targetPosition = transform.position;
         targetPosition.z -= hitBackDistance;
 
-
+         
     }
 
     protected virtual void UpdateHitState()
@@ -395,7 +397,7 @@ public class Player : Creature
         if (hitTime >= hitInputIgnoreTime)
         {
             hitTime = -1;
-            if (stageType == EStageType.None)
+            if (stageType == EStageType.None) // 추후 변경
                 PlayerState = EPlayerState.Run;
             else
                 PlayerState = EPlayerState.Idle; // 기절 상태 종료
@@ -494,13 +496,26 @@ public class Player : Creature
 
     protected virtual void JumpStateEnter()
     {
+        beforePosition = transform.position;
+        targetPosition = transform.position + Vector3.forward*moveSpeed; // 추후 이동거리로 뺄것
+        // 목표 위치로의 벡터 계산
+        Vector3 direction = targetPosition - transform.position;
+
+        // 목표까지의 수평 거리와 목표 높이를 계산
+        float distance = direction.magnitude;
+
+
+        // 최종적으로 물리적인 점프를 위한 속도 계산
+        Vector3 velocity = Vector3.forward * distance * moveSpeed + Vector3.up * jumpForce;
         InitRigidVelocityY();
-        SetRigidVelocityY(jumpForce);
+        SetRigidVelocity(velocity);
+
+       
     }
 
     protected virtual void UpdateJumpState()
     {
-        Running();
+
         if (rigid.velocity.y == 0)
         {
             PlayerState = EPlayerState.Run;
@@ -508,6 +523,7 @@ public class Player : Creature
 
     }
 
+    
     protected virtual void JumpStateExit()
     {
 
@@ -547,7 +563,7 @@ public class Player : Creature
     }
     protected void Running()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.01f); // 추후 2스테이지 data로 뺄것
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.01f * moveSpeed ); // 추후 2스테이지 data로 뺄것
     }
 
 
