@@ -31,7 +31,6 @@ public class GameScene : BaseScene
     {
         // GC 생기는 게 좀 별론데 일단 진행 (임시)
         Type type = Type.GetType($"{stageType}Stage");
-        Debug.Log($"{type.Name}");
         BaseStage tempStage = Activator.CreateInstance(type) as BaseStage;
 
         GameObject stageControllerObj = new GameObject("StageController");
