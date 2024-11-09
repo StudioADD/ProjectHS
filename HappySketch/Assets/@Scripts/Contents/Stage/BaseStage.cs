@@ -7,7 +7,9 @@ public enum EStageType
     None = 0,
     SharkAvoidance, // 상어 피하기
     CollectingCandy, // 사탕 모으기
-    CrossingBridge // 다리 건니기
+    CrossingBridge, // 다리 건니기
+
+    Max
 }
 
 public abstract class BaseStage : InitBase

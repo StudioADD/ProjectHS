@@ -29,7 +29,7 @@ public class GameScene : BaseScene
         return true;
     }
 
-    public void StartGame(EStageType stageType)
+    public void StartStage(EStageType stageType)
     {
         stageGroup.SetInfo(stageType, STAGE_DISTANCE);
         cameraGroup.SetInfo(stageType, STAGE_DISTANCE);
@@ -50,6 +50,13 @@ public class GameScene : BaseScene
 
         if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
             uI_GameScene.StartStage(stageType);
+    }
+
+    public void EndStage(ETeamType winningTeam)
+    {
+        // 플레이어한테 정보 전달
+
+        // 
     }
     
     public override void Clear()
