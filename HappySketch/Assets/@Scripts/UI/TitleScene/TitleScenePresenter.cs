@@ -6,7 +6,7 @@ namespace MomDra
 {
     public class TitleScenePresenter : PresenterBase
     {
-        public TitleScenePresenter(ViewBase view) : base(view)
+        public TitleScenePresenter(ViewBase view, ModelBase model) : base(view, model)
         {
             // Model의 이벤트 등록
         }

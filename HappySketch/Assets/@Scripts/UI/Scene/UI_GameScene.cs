@@ -70,8 +70,9 @@ public class UI_GameScene : UI_BaseScene
                 break;
 
             case EStageType.CollectingCandy:
-                currPresentLeft = new CollectCandyPresenter(leftView);
-                currPresentRight = new CollectCandyPresenter(rightView);
+                // 캔디 모델로 바꿔야 함
+                currPresentLeft = new CollectCandyPresenter(leftView, new SharkAvoidanceModel(ETeamType.Left));
+                currPresentRight = new CollectCandyPresenter(rightView, new SharkAvoidanceModel(ETeamType.Left));
                 break;
 
             case EStageType.CrossingBridge:
