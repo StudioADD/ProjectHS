@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 9099866726909400319}
   - component: {fileID: 1775578691581345590}
   m_Layer: 0
-  m_Name: SharkAvoidance
+  m_Name: CrossingBridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6f0971f0f778914b84a6c85db45d528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PlayerSpawnPoint>k__BackingField: {fileID: 7142684831380104498}
+  <PlayerStartTr>k__BackingField: {fileID: 7142684831380104498}
   spawnPointList:
   - {fileID: 8304389967337080396}
   - {fileID: 826596050531149656}

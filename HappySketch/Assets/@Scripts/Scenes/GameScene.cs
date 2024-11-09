@@ -1,21 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using UnityEditor;
 using UnityEngine;
 using static Define;
 
 public class GameScene : BaseScene
 {
-    [SerializeField] StageGroupController stageGroup;
+    [SerializeField, ReadOnly] BaseStageController stageController;
     [SerializeField] CameraGroupController cameraGroup;
 
     [SerializeField, ReadOnly] Player leftPlayer;
     [SerializeField, ReadOnly] Player rightPlayer;
 
-    const int STAGE_DISTANCE = 10;
 
     protected virtual void Reset()
     {
-        stageGroup = Util.FindChild<StageGroupController>(gameObject);
         cameraGroup = Util.FindChild<CameraGroupController>(gameObject);
     }
 
@@ -31,25 +29,69 @@ public class GameScene : BaseScene
 
     public void StartStage(EStageType stageType)
     {
-        stageGroup.SetInfo(stageType, STAGE_DISTANCE);
-        cameraGroup.SetInfo(stageType, STAGE_DISTANCE);
+        // GC 생기는 게 좀 별론데 일단 진행 (임시)
+        Type type = Type.GetType($"{stageType}Stage");
+        Debug.Log($"{type.Name}");
+        BaseStage tempStage = Activator.CreateInstance(type) as BaseStage;
 
+        GameObject stageControllerObj = new GameObject("StageController");
+        stageControllerObj.transform.SetParent(transform, false);
+
+        if (tempStage is SingleStage singleStage)
+        {
+            stageController = stageControllerObj.AddComponent<SingleStageController>();
+            StartSingleStage(stageType);
+        }
+        else if(tempStage is MultiStage multiStage)
+        {
+            stageController = stageControllerObj.AddComponent<MultiStageController>();
+            StartMultiStage(stageType);
+        }
+        else
+        {
+            Debug.LogWarning($"없는 타입 : {tempStage.GetType().Name}");
+            return;
+        }
+
+        stageController.SetInfo(stageType);
+
+        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
+            uI_GameScene.StartStage(stageType);
+    }
+
+    private void StartSingleStage(EStageType stageType)
+    {
+        cameraGroup.SetInfo(stageType);
+
+        SpawnPlayers(stageType);
+
+        cameraGroup.SetTarget(leftPlayer, ETeamType.Left);
+        cameraGroup.SetTarget(rightPlayer, ETeamType.Right);
+    }
+
+    private void StartMultiStage(EStageType stageType)
+    {
+        stageController.SetInfo(stageType);
+        cameraGroup.SetInfo(stageType);
+
+        SpawnPlayers(stageType);
+
+        cameraGroup.SetTarget(leftPlayer, ETeamType.Left);
+        cameraGroup.SetTarget(rightPlayer, ETeamType.Right);
+    }
+
+    private void SpawnPlayers(EStageType stageType)
+    {
         // 맘에 안드는 상태 (임시)
         leftPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/LeftPlayer").GetComponent<Player>();
-        leftPlayer.transform.position = stageGroup.GetStagePlayerStartPos(ETeamType.Left);
+        leftPlayer.transform.position = stageController.GetStagePlayerStartPos(ETeamType.Left);
         leftPlayer.transform.position += Vector3.up * leftPlayer.GetColliderHeight();
         leftPlayer.SetInfo((int)stageType);
 
         rightPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/RightPlayer").GetComponent<Player>();
-        rightPlayer.transform.position = stageGroup.GetStagePlayerStartPos(ETeamType.Right);
+        rightPlayer.transform.position = stageController.GetStagePlayerStartPos(ETeamType.Right);
         rightPlayer.transform.position += Vector3.up * rightPlayer.GetColliderHeight();
         rightPlayer.SetInfo((int)stageType);
-
-        cameraGroup.SetTarget(leftPlayer, ETeamType.Left);
-        cameraGroup.SetTarget(rightPlayer, ETeamType.Right);
-
-        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
-            uI_GameScene.StartStage(stageType);
     }
 
     public void EndStage(ETeamType winningTeam)

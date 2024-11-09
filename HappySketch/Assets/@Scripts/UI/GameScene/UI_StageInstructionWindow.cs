@@ -23,7 +23,7 @@ public class UI_StageInstructionWindow : InitBase
     #region OnClick Event
     public void OnClickExit()
     {
-        
+        StartStage();
 
         gameObject.SetActive(false);
     }

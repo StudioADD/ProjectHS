@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public enum EStageType
 {
@@ -16,14 +17,6 @@ public abstract class BaseStage : InitBase
 {
     public EStageType StageType { get; protected set; }
 
-    [field: SerializeField, ReadOnly]
-    public Transform PlayerStartTr { get; private set; }
-      
-    protected virtual void Reset()
-    {
-        PlayerStartTr = transform.Find("PlayerSpawnPoint");
-    }
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -32,8 +25,5 @@ public abstract class BaseStage : InitBase
         return true;
     }
 
-    public virtual void SetInfo()
-    {
-
-    }
+    public virtual void SetInfo() { }
 }

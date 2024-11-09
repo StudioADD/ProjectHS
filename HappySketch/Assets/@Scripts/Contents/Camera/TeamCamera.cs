@@ -48,11 +48,10 @@ public class TeamCamera : InitBase
         return true;
     }
 
-    public void SetInfo(EStageType stageType, int stageDisX)
+    public void SetInfo(EStageType stageType)
     {
         LoadCameraDataInfo(stageType);
         cam.fieldOfView = cameraInfoData.fieldOfView;
-        this.transform.position = new Vector3(stageDisX, stageDisX, 0f);
     }
 
     public void SetTarget(BaseObject target) => this.target = target;

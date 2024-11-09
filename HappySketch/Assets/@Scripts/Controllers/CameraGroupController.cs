@@ -25,10 +25,10 @@ public class CameraGroupController : InitBase
         return true;
     }
 
-    public void SetInfo(EStageType stageType, int stageDisX)
+    public void SetInfo(EStageType stageType)
     {
-        leftCamera.SetInfo(stageType, stageDisX * -1);
-        rightCamera.SetInfo(stageType, stageDisX);
+        leftCamera.SetInfo(stageType);
+        rightCamera.SetInfo(stageType);
     }
 
     public void SetTarget(BaseObject target, ETeamType type)

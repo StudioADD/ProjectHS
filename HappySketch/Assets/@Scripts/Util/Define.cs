@@ -52,6 +52,6 @@ public static class Define
     public enum ETeamType
     {
         Left,
-        Right
+        Right,
     }
 }

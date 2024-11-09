@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SharkAvoidanceStage : BaseStage
+public class SharkAvoidanceStage : MultiStage
 {
     [field: SerializeField, ReadOnly]
     List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
