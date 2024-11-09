@@ -14,14 +14,19 @@ public class UI_GameScene : UI_BaseScene
 
     private EStageType currStageType;
 
-    private Action<UITeamData>[] stageHandle;
+    private Dictionary<EStageType, Action<UITeamData>> stageHandle;
 
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
 
-        stageHandle = new Action<UITeamData>[] { HandleSharkAvoidance, HandleCollectingCandy, HandleCrossingBridge };
+        stageHandle = new Dictionary<EStageType, Action<UITeamData>>
+        {
+            {EStageType.SharkAvoidance, HandleSharkAvoidance },
+            {EStageType.CollectingCandy ,HandleCollectingCandy },
+            {EStageType.CrossingBridge, HandleCrossingBridge }
+        };
 
         return true;
     }
@@ -60,8 +65,8 @@ public class UI_GameScene : UI_BaseScene
         switch (stageType)
         {
             case EStageType.SharkAvoidance:
-                currPresentLeft = new SharkAvoidancePresenter(leftView);
-                currPresentRight = new SharkAvoidancePresenter(rightView);
+                currPresentLeft = new SharkAvoidancePresenter(leftView, new SharkAvoidanceModel(ETeamType.Left));
+                currPresentRight = new SharkAvoidancePresenter(rightView, new SharkAvoidanceModel(ETeamType.Right));
                 break;
 
             case EStageType.CollectingCandy:
@@ -82,7 +87,7 @@ public class UI_GameScene : UI_BaseScene
         switch(data)
         {
             case UITeamData teamData:
-                stageHandle[(int)data.StageType](teamData);
+                stageHandle[data.StageType](teamData);
                 break;
 
             case UICommonData commonData:

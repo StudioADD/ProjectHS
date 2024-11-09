@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static Define;
  
 namespace MomDra
 {
@@ -28,11 +29,14 @@ namespace MomDra
             }
         }
 
-        public void UpdateProgressRatio(float ratio)
+        public void UpdateLeftProgressRatio(ETeamType teamType, float ratio)
         {
-            Debug.Log($"현재 진행 상황: {ratio}");
 
-            progressing.fillAmount = ratio;
+        }
+
+        public void UpdateRightProgressRatio(ETeamType teamType, float ratio)
+        {
+
         }
     }
 }
