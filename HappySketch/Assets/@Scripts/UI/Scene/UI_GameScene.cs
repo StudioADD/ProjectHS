@@ -24,7 +24,7 @@ public class UI_GameScene : UI_BaseScene
         stageHandle = new Dictionary<EStageType, Action<UITeamData>>
         {
             {EStageType.SharkAvoidance, HandleSharkAvoidance },
-            {EStageType.CollectingCandy ,HandleCollectingCandy },
+            {EStageType.CollectingCandy, HandleCollectingCandy },
             {EStageType.CrossingBridge, HandleCrossingBridge }
         };
 
