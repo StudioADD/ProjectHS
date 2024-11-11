@@ -185,7 +185,7 @@ public class Player : Creature
         //PlayerState = EPlayerState.Idle;
 
 
-        IsPlayerInputControll = true;
+        
         trackNum = 2;
         targetPosition = beforePosition = transform.position;
         SetInfo((int)stageType);
@@ -202,6 +202,7 @@ public class Player : Creature
                 break; // 추후 스테이지2 나오면  바꿔야함
             case EStageType.SharkAvoidance: PlayerState = EPlayerState.Idle; break;
         }
+        IsPlayerInputControll = true;
 
     }
 
