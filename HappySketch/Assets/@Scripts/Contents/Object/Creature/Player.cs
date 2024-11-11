@@ -199,13 +199,10 @@ public class Player : Creature
         {
             case EStageType.CollectingCandy:
                 PlayerState = EPlayerState.Run;
-                collisionTrigger.OnCollisionTiggerEnter -= OnCollisionTriggerEnter;
-                collisionTrigger.OnCollisionTiggerEnter += OnCollisionTriggerEnter;
                 break; // 추후 스테이지2 나오면  바꿔야함
             case EStageType.SharkAvoidance: PlayerState = EPlayerState.Idle; break;
         }
 
-        animator.SetInteger("nStageType", templateID);
     }
 
 
