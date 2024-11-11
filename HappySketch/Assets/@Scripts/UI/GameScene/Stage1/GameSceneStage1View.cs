@@ -5,70 +5,77 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using static Define;
- 
-    public class GameSceneStage1View : ViewBase
+
+public class GameSceneStage1View : ViewBase
+{
+    [SerializeField]
+    private Image progressing;
+
+    [SerializeField]
+    private Image leftImage;
+
+    [SerializeField]
+    private Image rightImage;
+
+    [SerializeField]
+    private Image[] items;
+
+    private float progressingWidth;
+    private RectTransform leftRectTransfrom;
+    private RectTransform rightRectTransfrom;
+
+    private float leftImgWidth;
+    private float rightImgWidth;
+
+
+    public override bool Init()
     {
-        [SerializeField]
-        private Image progressing;
+        if (base.Init() == false)
+            return false;
 
-        [SerializeField]
-        private Image leftImage;
+        leftRectTransfrom = leftImage.GetComponent<RectTransform>();
+        rightRectTransfrom = rightImage.GetComponent<RectTransform>();
 
-        [SerializeField]
-        private Image rightImage;
+        progressingWidth = progressing.GetComponent<RectTransform>().rect.width;
 
-        [SerializeField]
-        private Image[] items;
+        leftImgWidth = leftImage.GetComponent<RectTransform>().rect.width;
+        rightImgWidth = rightImage.GetComponent<RectTransform>().rect.width;
 
-        private float progressingWidth;
-        private RectTransform leftRectTransfrom;
-        private RectTransform rightRectTransfrom;
+        return true;
+    }
 
-        public override bool Init()
+    public void UpdateItemCount(int count)
+    {
+        Debug.Log($"아이템 개수: {count}");
+
+        for (int i = 0; i < count; ++i)
         {
-            if (base.Init() == false)
-                return false;
-
-            leftRectTransfrom = leftImage.GetComponent<RectTransform>();
-            rightRectTransfrom = rightImage.GetComponent<RectTransform>();
-
-            progressingWidth = progressing.GetComponent<RectTransform>().rect.width;
-
-            return true;
+            items[i].gameObject.SetActive(true);
         }
 
-        public void UpdateItemCount(int count)
+        for (int i = count; i < items.Length; ++i)
         {
-            Debug.Log($"아이템 개수: {count}");
-
-            for(int i = 0; i < count; ++i)
-            {
-                items[i].gameObject.SetActive(true);
-            }
-
-            for(int i = count; i < items.Length; ++i)
-            {
-                items[i].gameObject.SetActive(false);
-            }
-        }
-
-        public void UpdateLeftProgressRatio(ETeamType teamType, float ratio)
-        {
-            ratio = Mathf.Clamp01(ratio);
-
-            if (teamType == ETeamType.Left)
-                progressing.fillAmount = ratio;
-
-            leftRectTransfrom.anchoredPosition = new Vector3(progressingWidth * ratio, leftRectTransfrom.anchoredPosition.y);
-        }
-
-        public void UpdateRightProgressRatio(ETeamType teamType, float ratio)
-        {
-            ratio = Mathf.Clamp01(ratio);
-
-            if (teamType == ETeamType.Right)
-                progressing.fillAmount = ratio;
-
-            rightRectTransfrom.anchoredPosition = new Vector3(progressingWidth * ratio, rightRectTransfrom.anchoredPosition.y);
+            items[i].gameObject.SetActive(false);
         }
     }
+
+    public void UpdateLeftProgressRatio(ETeamType teamType, float ratio)
+    {
+        ratio = Mathf.Clamp01(ratio);
+
+        if (teamType == ETeamType.Left)
+            progressing.fillAmount = ratio;
+
+        leftRectTransfrom.anchoredPosition = new Vector3(progressingWidth * ratio - leftImgWidth / 2.2f, leftRectTransfrom.anchoredPosition.y);
+    }
+
+    public void UpdateRightProgressRatio(ETeamType teamType, float ratio)
+    {
+        ratio = Mathf.Clamp01(ratio);
+
+        if (teamType == ETeamType.Right)
+            progressing.fillAmount = ratio;
+
+        rightRectTransfrom.anchoredPosition = new Vector3(progressingWidth * ratio - rightImgWidth / 2.2f, rightRectTransfrom.anchoredPosition.y);
+    }
+}

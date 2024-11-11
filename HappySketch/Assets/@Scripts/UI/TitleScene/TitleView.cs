@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class TitleView : ViewBase
 {
     [SerializeField]
     private Button playButton;
 
     [SerializeField]
-    private GameObject playerView;
+    private GameObject playerPopUp;
+
+    [SerializeField]
+    private GameObject[] players;
 
     public override bool Init()
     {
@@ -31,6 +33,11 @@ public class TitleView : ViewBase
 
     private void OpenPopup()
     {
-        playerView.SetActive(true);
+        playerPopUp.SetActive(true);
+
+        foreach (GameObject player in players)
+        {
+            player.SetActive(true);
+        }
     }
 }
