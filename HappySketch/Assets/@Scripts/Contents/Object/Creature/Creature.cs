@@ -13,7 +13,7 @@ public enum ECreatureType
 public abstract class Creature : BaseObject
 {
     public ECreatureType CreatureType { get; protected set; }
-    
+
     protected Collider col;
     protected Rigidbody rigid;
     protected Animator animator;
@@ -27,7 +27,7 @@ public abstract class Creature : BaseObject
         animator = Util.GetOrAddComponent<Animator>(this.gameObject);
 
         collisionTrigger = Util.FindChild<CollisionTrigger>(this.gameObject, "CollisionTriggerObj", true);
-        if(collisionTrigger == null)
+        if (collisionTrigger == null)
         {
             GameObject go = new GameObject();
             go.name = "CollisionTriggerObj";
@@ -49,7 +49,7 @@ public abstract class Creature : BaseObject
         col = GetComponent<BoxCollider>();
         animator = GetComponent<Animator>();
 
-        if(collisionTrigger != null)
+        if (collisionTrigger != null)
         {
             collisionTrigger.OnCollisionTiggerEnter -= OnCollisionTriggerEnter;
             collisionTrigger.OnCollisionTiggerEnter += OnCollisionTriggerEnter;
@@ -69,7 +69,7 @@ public abstract class Creature : BaseObject
     {
 
     }
-    
+
     #region Rigid
     protected void SetRigidVelocity(Vector3 velocity)
     {

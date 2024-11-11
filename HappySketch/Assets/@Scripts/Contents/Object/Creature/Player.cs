@@ -19,6 +19,8 @@ public enum EPlayerState
     None,
     Idle,
     Move,
+    Swimming,
+
     JumpUp,
     Jump,
     Landing,
@@ -48,7 +50,22 @@ public class Player : Creature
 
     #region booster 변수
     [SerializeField]
-    private int boosterCount = 0; // 부스터 게이지
+    private int BoosterCount = 0; // 부스터 게이지
+    public virtual int _boosterCount
+    {
+        get { return BoosterCount; }
+        set
+        {
+            if (value > 3 || value < 0)
+                return;
+            if (value == BoosterCount)
+                return;
+            BoosterCount = value;
+            (Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, teamType, BoosterCount));
+
+        }
+    }
+
     private const float boosterTime = 5f;  // 부스터 시간
     private float boosterTimer = -1f; // 부스터 현재시간
     #endregion
@@ -70,7 +87,7 @@ public class Player : Creature
     [SerializeField, ReadOnly]
     private int trackNum = 2; // 현재 트랙 위치
     [SerializeField, ReadOnly]
-    private bool isJump = false; // 점프유무 3스테이지 용도
+    private bool IsJump = false;
 
     #region playerState
     [SerializeField, ReadOnly]
@@ -98,7 +115,8 @@ public class Player : Creature
             {
                 case EPlayerState.Idle: isChangeState = IdleStateCondition(); break;
                 case EPlayerState.Move: isChangeState = MoveStateCondition(); break;
-                case EPlayerState.JumpUp: isChangeState = JumpStateCondition(); break;
+                case EPlayerState.Swimming: isChangeState = SwimmingStateCondition(); break;
+                case EPlayerState.JumpUp: isChangeState = JumpUpStateCondition(); break;
                 case EPlayerState.Jump: isChangeState = JumpStateCondition(); break;
                 case EPlayerState.Landing: isChangeState = JumpStateCondition(); break;
                 case EPlayerState.Hit: isChangeState = HitStateCondition(); break;
@@ -117,6 +135,7 @@ public class Player : Creature
             {
                 case EPlayerState.Idle: IdleStateExit(); break;
                 case EPlayerState.Move: MoveStateExit(); break;
+                case EPlayerState.Swimming: SwimmingStateExit(); break;
                 case EPlayerState.JumpUp: JumpUpStateExit(); break;
                 case EPlayerState.Jump: JumpStateExit(); break;
                 case EPlayerState.Landing: LandingStateExit(); break;
@@ -136,6 +155,7 @@ public class Player : Creature
             {
                 case EPlayerState.Idle: IdleStateEnter(); break;
                 case EPlayerState.Move: MoveStateEnter(); break;
+                case EPlayerState.Swimming: SwimmingStateEnter(); break;
                 case EPlayerState.JumpUp: JumpUpStateEnter(); break;
                 case EPlayerState.Jump: JumpStateEnter(); break;
                 case EPlayerState.Landing: LandingStateEnter(); break;
@@ -149,6 +169,47 @@ public class Player : Creature
         }
     }
     #endregion
+
+
+
+    public override bool Init()
+    {
+        if (base.Init() == false)
+        {
+            return false;
+        }
+
+        this.gameObject.tag = ETag.Player.ToString();
+        this.gameObject.layer = (int)ELayer.Player;
+        CreatureType = ECreatureType.Player;
+        //PlayerState = EPlayerState.Idle;
+
+
+        IsPlayerInputControll = true;
+        trackNum = 2;
+        targetPosition = beforePosition = transform.position;
+        SetInfo((int)stageType);
+        return true;
+    }
+
+    public override void SetInfo(int templateID = 0)
+    {
+        stageType = (EStageType)templateID;
+        switch (stageType)
+        {
+            case EStageType.CollectingCandy:
+                PlayerState = EPlayerState.Run;
+                collisionTrigger.OnCollisionTiggerEnter -= OnCollisionTriggerEnter;
+                collisionTrigger.OnCollisionTiggerEnter += OnCollisionTriggerEnter;
+                break; // 추후 스테이지2 나오면  바꿔야함
+            case EStageType.SharkAvoidance: PlayerState = EPlayerState.Idle; break;
+        }
+
+        animator.SetInteger("nStageType", templateID);
+    }
+
+
+    #region Input
 
     #region inputControll
     [SerializeField, ReadOnly]
@@ -179,40 +240,6 @@ public class Player : Creature
     }
     #endregion
 
-    public override bool Init()
-    {
-        if (base.Init() == false)
-        {
-            return false;
-        }
-
-        this.gameObject.tag = ETag.Player.ToString();
-        this.gameObject.layer = (int)ELayer.Player;
-        CreatureType = ECreatureType.Player;
-        //PlayerState = EPlayerState.Idle;
-
-
-        IsPlayerInputControll = true;
-        trackNum = 2;
-        targetPosition = beforePosition = transform.position;
-        SetInfo((int)stageType);
-        return true;
-    }
-
-    public override void SetInfo(int templateID = 0)
-    {
-        stageType = (EStageType)templateID;
-        switch (stageType)
-        {
-            case EStageType.None: PlayerState = EPlayerState.Run; break; // 추후 스테이지2 나오면  바꿔야함
-            case EStageType.SharkAvoidance: PlayerState = EPlayerState.Idle; break;
-        }
-
-        animator.SetInteger("nStageType", templateID);
-    }
-
-
-    #region Input
     private Vector2 moveDirection = Vector2.zero;
 
     private void ConnectInputActions(bool isConnect)
@@ -220,14 +247,11 @@ public class Player : Creature
 
         switch (stageType)
         {
-            case EStageType.None: Stage2ConnectInputActions(isConnect); break;
+            
             case EStageType.SharkAvoidance: SharkAvoidanceConnectInputActions(isConnect); break;
+            case EStageType.CollectingCandy: Stage2ConnectInputActions(isConnect); break;
                 // 스테이지 추가
         }
-
-
-
-
     }
 
     #region SharkAvoidance
@@ -241,7 +265,7 @@ public class Player : Creature
         if (isConnect)
         {
             if (isUsingArrow)
-            {
+            {   
                 Managers.Input.OnArrowKeyEntered += OnArrowKeySharkAvoidance;
                 Managers.Input.OnEndKeyEntered += OnBoosterKeySharkAvoidance;
             }
@@ -270,15 +294,15 @@ public class Player : Creature
         {
             if (inputTime >= inputCooldown)
             {
-
                 inputTime = 0f;
+                PlayerState = EPlayerState.Swimming;
             }
             else
             { //전진 쿨일때 전진 X
                 moveDirection = Vector2.zero;
                 PlayerState = EPlayerState.Idle;
-                return;
             }
+            return;
         }
         PlayerState = EPlayerState.Move;
 
@@ -291,11 +315,12 @@ public class Player : Creature
         {
             return;
         }
-        if (boosterCount == 3)
+        if (BoosterCount == 3)
         {
             boosterTimer = 0;
-            boosterCount = 0;
+            _boosterCount = 0;
             inputCooldown = 0.25f;
+
         }
 
     }
@@ -360,6 +385,8 @@ public class Player : Creature
 
     #endregion
 
+    #region PlayerState
+
     #region Idle
     protected virtual bool IdleStateCondition()
     {
@@ -395,8 +422,10 @@ public class Player : Creature
         {
             return false;
         }
-        if (PlayerState == EPlayerState.Dizz)
+        if (PlayerState == EPlayerState.Dizz || PlayerState == EPlayerState.GoBack)
             return false;
+        IsJump = false;
+
         return true;
     }
 
@@ -441,7 +470,8 @@ public class Player : Creature
 
     protected virtual bool DizzStateCondition()
     {
-
+        if (PlayerState != EPlayerState.Hit)
+            return false;
         return true;
     }
 
@@ -457,7 +487,10 @@ public class Player : Creature
         hitTime += Time.deltaTime;
         if (hitTime >= hitInputIgnoreTime - 0.5f)
         {
-            PlayerState = EPlayerState.GoBack;
+            if (stageType == EStageType.CollectingCandy) // 추후 변경
+                PlayerState = EPlayerState.Run;
+            else
+                PlayerState = EPlayerState.GoBack;
 
         }
     }
@@ -495,7 +528,7 @@ public class Player : Creature
         if (hitTime >= hitInputIgnoreTime)
         {
             hitTime = -1;
-            if (stageType == EStageType.None) // 추후 변경
+            if (stageType == EStageType.CollectingCandy) // 추후 변경
                 PlayerState = EPlayerState.Run;
             else
                 PlayerState = EPlayerState.Idle; // 기절 상태 종료
@@ -577,9 +610,74 @@ public class Player : Creature
     }
     #endregion
 
+    #region Swimming
+
+    protected virtual bool SwimmingStateCondition()
+    {
+        if (isInputRock)
+        {
+            return false;
+        }
+
+        if (rigid.velocity.y != 0)
+        {
+            return false;
+        }
+
+
+        if (trackNum + (int)moveDirection.x < 0 || trackNum + (int)moveDirection.x > 3)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected virtual void SwimmingStateEnter()
+    {
+        isInputRock = true;
+        trackNum += (int)moveDirection.x;
+        if (moveDirection.y > 0)
+        {
+            moveDirection.y *= moveSpeed;
+        }
+
+        beforePosition = transform.position;
+        targetPosition = transform.position + new Vector3(moveDirection.x, 0, moveDirection.y);
+
+    }
+
+    protected virtual void UpdateSwimmingState()
+    {
+        Movement();
+        if (transform.position == targetPosition)
+        {
+            PlayerState = EPlayerState.Idle;
+        }
+
+
+    }
+
+    protected virtual void SwimmingStateExit()
+    {
+        isInputRock = false;
+        if (targetPosition != transform.position)
+        {
+            transform.position = beforePosition;
+            trackNum -= (int)moveDirection.x;
+        }
+    }
+
+
+    #endregion
+
     #region JumpUp
     protected virtual bool JumpUpStateCondition()
     {
+        if (IsJump)
+            return false;
+
+        IsJump = true;
 
         return true;
     }
@@ -611,7 +709,7 @@ public class Player : Creature
     #region Jump
     protected virtual bool JumpStateCondition()
     {
-
+       
 
         return true;
     }
@@ -671,8 +769,12 @@ public class Player : Creature
         {
             switch (stageType)
             {
-                case EStageType.None: PlayerState = EPlayerState.Run; break;
+                case EStageType.None:
+                case EStageType.SharkAvoidance:
+                case EStageType.CrossingBridge:
+                    PlayerState = EPlayerState.Idle; break;
 
+                case EStageType.CollectingCandy: PlayerState = EPlayerState.Run; break;
             }
 
         }
@@ -682,7 +784,7 @@ public class Player : Creature
 
     protected virtual void LandingStateExit()
     {
-
+        IsJump = false;
     }
     #endregion
 
@@ -725,7 +827,6 @@ public class Player : Creature
 
     #endregion
 
-
     #region Left Collect
     protected virtual bool LeftCollectStateCondition()
     {
@@ -754,7 +855,6 @@ public class Player : Creature
     {
     }
     #endregion
-
 
     #region Right Collect
     protected virtual bool RightCollectStateCondition()
@@ -785,6 +885,8 @@ public class Player : Creature
     }
     #endregion
 
+    #endregion
+
     #region co
     Coroutine coPlayerStateController = null;
     protected IEnumerator CoPlayerStateController()
@@ -811,6 +913,7 @@ public class Player : Creature
             {
                 case EPlayerState.Idle: UpdateIdleState(); break;
                 case EPlayerState.Move: UpdateMoveState(); break;
+                case EPlayerState.Swimming: UpdateSwimmingState(); break;
                 case EPlayerState.JumpUp: UpdateJumpUpState(); break;
                 case EPlayerState.Jump: UpdateJumpState(); break;
                 case EPlayerState.Landing: UpdateLandingState(); break;
@@ -876,6 +979,8 @@ public class Player : Creature
     }
     #endregion
 
+    #region Booster
+
     private void BoosterTimeUpdate()
     {
         if (boosterTimer >= 0)
@@ -889,6 +994,7 @@ public class Player : Creature
         }
     }
 
+    #endregion
 
     // 임시 hit
     private void OnTriggerEnter(Collider other)
@@ -901,39 +1007,15 @@ public class Player : Creature
         }
         else if (other.CompareTag("Booster"))
         {
-            boosterCount++;
-            if (boosterCount > 3)
-            {
-                boosterCount = 3;
-            }
-            else
-            {
-                (Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, teamType, boosterCount));
-            }
+            _boosterCount++;
         }
     }
 
-    //임시
-    private void OnCollisionExit(Collision collision)
+    public override void OnCollisionTriggerEnter(Collider other)
     {
-        if (collision.collider.CompareTag("Ground"))
-        {
-            isJump = true;
-        }
+        base.OnCollisionTriggerEnter(other);
+
     }
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.collider.CompareTag("Ground"))
-        {
-            isJump = false;
-        }
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.CompareTag("Ground"))
-        {
-            isJump = false;
-        }
-    }
+
 
 }

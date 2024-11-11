@@ -7,21 +7,23 @@ using static Define;
 public enum EMonsterType
 {
     TestMonster = 0,
-    SmallShark,
-    BigShark,
+    SmallMonster,
+    BigMonster,
 
     Max
 }
-
 public class Monster : Creature
 {
     public EMonsterType MonsterType { get; protected set; }
+    [SerializeField]
+    private bool IsStart = false;
 
     [SerializeField, ReadOnly] private JMonsterData data = null;
-
+    [SerializeField] private float moveSpeed = 5f;
+    
     private void Start() // 임시
     {
-        SetInfo(0); 
+        SetInfo(0);
     }
 
     public override bool Init()
@@ -32,7 +34,9 @@ public class Monster : Creature
         this.gameObject.tag = Define.ETag.Monster.ToString();
         this.gameObject.layer = (int)ELayer.Monster;
         CreatureType = ECreatureType.Monster;
+        this.transform.forward = new Vector3(0, 0, -1);
 
+        moveStart();
         return true;
     }
 
@@ -43,9 +47,31 @@ public class Monster : Creature
         data = Managers.Data.MonsterDict[(int)MonsterType];
     }
 
-    private void Update() // 임시
+    public void moveStart()
     {
-        if(data != null)
-            SetRigidVelocityZ(data.MoveSpeed * -0.01f);
+        IsStart = true;
+        if (coMonsterMove == null)
+            coMonsterMove = StartCoroutine(CoMonsterMove());
+    }
+
+   
+
+    Coroutine coMonsterMove = null;
+
+    protected IEnumerator CoMonsterMove()
+    {
+        while (IsStart)
+        {
+            transform.Translate(transform.forward * -moveSpeed*Time.deltaTime);
+
+
+            yield return null;
+        }
+        coMonsterMove = null;
+    }
+    public override void OnCollisionTriggerEnter(Collider other)
+    {
+        base.OnCollisionTriggerEnter(other);
+
     }
 }
