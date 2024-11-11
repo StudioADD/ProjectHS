@@ -19,7 +19,7 @@ public class GameSceneTest : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.S))
         {
-            ratio += 0.01f;
+            ratio += 0.0055f;
             gameScene.ReceiveData(new UIRatioData(EStageType.SharkAvoidance, Define.ETeamType.Left, ratio));
         }
 
