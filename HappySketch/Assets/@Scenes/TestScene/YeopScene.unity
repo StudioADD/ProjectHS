@@ -223,6 +223,10 @@ PrefabInstance:
       propertyPath: stageType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8238620692973110644, guid: 3b6e855aced2e7341bc344f22730ce89, type: 3}
+      propertyPath: hitBackDistance
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -625,6 +629,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SmallShark
       objectReference: {fileID: 0}
+    - target: {fileID: 3387068720541118847, guid: e3eea6e980c03bb4881477c2cd792768, type: 3}
+      propertyPath: m_TagString
+      value: Monster
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -899,6 +907,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BigShark
       objectReference: {fileID: 0}
+    - target: {fileID: 3387068720541118847, guid: a58386741e1db554c8e5d1825cd02305, type: 3}
+      propertyPath: m_TagString
+      value: Monster
+      objectReference: {fileID: 0}
     - target: {fileID: 3981343624083006311, guid: a58386741e1db554c8e5d1825cd02305, type: 3}
       propertyPath: IsStart
       value: 1
@@ -1031,7 +1043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0167f19af67af964c95a0a8e79053505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageGroup: {fileID: 0}
+  stageController: {fileID: 0}
   cameraGroup: {fileID: 575619666}
   leftPlayer: {fileID: 0}
   rightPlayer: {fileID: 0}
@@ -1228,7 +1240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6f0971f0f778914b84a6c85db45d528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PlayerStartTr>k__BackingField: {fileID: 0}
+  <PlayerSpawnPoint>k__BackingField: {fileID: 0}
   spawnPointList:
   - {fileID: 1693515}
   - {fileID: 925616907}

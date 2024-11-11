@@ -26,6 +26,8 @@ public enum EPlayerState
     Run,
     Hit,
     Dizz,
+    GoBack, // 기절후 회복
+
     LeftCollect, //수집
     RightCollect, //수집
 
@@ -100,6 +102,8 @@ public class Player : Creature
                 case EPlayerState.Jump: isChangeState = JumpStateCondition(); break;
                 case EPlayerState.Landing: isChangeState = JumpStateCondition(); break;
                 case EPlayerState.Hit: isChangeState = HitStateCondition(); break;
+                case EPlayerState.Dizz: isChangeState = DizzStateCondition(); break;
+                case EPlayerState.GoBack: isChangeState = GoBackStateCondition(); break;
                 case EPlayerState.LeftCollect: isChangeState = LeftCollectStateCondition(); break;
                 case EPlayerState.RightCollect: isChangeState = RightCollectStateCondition(); break;
                 case EPlayerState.Run: isChangeState = RunStateCondition(); break;
@@ -117,6 +121,8 @@ public class Player : Creature
                 case EPlayerState.Jump: JumpStateExit(); break;
                 case EPlayerState.Landing: LandingStateExit(); break;
                 case EPlayerState.Hit: HitStateExit(); break;
+                case EPlayerState.Dizz: DizzStateExit(); break;
+                case EPlayerState.GoBack: GoBackStateExit(); break;
                 case EPlayerState.LeftCollect: LeftCollectStateExit(); break;
                 case EPlayerState.RightCollect: RightCollectStateExit(); break;
                 case EPlayerState.Run: RunStateExit(); break;
@@ -124,7 +130,7 @@ public class Player : Creature
             }
 
             _playerState = value;
-            //PlayAnimation(value);
+            PlayAnimation(value);
 
             switch (value)
             {
@@ -134,6 +140,8 @@ public class Player : Creature
                 case EPlayerState.Jump: JumpStateEnter(); break;
                 case EPlayerState.Landing: LandingStateEnter(); break;
                 case EPlayerState.Hit: HitStateEnter(); break;
+                case EPlayerState.Dizz: DizzStateEnter(); break;
+                case EPlayerState.GoBack: GoBackStateEnter(); break;
                 case EPlayerState.LeftCollect: LeftCollectStateEnter(); break;
                 case EPlayerState.RightCollect: LeftCollectStateEnter(); break;
                 case EPlayerState.Run: RunStateEnter(); break;
@@ -273,8 +281,6 @@ public class Player : Creature
             }
         }
         PlayerState = EPlayerState.Move;
-        Debug.LogWarning("1111");
-        animator.SetTrigger("TriggerInput");
 
 
     }
@@ -389,6 +395,8 @@ public class Player : Creature
         {
             return false;
         }
+        if (PlayerState == EPlayerState.Dizz)
+            return false;
         return true;
     }
 
@@ -414,6 +422,76 @@ public class Player : Creature
     {
         Movement();
         hitTime += Time.deltaTime;
+        if (transform.position == targetPosition)
+        {
+            PlayerState = EPlayerState.Dizz;
+        }
+    }
+
+    protected virtual void HitStateExit()
+    {
+
+
+    }
+
+    #endregion
+
+    #region Dizz
+    [SerializeField]
+
+    protected virtual bool DizzStateCondition()
+    {
+
+        return true;
+    }
+
+    protected virtual void DizzStateEnter()
+    {
+
+
+
+    }
+
+    protected virtual void UpdateDizzState()
+    {
+        hitTime += Time.deltaTime;
+        if (hitTime >= hitInputIgnoreTime - 0.5f)
+        {
+            PlayerState = EPlayerState.GoBack;
+
+        }
+    }
+
+    protected virtual void DizzStateExit()
+    {
+
+        isInputRock = false;
+    }
+
+    #endregion
+
+    #region GoBack
+    [SerializeField]
+
+    protected virtual bool GoBackStateCondition()
+    {
+        if (PlayerState != EPlayerState.Dizz)
+            return false;
+        return true;
+    }
+
+    protected virtual void GoBackStateEnter()
+    {
+        targetPosition = transform.position + new Vector3(0, 0, hitBackDistance);
+        beforePosition = transform.position;
+
+
+    }
+
+    protected virtual void UpdateGoBackState()
+    {
+        Movement();
+        hitTime += Time.deltaTime;
         if (hitTime >= hitInputIgnoreTime)
         {
             hitTime = -1;
@@ -424,14 +502,13 @@ public class Player : Creature
         }
     }
 
-    protected virtual void HitStateExit()
+    protected virtual void GoBackStateExit()
     {
 
         isInputRock = false;
     }
 
     #endregion
-
 
     #region Move
     [SerializeField, ReadOnly]
@@ -738,6 +815,8 @@ public class Player : Creature
                 case EPlayerState.Jump: UpdateJumpState(); break;
                 case EPlayerState.Landing: UpdateLandingState(); break;
                 case EPlayerState.Hit: UpdateHitState(); break;
+                case EPlayerState.Dizz: UpdateDizzState(); break;
+                case EPlayerState.GoBack: UpdateGoBackState(); break;
                 case EPlayerState.Run: UpdateRunState(); break;
                 case EPlayerState.LeftCollect: UpdateLeftCollectState(); break;
                 case EPlayerState.RightCollect: UpdateRightCollectState(); break;
@@ -814,8 +893,10 @@ public class Player : Creature
     // 임시 hit
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.CompareTag("Monster"))
         {
+
             PlayerState = EPlayerState.Hit;
         }
         else if (other.CompareTag("Booster"))
@@ -832,7 +913,7 @@ public class Player : Creature
         }
     }
 
-
+    //임시
     private void OnCollisionExit(Collision collision)
     {
         if (collision.collider.CompareTag("Ground"))
