@@ -239,6 +239,7 @@ GameObject:
   - component: {fileID: 278909833}
   - component: {fileID: 278909832}
   - component: {fileID: 278909836}
+  - component: {fileID: 278909837}
   m_Layer: 5
   m_Name: '@UI_GameScene'
   m_TagString: Untagged
@@ -340,6 +341,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ead10547cd6e6e4daf17bcdbdcab07f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &278909837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278909831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b731a5c746012474b930b9d7cfc4853e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameScene: {fileID: 278909836}
 --- !u!1 &497935396
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,7 +639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0167f19af67af964c95a0a8e79053505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageGroup: {fileID: 1879603969}
+  stageController: {fileID: 0}
   cameraGroup: {fileID: 575619666}
   leftPlayer: {fileID: 0}
   rightPlayer: {fileID: 0}
@@ -840,8 +854,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a99e9b1fd58c0ec4ab341f9b54dd9be3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftStage: {fileID: 0}
-  rightStage: {fileID: 0}
 --- !u!1001 &7112495376950787351
 PrefabInstance:
   m_ObjectHideFlags: 0

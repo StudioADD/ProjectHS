@@ -9,7 +9,7 @@ public class UIDataBase
 
     public UIDataBase(EStageType stageType)
     {
-        this.StageType = stageType;
+        StageType = stageType;
     }
 }
 
@@ -27,16 +27,26 @@ public class UITeamData : UIDataBase
 
     public UITeamData(EStageType stageType, ETeamType teamType) : base(stageType)
     {
-        this.TeamType = teamType;
+        TeamType = teamType;
     }
 }
 
 public class UIBoosterCountData : UITeamData
 {
-    public int BoosterCount { get; set; }
+    public int BoosterCount { get; }
 
     public UIBoosterCountData(EStageType stageType, ETeamType teamType, int boosterCount) : base(stageType, teamType)
     {
-        this.BoosterCount = boosterCount;
+        BoosterCount = boosterCount;
+    }
+}
+
+public class UIRatioData : UITeamData
+{
+    public float Ratio { get; }
+
+    public UIRatioData(EStageType stageType, ETeamType teamType, float ratio) : base(stageType, teamType)
+    {
+        Ratio = ratio;
     }
 }

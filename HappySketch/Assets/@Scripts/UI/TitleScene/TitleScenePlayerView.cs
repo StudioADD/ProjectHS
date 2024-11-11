@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MomDra
+
+public class TitleScenePlayerView : ViewBase
 {
-    public class TitleScenePlayerView : ViewBase
+    private Image playerImage;
+
+    private void Awake()
     {
-        private Image playerImage;
+        playerImage = GetComponent<Image>();
+    }
 
-        private void Awake()
-        {
-            playerImage = GetComponent<Image>();
-        }
-
-        public void PlayButtonClicked()
-        {
-            Debug.Log("PlayButtonClicked");
-        }
+    public void PlayButtonClicked()
+    {
+        Debug.Log("PlayButtonClicked");
     }
 }

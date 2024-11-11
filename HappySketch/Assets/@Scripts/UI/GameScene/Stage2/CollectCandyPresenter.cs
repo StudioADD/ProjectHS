@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MomDra
-{
     public class CollectCandyPresenter : PresenterBase
     {
         public CollectCandyPresenter(ViewBase view, ModelBase model) : base(view, model)
@@ -13,4 +11,3 @@ namespace MomDra
             
         }
     }
-}

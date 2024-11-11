@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MomDra
+public abstract class ModelBase
 {
-    public class ModelBase
-    {
        
-    }
 }

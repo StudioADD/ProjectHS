@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MomDra;
 using static Define;
 using UnityEditor;
 using System;
@@ -107,6 +106,10 @@ public class UI_GameScene : UI_BaseScene
                     {
                         (currPresentLeft as SharkAvoidancePresenter).SetItemCount(boosterCountData.BoosterCount);
                     }
+                    else if(teamData is UIRatioData ratioData)
+                    {
+                        (currPresentLeft as SharkAvoidancePresenter).SetLeftProgressRatio(ratioData.Ratio);
+                    }
                 }
                 break;
 
@@ -115,6 +118,10 @@ public class UI_GameScene : UI_BaseScene
                     if (teamData is UIBoosterCountData boosterCountData)
                     {
                         (currPresentRight as SharkAvoidancePresenter).SetItemCount(boosterCountData.BoosterCount);
+                    }
+                    else if (teamData is UIRatioData ratioData)
+                    {
+                        (currPresentLeft as SharkAvoidancePresenter).SetLeftProgressRatio(ratioData.Ratio);
                     }
                 }
                 break;

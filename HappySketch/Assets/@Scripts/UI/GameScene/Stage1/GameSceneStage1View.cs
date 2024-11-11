@@ -6,8 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Define;
  
-namespace MomDra
-{
     public class GameSceneStage1View : ViewBase
     {
         [SerializeField]
@@ -56,6 +54,8 @@ namespace MomDra
 
         public void UpdateLeftProgressRatio(ETeamType teamType, float ratio)
         {
+            ratio = Mathf.Clamp01(ratio);
+
             if (teamType == ETeamType.Left)
                 progressing.fillAmount = ratio;
 
@@ -64,10 +64,11 @@ namespace MomDra
 
         public void UpdateRightProgressRatio(ETeamType teamType, float ratio)
         {
+            ratio = Mathf.Clamp01(ratio);
+
             if (teamType == ETeamType.Right)
                 progressing.fillAmount = ratio;
 
             rightRectTransfrom.anchoredPosition = new Vector3(progressingWidth * ratio, rightRectTransfrom.anchoredPosition.y);
         }
     }
-}

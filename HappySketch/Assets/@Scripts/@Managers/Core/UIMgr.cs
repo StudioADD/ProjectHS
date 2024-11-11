@@ -73,6 +73,35 @@ public class UIMgr
         }
     }
 
+    public void SetCanvasNotOverlay(GameObject go, bool sort = true, int sortingOrder = 0)
+    {
+        Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
+        if (canvas != null)
+        {
+            canvas.renderMode = RenderMode.ScreenSpaceCamera;
+            canvas.overrideSorting = true;
+        }
+
+        CanvasScaler cs = go.GetOrAddComponent<CanvasScaler>();
+        if (cs != null)
+        {
+            cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            cs.referenceResolution = new Vector2(1920, 1080);
+        }
+
+        go.GetOrAddComponent<GraphicRaycaster>();
+
+        if (sort)
+        {
+            canvas.sortingOrder = this.sortingOrder;
+            this.sortingOrder++;
+        }
+        else
+        {
+            canvas.sortingOrder = sortingOrder;
+        }
+    }
+
     public void CacheAllPopupUI()
     {
         // UI_BasePopup을 상속받은 모든 클래스 타입들을 가져와 list에 담는다

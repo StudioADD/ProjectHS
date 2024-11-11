@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MomDra
+public class TitleSceneModel : ModelBase
 {
-    public class TitleSceneModel : ModelBase
-    {
-        
-    }
+
 }
 

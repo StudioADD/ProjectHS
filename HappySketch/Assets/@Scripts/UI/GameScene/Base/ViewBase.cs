@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MomDra
-{
     public abstract class ViewBase : UI_BaseObject
     {
         protected PresenterBase presenter;
@@ -13,16 +11,6 @@ namespace MomDra
         public void SetPresenter(PresenterBase presenter)
         {
             this.presenter = presenter;
-        }
-
-        public void Show()
-        {
-            gameObject.SetActive(true);
-        }
-
-        public void Hide()
-        {
-            gameObject.SetActive(false);
         }
 
         public void FadeOut(Image fadeOutImage, float duration)
@@ -80,4 +68,3 @@ namespace MomDra
             yield return FadeInCoroutine(fadeInImage, fadeDuration);
         }
     }
-}

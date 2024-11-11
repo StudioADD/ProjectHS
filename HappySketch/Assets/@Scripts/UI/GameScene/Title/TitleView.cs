@@ -1,32 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class UI_TitleScene : UI_BaseScene
+
+public class TitleView : ViewBase
 {
-    private PresenterBase presenter;
+    [SerializeField]
+    private Button playButton;
 
-    [SerializeField] GameObject go;
+    [SerializeField]
+    private GameObject playerView;
 
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
 
-        Managers.UI.SetCanvasNotOverlay(gameObject, false);
-        Managers.UI.SetSceneUI(this);
+        playButton.onClick.AddListener(OnClickPlayButton);
 
         return true;
     }
 
-    public void OnClickTest()
+    private void OnClickPlayButton()
     {
         UIFadeEffectParam param = new UIFadeEffectParam(null, OpenPopup, null);
         Managers.UI.OpenPopupUI<UI_FadeEffectPopup>(param);
     }
 
-    public void OpenPopup()
+    private void OpenPopup()
     {
-        go.SetActive(!go.activeSelf);
+        playerView.SetActive(true);
     }
 }
