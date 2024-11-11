@@ -54,12 +54,16 @@ public class TeamCamera : InitBase
         cam.fieldOfView = cameraInfoData.fieldOfView;
     }
 
-    public void SetTarget(BaseObject target) => this.target = target;
+    public void SetTarget(BaseObject target)
+    {
+        this.target = target;
+    }
 
     private void FollowingTarget()
     {
-        transform.position = target.transform.position + new Vector3(0, cameraInfoData.cameraHeight, cameraInfoData.targetDistance * -1);
-        transform.LookAt(target.transform.position + new Vector3(0, cameraInfoData.lookAtHeight, 0));
+        Vector3 targetPos = target.transform.position;
+        transform.position = targetPos + new Vector3(0, cameraInfoData.cameraHeight, cameraInfoData.targetDistance * -1);
+        transform.LookAt(targetPos + new Vector3(0, cameraInfoData.lookAtHeight, 0));
     }
 
     protected bool LoadCameraDataInfo(EStageType stageType)

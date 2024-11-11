@@ -14,6 +14,5 @@ public abstract class BaseStageController : InitBase
     }
 
     public virtual void SetInfo(EStageType stageType) { }
-
     public abstract Vector3 GetStagePlayerStartPos(ETeamType teamType);
 }

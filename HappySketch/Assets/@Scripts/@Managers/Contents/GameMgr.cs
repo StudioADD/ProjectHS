@@ -36,12 +36,11 @@ public class GameMgr
         while (playedStages[stageId])
             stageId = Random.Range(1, (int)EStageType.Max - 1);
 
-        // 스테이지 1만 반복 (임시)
-        stageId = 1;
+        stageId = 1; // 테스트
 
         if(Managers.Scene.CurrScene is GameScene gameScene)
         {
-            playedStages[stageId] = true;
+            playedStages[stageId - 1] = true;
             gameScene.StartStage((EStageType)stageId);
         }
     }

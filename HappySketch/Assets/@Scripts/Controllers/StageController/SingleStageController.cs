@@ -15,7 +15,7 @@ public class SingleStageController : BaseStageController
         return true;
     }
 
-    public void SetInfo(EStageType stageType)
+    public override void SetInfo(EStageType stageType)
     {
         string prefabPath = $"{PrefabPath.STAGE_PATH}/{stageType}";
         singleStage = Managers.Resource.Instantiate(prefabPath, this.transform).GetComponent<SingleStage>();

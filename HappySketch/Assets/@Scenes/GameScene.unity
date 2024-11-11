@@ -792,7 +792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0167f19af67af964c95a0a8e79053505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageGroup: {fileID: 0}
+  stageController: {fileID: 0}
   cameraGroup: {fileID: 575619666}
   leftPlayer: {fileID: 0}
   rightPlayer: {fileID: 0}
