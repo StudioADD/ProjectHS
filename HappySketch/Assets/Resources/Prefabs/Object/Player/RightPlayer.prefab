@@ -1211,6 +1211,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3824361860305346865}
   - component: {fileID: 6972561404136919898}
+  - component: {fileID: 5994946212314969423}
+  - component: {fileID: 5224119653452254054}
   m_Layer: 0
   m_Name: CollisionTriggerObj
   m_TagString: Untagged
@@ -1246,6 +1248,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Collider: {fileID: 0}
+--- !u!135 &5994946212314969423
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2344128878077224384}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &5224119653452254054
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2344128878077224384}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2465534838785688733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1858,12 +1908,13 @@ MonoBehaviour:
   stageType: 0
   inputCooldown: 0.5
   inputTime: 0
-  boosterCount: 3
+  _boosterCount: 0
   hitInputIgnoreTime: 3
   hitTime: -1
   moveSpeed: 3
   isUsingArrow: 1
   trackNum: 2
+  IsJump: 0
   isInputRock: 0
   _playerState: 0
   _isPlayerInputControll: 0

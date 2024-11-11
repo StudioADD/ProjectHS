@@ -50,18 +50,18 @@ public class Player : Creature
 
     #region booster 변수
     [SerializeField]
-    private int BoosterCount = 0; // 부스터 게이지
-    public virtual int _boosterCount
+    private int _boosterCount = 0; // 부스터 게이지
+    public virtual int BoosterCount
     {
-        get { return BoosterCount; }
+        get { return _boosterCount; }
         set
         {
             if (value > 3 || value < 0)
                 return;
-            if (value == BoosterCount)
+            if (value == _boosterCount)
                 return;
-            BoosterCount = value;
-            (Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, teamType, BoosterCount));
+            _boosterCount = value;
+            (Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, teamType, _boosterCount));
 
         }
     }
@@ -315,10 +315,10 @@ public class Player : Creature
         {
             return;
         }
-        if (BoosterCount == 3)
+        if (_boosterCount == 3)
         {
             boosterTimer = 0;
-            _boosterCount = 0;
+            BoosterCount = 0;
             inputCooldown = 0.25f;
 
         }
@@ -1007,7 +1007,7 @@ public class Player : Creature
         }
         else if (other.CompareTag("Booster"))
         {
-            _boosterCount++;
+            BoosterCount++;
         }
     }
 
