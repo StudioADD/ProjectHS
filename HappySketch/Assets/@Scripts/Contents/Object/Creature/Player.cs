@@ -80,9 +80,9 @@ public class Player : Creature
     [SerializeField]
     private float moveSpeed = 5f; // 이동거리
 
-    private ETeamType teamType;
     [SerializeField]
-    private bool isUsingArrow; // 방향키 or wad
+    private ETeamType teamType;
+    
     private float jumpForce = 5f; // 점프 힘
     [SerializeField, ReadOnly]
     private int trackNum = 2; // 현재 트랙 위치
@@ -188,7 +188,6 @@ public class Player : Creature
         
         trackNum = 2;
         targetPosition = beforePosition = transform.position;
-        SetInfo((int)stageType);
         return true;
     }
 
@@ -262,7 +261,7 @@ public class Player : Creature
         Managers.Input.OnEndKeyEntered -= OnBoosterKeySharkAvoidance;
         if (isConnect)
         {
-            if (isUsingArrow)
+            if (teamType == ETeamType.Left)
             {   
                 Managers.Input.OnArrowKeyEntered += OnArrowKeySharkAvoidance;
                 Managers.Input.OnEndKeyEntered += OnBoosterKeySharkAvoidance;
@@ -336,7 +335,7 @@ public class Player : Creature
         Managers.Input.OnSpaceKeyEntered -= OnJumpKey;
         if (isConnect)
         {
-            if (isUsingArrow)
+            if (teamType == ETeamType.Left)
             {
                 Managers.Input.OnArrowKeyEntered += OnArrowKeyStage2;
                 Managers.Input.OnSpaceKeyEntered += OnJumpKey;

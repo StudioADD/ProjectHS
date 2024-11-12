@@ -1912,6 +1912,7 @@ MonoBehaviour:
   hitInputIgnoreTime: 3
   hitTime: -1
   moveSpeed: 3
+  teamType: 1
   isUsingArrow: 1
   trackNum: 2
   IsJump: 0
