@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 7311108731428558610}
   - component: {fileID: 2894630374889204722}
   m_Layer: 5
-  m_Name: UI_SharkAvoidance
+  m_Name: UI_CrossingBridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
