@@ -220,6 +220,14 @@ PrefabInstance:
       value: RightPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 8238620692973110644, guid: 3b6e855aced2e7341bc344f22730ce89, type: 3}
+      propertyPath: _teamType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8238620692973110644, guid: 3b6e855aced2e7341bc344f22730ce89, type: 3}
+      propertyPath: moveSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8238620692973110644, guid: 3b6e855aced2e7341bc344f22730ce89, type: 3}
       propertyPath: stageType
       value: 1
       objectReference: {fileID: 0}
@@ -228,8 +236,12 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8238620692973110644, guid: 3b6e855aced2e7341bc344f22730ce89, type: 3}
+      propertyPath: collisionTrigger
+      value: 
+      objectReference: {fileID: 1887906035}
+    - target: {fileID: 8238620692973110644, guid: 3b6e855aced2e7341bc344f22730ce89, type: 3}
       propertyPath: hitInputIgnoreTime
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -559,6 +571,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ead10547cd6e6e4daf17bcdbdcab07f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &447133715 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6836439439115151726, guid: a91b6ba2dc888ee4aa5726bfd9788c8a, type: 3}
+  m_PrefabInstance: {fileID: 1389200268}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc210538b971ae54ea29f92eecc76738, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &497935396
@@ -1253,9 +1276,21 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5005944469275754812, guid: a91b6ba2dc888ee4aa5726bfd9788c8a, type: 3}
+      propertyPath: moveSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5005944469275754812, guid: a91b6ba2dc888ee4aa5726bfd9788c8a, type: 3}
       propertyPath: stageType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5005944469275754812, guid: a91b6ba2dc888ee4aa5726bfd9788c8a, type: 3}
+      propertyPath: hitBackDistance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5005944469275754812, guid: a91b6ba2dc888ee4aa5726bfd9788c8a, type: 3}
+      propertyPath: collisionTrigger
+      value: 
+      objectReference: {fileID: 447133715}
     - target: {fileID: 8619966498458803347, guid: a91b6ba2dc888ee4aa5726bfd9788c8a, type: 3}
       propertyPath: m_Name
       value: LeftPlayer
@@ -1515,6 +1550,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 755011f0fe2364d4e8766d69ac4fcc43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1887906035 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6972561404136919898, guid: 3b6e855aced2e7341bc344f22730ce89, type: 3}
+  m_PrefabInstance: {fileID: 19548402}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc210538b971ae54ea29f92eecc76738, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1965021950
