@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Define;
 
-public class GameSceneStage1View : ViewBase
+public class SharkAvoidanceView : ViewBase
 {
     [SerializeField]
     private Image progressing;
@@ -18,6 +18,9 @@ public class GameSceneStage1View : ViewBase
     private Image rightImage;
 
     [SerializeField]
+    private Image boosterImage;
+
+    [SerializeField]
     private Image[] items;
 
     private float progressingWidth;
@@ -26,7 +29,6 @@ public class GameSceneStage1View : ViewBase
 
     private float leftImgWidth;
     private float rightImgWidth;
-
 
     public override bool Init()
     {
@@ -47,6 +49,9 @@ public class GameSceneStage1View : ViewBase
     public void UpdateItemCount(int count)
     {
         Debug.Log($"아이템 개수: {count}");
+
+        if (count == 0) DeActivateBoosterImage();
+        else if (count == 3) ActivateBoosterImage();
 
         for (int i = 0; i < count; ++i)
         {
@@ -77,5 +82,15 @@ public class GameSceneStage1View : ViewBase
             progressing.fillAmount = ratio;
 
         rightRectTransfrom.anchoredPosition = new Vector3(progressingWidth * ratio - rightImgWidth / 2.2f, rightRectTransfrom.anchoredPosition.y);
+    }
+
+    private void ActivateBoosterImage()
+    {
+        boosterImage.color = Color.white;
+    }
+
+    private void DeActivateBoosterImage()
+    {
+        boosterImage.color = Color.gray;
     }
 }
