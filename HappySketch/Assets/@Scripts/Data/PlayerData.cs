@@ -9,7 +9,7 @@ namespace Data
     [Serializable]
     public class JPlayerData
     {
-        public int DataId; // 좌 0 우 1 
+        public int teamType;
         public string TestName;
         public float moveSpeed;
         public float jumpForce;
@@ -28,7 +28,7 @@ namespace Data
         {
             Dictionary<int, JPlayerData> testDict = new Dictionary<int, JPlayerData>();
             foreach (JPlayerData test in Tests)
-                testDict.Add(test.DataId, test);
+                testDict.Add(test.teamType, test);
             return testDict;
         }
     }

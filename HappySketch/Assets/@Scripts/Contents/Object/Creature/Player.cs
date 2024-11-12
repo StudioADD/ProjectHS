@@ -38,7 +38,7 @@ public enum EPlayerState
 
 public class Player : Creature
 {
-    [SerializeField, ReadOnly]
+    [SerializeField]
     private EStageType stageType;
 
 
@@ -196,7 +196,7 @@ public class Player : Creature
         //PlayerState = EPlayerState.Idle;
 
 
-        
+        SetInfo((int)stageType);
         trackNum = 2;
         targetPosition = beforePosition = transform.position;
         return true;
@@ -493,7 +493,7 @@ public class Player : Creature
     #endregion
 
     #region Dizz
-    [SerializeField]
+   
 
     protected virtual bool DizzStateCondition()
     {
