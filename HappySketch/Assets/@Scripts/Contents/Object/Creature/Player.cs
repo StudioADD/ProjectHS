@@ -259,21 +259,26 @@ public class Player : Creature
         Managers.Input.OnArrowKeyEntered -= OnArrowKeySharkAvoidance;
         Managers.Input.OnSpaceKeyEntered -= OnBoosterKeySharkAvoidance;
         Managers.Input.OnEndKeyEntered -= OnBoosterKeySharkAvoidance;
+        Managers.Input.OnNum1KeyEntered -= onGetBooster;
+        Managers.Input.OnNum1KeyEntered += onGetBooster;
         if (isConnect)
         {
             if (teamType == ETeamType.Left)
             {   
                 Managers.Input.OnArrowKeyEntered += OnArrowKeySharkAvoidance;
-                Managers.Input.OnEndKeyEntered += OnBoosterKeySharkAvoidance;
+                Managers.Input.OnSpaceKeyEntered += OnBoosterKeySharkAvoidance;
             }
             else
             {
                 Managers.Input.OnWASDKeyEntered += OnArrowKeySharkAvoidance;
-                Managers.Input.OnSpaceKeyEntered += OnBoosterKeySharkAvoidance;
+                Managers.Input.OnEndKeyEntered += OnBoosterKeySharkAvoidance;
             }
         }
     }
-
+    public void onGetBooster()
+    {
+        BoosterCount++;
+    }
     public void OnArrowKeySharkAvoidance(Vector2 value)
     {
         if (isInputRock)
@@ -299,6 +304,11 @@ public class Player : Creature
                 moveDirection = Vector2.zero;
                 PlayerState = EPlayerState.Idle;
             }
+            return;
+        }
+        else if (value.y < 0)
+        {
+           // 뒤 X
             return;
         }
         PlayerState = EPlayerState.Move;
