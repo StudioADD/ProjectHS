@@ -38,18 +38,19 @@ public enum EPlayerState
 
 public class Player : Creature
 {
-    [SerializeField]
+    [SerializeField, ReadOnly]
     private EStageType stageType;
 
+
     #region input 변수
-    [SerializeField]
+    [SerializeField, ReadOnly]
     private float inputCooldown = 0.5f; // W와 S 키 쿨타임
     [SerializeField, ReadOnly]
     private float inputTime = 0f; // 입력시간 
     #endregion
 
     #region booster 변수
-    [SerializeField]
+    [SerializeField, ReadOnly]
     private int _boosterCount = 0; // 부스터 게이지
     public virtual int BoosterCount
     {
@@ -61,7 +62,7 @@ public class Player : Creature
             if (value == _boosterCount)
                 return;
             _boosterCount = value;
-            (Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, teamType, _boosterCount));
+            (Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, TeamType, _boosterCount));
 
         }
     }
@@ -71,8 +72,8 @@ public class Player : Creature
     #endregion
 
     #region hit 변수
-    [SerializeField]
-    private float hitInputIgnoreTime = 1.0f; // Hit 상태에서 입력 무시 시간
+    [SerializeField, ReadOnly]
+    private float hitInputIgnoreTime = 3.0f; // Hit 상태에서 입력 무시 시간
     [SerializeField, ReadOnly]
     private float hitTime = -1; // hit시간
     #endregion
@@ -81,8 +82,18 @@ public class Player : Creature
     private float moveSpeed = 5f; // 이동거리
 
     [SerializeField]
-    private ETeamType teamType;
+    private ETeamType _teamType;
     
+    public virtual ETeamType TeamType
+    {
+        get { return _teamType; }
+        set
+        {
+            if(value == _teamType) return;
+            _teamType = value;
+        }
+    }
+
     private float jumpForce = 5f; // 점프 힘
     [SerializeField, ReadOnly]
     private int trackNum = 2; // 현재 트랙 위치
@@ -238,10 +249,11 @@ public class Player : Creature
     #endregion
 
     private Vector2 moveDirection = Vector2.zero;
-
+    
+    
     private void ConnectInputActions(bool isConnect)
     {
-
+        UnConnectInputActions();
         switch (stageType)
         {
             
@@ -250,20 +262,32 @@ public class Player : Creature
                 // 스테이지 추가
         }
     }
+    private void UnConnectInputActions()
+    {
+        Managers.Input.OnArrowKeyEntered -= OnArrowKeySharkAvoidance;
+        Managers.Input.OnSpaceKeyEntered -= OnBoosterKeySharkAvoidance;
+
+        Managers.Input.OnWASDKeyEntered -= OnArrowKeySharkAvoidance;
+        Managers.Input.OnEndKeyEntered -= OnBoosterKeySharkAvoidance;
+
+        Managers.Input.OnArrowKeyEntered -= OnArrowKeyStage2;
+        Managers.Input.OnSpaceKeyEntered -= OnJumpKey;
+
+        Managers.Input.OnWASDKeyEntered -= OnArrowKeyStage2;
+        Managers.Input.OnEndKeyEntered -= OnJumpKey;
+    }
 
     #region SharkAvoidance
 
     public void SharkAvoidanceConnectInputActions(bool isConnect)
     {
-        Managers.Input.OnWASDKeyEntered -= OnArrowKeySharkAvoidance;
-        Managers.Input.OnArrowKeyEntered -= OnArrowKeySharkAvoidance;
-        Managers.Input.OnSpaceKeyEntered -= OnBoosterKeySharkAvoidance;
-        Managers.Input.OnEndKeyEntered -= OnBoosterKeySharkAvoidance;
+        // 테스트
         Managers.Input.OnNum1KeyEntered -= onGetBooster;
         Managers.Input.OnNum1KeyEntered += onGetBooster;
+
         if (isConnect)
         {
-            if (teamType == ETeamType.Left)
+            if (TeamType == ETeamType.Left)
             {   
                 Managers.Input.OnArrowKeyEntered += OnArrowKeySharkAvoidance;
                 Managers.Input.OnSpaceKeyEntered += OnBoosterKeySharkAvoidance;
@@ -311,7 +335,10 @@ public class Player : Creature
            // 뒤 X
             return;
         }
-        PlayerState = EPlayerState.Move;
+        if (PlayerState == EPlayerState.Swimming) 
+            ;
+        else
+            PlayerState = EPlayerState.Move;
 
 
     }
@@ -336,16 +363,9 @@ public class Player : Creature
     #region stage2
     public void Stage2ConnectInputActions(bool isConnect)
     {
-        Managers.Input.OnWASDKeyEntered -= OnArrowKeySharkAvoidance;
-        Managers.Input.OnArrowKeyEntered -= OnArrowKeySharkAvoidance;
-        Managers.Input.OnSpaceKeyEntered -= OnBoosterKeySharkAvoidance;
-        Managers.Input.OnEndKeyEntered -= OnBoosterKeySharkAvoidance;
-        Managers.Input.OnWASDKeyEntered -= OnArrowKeyStage2;
-        Managers.Input.OnArrowKeyEntered -= OnArrowKeyStage2;
-        Managers.Input.OnSpaceKeyEntered -= OnJumpKey;
         if (isConnect)
         {
-            if (teamType == ETeamType.Left)
+            if (TeamType == ETeamType.Left)
             {
                 Managers.Input.OnArrowKeyEntered += OnArrowKeyStage2;
                 Managers.Input.OnSpaceKeyEntered += OnJumpKey;
@@ -379,6 +399,8 @@ public class Player : Creature
 
     #region stage3
 
+
+    #endregion
     public void OnJumpKey()
     {
         if (isInputRock)
@@ -388,8 +410,6 @@ public class Player : Creature
 
         PlayerState = EPlayerState.JumpUp;
     }
-    #endregion
-
     #endregion
 
     #region PlayerState
