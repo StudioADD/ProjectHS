@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameSceneStage2View : ViewBase
+public class CollectCandyView : ViewBase
 {
-    // UI 요소들
-
+    
 }

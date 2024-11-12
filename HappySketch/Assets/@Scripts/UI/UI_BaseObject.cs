@@ -9,8 +9,6 @@ public class UI_BaseObject : InitBase
         if (base.Init() == false)
             return false;
 
-
-
         return true;
     }
 

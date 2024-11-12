@@ -18,7 +18,7 @@ public class SharkAvoidancePresenter : PresenterBase
         if (model is SharkAvoidanceModel model1)
             model1.SetItemCount(count);
 
-        if (view is GameSceneStage1View view1)
+        if (view is SharkAvoidanceView view1)
             view1.UpdateItemCount(count);
     }
 
@@ -32,7 +32,7 @@ public class SharkAvoidancePresenter : PresenterBase
         {
             model1.SetLeftProgressRatio(ratio);
 
-            if (view is GameSceneStage1View view1)
+            if (view is SharkAvoidanceView view1)
                 view1.UpdateLeftProgressRatio(model1.TeamType, ratio);
         }
     }
@@ -43,7 +43,7 @@ public class SharkAvoidancePresenter : PresenterBase
         {
             model1.SetRightProgressRatio(ratio);
 
-            if (view is GameSceneStage1View view1)
+            if (view is SharkAvoidanceView view1)
                 view1.UpdateRightProgressRatio(model1.TeamType, ratio);
         }
     }

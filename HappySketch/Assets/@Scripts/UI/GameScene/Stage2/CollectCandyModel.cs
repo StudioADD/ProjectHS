@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-    public class GameSceneStage2Model : ModelBase
-    {
-       
-    }
+public class CollectCandyModel : ModelBase
+{
+
+}
