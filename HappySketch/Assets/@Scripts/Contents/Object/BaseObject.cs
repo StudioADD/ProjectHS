@@ -5,7 +5,8 @@ using UnityEngine;
 public enum EObjectType
 {
     Creature,
-    
+    interaction,
+
     Max
 }
 

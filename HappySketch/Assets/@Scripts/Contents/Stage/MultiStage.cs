@@ -10,8 +10,11 @@ public class MultiStage : BaseStage
     [field: SerializeField, ReadOnly]
     public Transform PlayerSpawnPoint { get; protected set; } = null;
 
-    protected virtual void Reset()
+
+    protected override void Reset()
     {
+        base.Reset();
+
         PlayerSpawnPoint = Util.FindChild<Transform>(this.gameObject, "PlayerSpawnPoint", false);
         PlayerSpawnPoint ??= Util.Editor_InstantiateObject(this.transform).transform;
         PlayerSpawnPoint.gameObject.name = "PlayerSpawnPoint";
@@ -21,6 +24,8 @@ public class MultiStage : BaseStage
     {
         if (base.Init() == false)
             return false;
+
+        
 
         return true;
     }

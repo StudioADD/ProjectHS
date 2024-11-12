@@ -13,6 +13,11 @@ public abstract class BaseStageController : InitBase
         return true;
     }
 
+    public virtual void EndStage(ETeamType winnerTeam)
+    {
+        Managers.Game.EndStage(winnerTeam);
+    }
+
     public virtual void SetInfo(EStageType stageType) { }
     public abstract Vector3 GetStagePlayerStartPos(ETeamType teamType);
 }

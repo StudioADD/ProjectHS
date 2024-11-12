@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,14 @@ public enum EStageType
 
 public abstract class BaseStage : InitBase
 {
+    [SerializeField, ReadOnly]
+    protected FinishLineObject finishLineObject;
+
+    protected virtual void Reset()
+    {
+        finishLineObject = Util.FindChild<FinishLineObject>(gameObject, "FinishLineObject", false);
+    }
+
     public EStageType StageType { get; protected set; }
 
     public override bool Init()
@@ -26,4 +35,10 @@ public abstract class BaseStage : InitBase
     }
 
     public virtual void SetInfo() { }
+
+    public void ConnectEvents(Action<ETeamType> onArriveFinishLine)
+    {
+        finishLineObject.OnArriveFinishLine -= onArriveFinishLine;
+        finishLineObject.OnArriveFinishLine += onArriveFinishLine;
+    }
 }

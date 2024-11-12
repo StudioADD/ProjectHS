@@ -9,7 +9,7 @@ public class MultiStageController : BaseStageController
     [SerializeField, ReadOnly] MultiStage leftStage = null;
     [SerializeField, ReadOnly] MultiStage rightStage = null;
 
-    const int STAGE_DISTANCE = 10;
+    const int STAGE_DISTANCE = 50;
 
     public override bool Init()
     {
@@ -28,6 +28,9 @@ public class MultiStageController : BaseStageController
 
         leftStage.transform.position = Vector3.left * STAGE_DISTANCE;
         rightStage.transform.position = Vector3.right * STAGE_DISTANCE;
+
+        leftStage.ConnectEvents(EndStage);
+        rightStage.ConnectEvents(EndStage);
     }
 
     public override Vector3 GetStagePlayerStartPos(ETeamType teamType)
@@ -46,5 +49,4 @@ public class MultiStageController : BaseStageController
     {
 
     }
-
 }

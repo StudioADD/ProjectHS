@@ -89,6 +89,8 @@ public class InputMgr : MonoBehaviour
     public void OnFKey()
     {
         OnFKeyEntered?.Invoke();
+
+        Managers.Scene.LoadScene(Define.EScene.GameScene);
     }
 
     public void OnZKey()
