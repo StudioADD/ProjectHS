@@ -11,7 +11,6 @@ public class GameScene : BaseScene
     [SerializeField, ReadOnly] Player leftPlayer;
     [SerializeField, ReadOnly] Player rightPlayer;
 
-
     protected virtual void Reset()
     {
         cameraGroup = Util.FindChild<CameraGroupController>(gameObject);
@@ -29,20 +28,20 @@ public class GameScene : BaseScene
 
     public void StartStage(EStageType stageType)
     {
+        // UI ( GameStart )
+        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
+            uI_GameScene.StartStage(stageType);
+        
         // StageController
         Type type = Type.GetType($"{stageType}Stage");
         BaseStage tempStage = Activator.CreateInstance(type) as BaseStage;
         GameObject stageControllerObj = new GameObject("StageController");
         stageControllerObj.transform.SetParent(transform, false);
 
-        if (tempStage is SingleStage singleStage)
-        {
+        if (tempStage is SingleStage) 
             stageController = stageControllerObj.AddComponent<SingleStageController>();
-        }
-        else if(tempStage is MultiStage multiStage)
-        {
+        else if(tempStage is MultiStage) 
             stageController = stageControllerObj.AddComponent<MultiStageController>();
-        }
         else
         {
             Debug.LogWarning($"없는 타입 : {tempStage.GetType().Name}");
@@ -65,24 +64,12 @@ public class GameScene : BaseScene
         cameraGroup.SetInfo(stageType);
         cameraGroup.SetTarget(leftPlayer, ETeamType.Left);
         cameraGroup.SetTarget(rightPlayer, ETeamType.Right);
-
-        // StartStage
-        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
-            uI_GameScene.StartStage(stageType);
     }
 
-    public void EndStage(ETeamType winningTeam)
-    {
-        // 플레이어한테 정보 전달
-
-        // 
-    }
-    
     public override void Clear()
     {
-
+        
     }
-
 
     #region Test
 

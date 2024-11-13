@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class UI_StageInstructionWindow : InitBase
 {
-    public event Action OnStageInstruction = null;
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -17,15 +15,15 @@ public class UI_StageInstructionWindow : InitBase
 
     private void StartStage()
     {
-        Managers.Game.StartGame();
-        // OnStageInstruction?.Invoke();
+        Managers.Game.StartStage();
+        gameObject.SetActive(false);
     }
+
     #region OnClick Event
     public void OnClickExit()
     {
-        StartStage();
-
-        gameObject.SetActive(false);
+        UIFadeEffectParam param = new UIFadeEffectParam(() => { return !gameObject.activeSelf; }, StartStage, null);
+        Managers.UI.OpenPopupUI<UI_FadeEffectPopup>(param);
     }
     #endregion
 }

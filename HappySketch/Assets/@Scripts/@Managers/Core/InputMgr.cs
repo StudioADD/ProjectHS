@@ -89,8 +89,6 @@ public class InputMgr : MonoBehaviour
     public void OnFKey()
     {
         OnFKeyEntered?.Invoke();
-
-        Managers.Scene.LoadScene(Define.EScene.GameScene);
     }
 
     public void OnZKey()
@@ -106,11 +104,15 @@ public class InputMgr : MonoBehaviour
     public void OnCKey()
     {
         OnCKeyEntered?.Invoke();
+
+        Managers.Game.EndStage(Define.ETeamType.Left);
     }
 
     public void OnVKey()
     {
         OnVKeyEntered?.Invoke();
+
+        Managers.Game.EndStage(Define.ETeamType.Right);
     }
 
     public void OnNum1Key()

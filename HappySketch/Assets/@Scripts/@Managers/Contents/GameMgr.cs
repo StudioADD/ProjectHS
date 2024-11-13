@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using static Define;
 
@@ -18,27 +17,21 @@ public class GameMgr
 
     public void Clear()
     {
-
-    }
-
-
-    public void StartGame()
-    {
         for (int i = 0; i < winnerCounts.Length; i++)
             winnerCounts[i] = 0;
 
         for (int i = 0; i < playedStages.Length; i++)
             playedStages[i] = false;
-
-        StartStage();
     }
 
     private void EndGame(ETeamType winnerTeam)
     {
-        // Result
+        // 타이틀씬으로 (임시)
+        Managers.Scene.LoadScene(EScene.TitleScene);
+        Clear();
     }
 
-    private void StartStage()
+    public void StartStage()
     {
         currStageId++;
 
@@ -53,7 +46,7 @@ public class GameMgr
     {
         winnerCounts[(int)winnerTeam] += 1;
 
-        if (winnerCounts[(int)winnerTeam] >= (int)EStageType.Max / 2)
+        if (winnerCounts[(int)winnerTeam] >= ((int)EStageType.Max / 2))
         {
             EndGame(winnerTeam);
         }

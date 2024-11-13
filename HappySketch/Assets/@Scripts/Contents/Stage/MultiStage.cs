@@ -1,20 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 /// <summary>
 /// 두 개의 스테이지에 각각의 플레이어가 플레이하는 스테이지
 /// </summary>
-public class MultiStage : BaseStage
+public abstract class MultiStage : BaseStage
 {
     [field: SerializeField, ReadOnly]
     public Transform PlayerSpawnPoint { get; protected set; } = null;
 
-
-    protected override void Reset()
+    protected virtual void Reset()
     {
-        base.Reset();
-
         PlayerSpawnPoint = Util.FindChild<Transform>(this.gameObject, "PlayerSpawnPoint", false);
         PlayerSpawnPoint ??= Util.Editor_InstantiateObject(this.transform).transform;
         PlayerSpawnPoint.gameObject.name = "PlayerSpawnPoint";
@@ -29,4 +28,6 @@ public class MultiStage : BaseStage
 
         return true;
     }
+
+    public abstract void ConnectEvents(Action<ETeamType> onEndGameCallBack);
 }
