@@ -231,16 +231,20 @@ MonoBehaviour:
   cam: {fileID: 0}
   target: {fileID: 0}
   cameraInfoData:
-    fieldOfView: 0
-    targetDistance: 0
-    cameraHeight: 0
+    fieldOfView: 60
+    targetDistance: 5
+    cameraHeight: 5
     lookAtHeight: 0
-  stageType: 0
+    nearClipping: 0.3
+    farClipping: 1000
+  stageType: 2
   testTarget: {fileID: 483786395}
   fieldOfView: 60
   targetDistance: 5
   cameraHeight: 5
   lookAtHeight: 0
+  nearClipping: 0.3
+  farClipping: 1000
 --- !u!114 &483786395 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5932956307340120871, guid: b36023bcaba88224295bc91b58d8ef12, type: 3}
