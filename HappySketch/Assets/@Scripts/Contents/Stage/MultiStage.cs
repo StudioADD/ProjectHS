@@ -10,7 +10,7 @@ using static Define;
 public abstract class MultiStage : BaseStage
 {
     [field: SerializeField, ReadOnly]
-    public Transform PlayerSpawnPoint { get; protected set; } = null;
+    public Transform PlayerSpawnPoint { get; protected set; }
 
     protected virtual void Reset()
     {

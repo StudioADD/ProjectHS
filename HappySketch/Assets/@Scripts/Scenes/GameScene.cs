@@ -34,19 +34,18 @@ public class GameScene : BaseScene
         
         // StageController
         Type type = Type.GetType($"{stageType}Stage");
-        BaseStage tempStage = Activator.CreateInstance(type) as BaseStage;
         GameObject stageControllerObj = new GameObject("StageController");
         stageControllerObj.transform.SetParent(transform, false);
-
-        if (tempStage is SingleStage) 
+        if (type.BaseType == typeof(SingleStage))
             stageController = stageControllerObj.AddComponent<SingleStageController>();
-        else if(tempStage is MultiStage) 
+        else if(type.BaseType == typeof(MultiStage))
             stageController = stageControllerObj.AddComponent<MultiStageController>();
         else
         {
-            Debug.LogWarning($"없는 타입 : {tempStage.GetType().Name}");
+            Debug.LogWarning($"없는 타입 : {type.Name}");
             return;
         }
+
         stageController.SetInfo(stageType);
 
         // Player
