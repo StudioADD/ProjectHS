@@ -18,6 +18,10 @@ public abstract class BaseStageController : InitBase
         Managers.Game.EndStage(winnerTeam);
     }
 
-    public virtual void SetInfo(EStageType stageType) { }
+    public virtual void SetInfo(EStageType stageType)
+    {
+        LightingController.SetStageLighting(stageType);
+    }
+
     public abstract Vector3 GetStagePlayerStartPos(ETeamType teamType);
 }

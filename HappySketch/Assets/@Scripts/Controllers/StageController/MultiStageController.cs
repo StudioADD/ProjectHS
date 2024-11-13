@@ -21,6 +21,8 @@ public class MultiStageController : BaseStageController
 
     public override void SetInfo(EStageType stageType)
     {
+        base.SetInfo(stageType);
+
         string prefabPath = $"{PrefabPath.STAGE_PATH}/{stageType}";
 
         leftStage = Managers.Resource.Instantiate(prefabPath, this.transform).GetComponent<MultiStage>();

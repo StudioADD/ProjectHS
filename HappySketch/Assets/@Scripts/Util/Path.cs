@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
 /// "Assets/" 이후 경로
 /// </summary>
@@ -16,7 +12,8 @@ public static class DataPath
 /// </summary>
 public static class LoadPath
 {
-
+    //Materials
+    public const string MATERIALS_PATH = "Materials";
 }
 
 /// <summary>
