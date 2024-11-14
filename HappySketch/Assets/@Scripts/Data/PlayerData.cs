@@ -9,7 +9,7 @@ namespace Data
     [Serializable]
     public class JPlayerData
     {
-        public int teamType;
+        public int TeamType;
         public string TestName;
         public float moveSpeed;
         public float jumpForce;
@@ -20,16 +20,16 @@ namespace Data
         public float hitBackDistance; // hit시 뒤로 밀려나는 거리
     }
 
-    public class PlayerData : ILoader<int, JPlayerData>
+    public class PlayerDataLoader : ILoader<int, JPlayerData>
     {
-        public List<JPlayerData> Tests = new List<JPlayerData>();
+        public List<JPlayerData> Players = new List<JPlayerData>();
 
         public Dictionary<int, JPlayerData> MakeDict()
         {
-            Dictionary<int, JPlayerData> testDict = new Dictionary<int, JPlayerData>();
-            foreach (JPlayerData test in Tests)
-                testDict.Add(test.teamType, test);
-            return testDict;
+            Dictionary<int, JPlayerData> PlayerDict = new Dictionary<int, JPlayerData>();
+            foreach (JPlayerData test in Players)
+                PlayerDict.Add(test.TeamType, test);
+            return PlayerDict;
         }
     }
 }

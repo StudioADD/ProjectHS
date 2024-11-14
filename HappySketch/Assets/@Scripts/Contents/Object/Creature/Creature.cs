@@ -51,8 +51,11 @@ public abstract class Creature : BaseObject
 
         if (collisionTrigger != null)
         {
-            collisionTrigger.OnCollisionTiggerEnter -= OnCollisionTriggerEnter;
-            collisionTrigger.OnCollisionTiggerEnter += OnCollisionTriggerEnter;
+            collisionTrigger.OnCollisionTriggerEnter -= OnCollisionTriggerEnter;
+            collisionTrigger.OnCollisionTriggerEnter += OnCollisionTriggerEnter;
+
+            collisionTrigger.OnCollisionTriggerExit -= OnCollisionTriggerExit;
+            collisionTrigger.OnCollisionTriggerExit += OnCollisionTriggerExit;
         }
 
         return true;
@@ -69,7 +72,10 @@ public abstract class Creature : BaseObject
     {
 
     }
+    public virtual void OnCollisionTriggerExit(Collider other)
+    {
 
+    }
     #region Rigid
     protected void SetRigidVelocity(Vector3 velocity)
     {
