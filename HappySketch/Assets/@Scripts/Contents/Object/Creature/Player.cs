@@ -196,7 +196,7 @@ public class Player : Creature
         //PlayerState = EPlayerState.Idle;
 
 
-        SetInfo((int)stageType);
+        //SetInfo((int)stageType);
         trackNum = 2;
         targetPosition = beforePosition = transform.position;
         return true;
