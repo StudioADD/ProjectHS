@@ -22,9 +22,9 @@ public static class LightingController
                     string path = $"{LoadPath.MATERIALS_PATH}/{SkyBoxMaterialName.SHARKAVOIDANCESTAGE_NAME}";
                     RenderSettings.skybox = Managers.Resource.Load<Material>(path);
 
-                    RenderSettings.fog = true;
                     RenderSettings.fogColor = new Color(22, 151, 221);
                     RenderSettings.fogDensity = 0.002f;
+                    RenderSettings.fog = true;
                     break;
                 }
             default: // 기본 세팅
@@ -33,6 +33,7 @@ public static class LightingController
                     break;
                 }
         }
-        
+
+        DynamicGI.UpdateEnvironment();
     }
 }

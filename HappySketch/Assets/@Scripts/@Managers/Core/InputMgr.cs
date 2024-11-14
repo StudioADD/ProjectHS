@@ -99,6 +99,8 @@ public class InputMgr : MonoBehaviour
     public void OnXKey()
     {
         OnXKeyEntered?.Invoke();
+
+        Managers.Game.EndStage(Define.ETeamType.Right);
     }
 
     public void OnCKey()
@@ -112,7 +114,6 @@ public class InputMgr : MonoBehaviour
     {
         OnVKeyEntered?.Invoke();
 
-        Managers.Game.EndStage(Define.ETeamType.Right);
     }
 
     public void OnNum1Key()
