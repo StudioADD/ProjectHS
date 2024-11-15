@@ -1,0 +1,24 @@
+{
+  "Players": [
+    {
+      "TeamType": 0,
+      "TestName": "asdf",
+      "moveSpeed": 0,
+      "jumpForce": 5,
+      "inputCooldown": 0.5,
+      "boosterTime": 5,
+      "hitInputIgnoreTime": 3,
+      "hitBackDistance": 3
+    },
+    {
+      "TeamType": 1,
+      "TestName": "asdf",
+      "moveSpeed": 0,
+      "jumpForce": 5,
+      "inputCooldown": 0.5,
+      "boosterTime": 5,
+      "hitInputIgnoreTime": 3,
+      "hitBackDistance": 3
+    }
+  ]
+}

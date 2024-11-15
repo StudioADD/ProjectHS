@@ -9,12 +9,12 @@ public interface ILoader<Key, Value>
 
 public class DataMgr
 {
-    public Dictionary<int, JTestData> TestDict { get; private set; } = new Dictionary<int, JTestData>();
+    public Dictionary<int, JPlayerData> PlayerDict { get; private set; } = new Dictionary<int, JPlayerData>();
     public Dictionary<int, JMonsterData> MonsterDict { get; private set; } = new Dictionary<int, JMonsterData>();
 
     public void Init()
     {
-        TestDict = LoadJson<TestDataLoader, int, JTestData>("TestData").MakeDict();
+        PlayerDict = LoadJson<PlayerDataLoader, int, JPlayerData>("PlayerData").MakeDict();
         MonsterDict = LoadJson<MonsterDataLoader, int, JMonsterData>("MonsterData").MakeDict();
     } 
 

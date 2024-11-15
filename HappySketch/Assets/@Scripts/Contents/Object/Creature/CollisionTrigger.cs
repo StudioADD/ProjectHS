@@ -6,7 +6,8 @@ using UnityEngine;
 public class CollisionTrigger : InitBase
 {
     [SerializeField, ReadOnly] Collider Collider;
-    public event Action<Collider> OnCollisionTiggerEnter = null;
+    public event Action<Collider> OnCollisionTriggerEnter = null;
+    public event Action<Collider> OnCollisionTriggerExit = null;
 
     public override bool Init()
     {
@@ -20,7 +21,12 @@ public class CollisionTrigger : InitBase
 
     private void OnTriggerEnter(Collider other)
     {
-        if (OnCollisionTiggerEnter != null)
-            OnCollisionTiggerEnter.Invoke(other);
+        if (OnCollisionTriggerEnter != null)
+            OnCollisionTriggerEnter.Invoke(other);
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if(OnCollisionTriggerExit != null)
+            OnCollisionTriggerExit.Invoke(other);
     }
 }
