@@ -26,5 +26,7 @@ public abstract class BaseStage : InitBase
         return true;
     }
 
-    public virtual void SetInfo() { }
+    public virtual void SetInfo(Player player = null) { }
+
+    
 }

@@ -24,6 +24,14 @@ public class CrossingBridgeStage : SingleStage
         return true;
     }
 
+    public override void SetInfo(Player player = null)
+    {
+        base.SetInfo(player);
+
+        CrossingBridgeParam param = new CrossingBridgeParam(GetJumpTargetPos);
+        player.SetStageInfo(param);
+    }
+
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
     {
         if (finishLineObject != null)
@@ -33,5 +41,12 @@ public class CrossingBridgeStage : SingleStage
         }
         else
             Debug.LogWarning($"FinishLineObject is Null!!");
+    }
+
+    public Vector3 GetJumpTargetPos(int id, bool isLeft)
+    {
+        // 
+
+        return Vector3.zero;
     }
 }

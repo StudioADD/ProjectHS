@@ -6,14 +6,14 @@ using static Define;
 public class GameScene : BaseScene
 {
     [SerializeField, ReadOnly] BaseStageController stageController;
-    [SerializeField] CameraGroupController cameraGroup;
+    [SerializeField] CameraGroupController cameraGroupController;
 
     [SerializeField, ReadOnly] Player leftPlayer;
     [SerializeField, ReadOnly] Player rightPlayer;
 
     protected virtual void Reset()
     {
-        cameraGroup = Util.FindChild<CameraGroupController>(gameObject);
+        cameraGroupController = Util.FindChild<CameraGroupController>(gameObject);
     }
 
     public override bool Init()
@@ -36,19 +36,23 @@ public class GameScene : BaseScene
         Type type = Type.GetType($"{stageType}Stage");
         GameObject stageControllerObj = new GameObject("StageController");
         stageControllerObj.transform.SetParent(transform, false);
+
         if (type.BaseType == typeof(SingleStage))
+        {
             stageController = stageControllerObj.AddComponent<SingleStageController>();
+        }
         else if(type.BaseType == typeof(MultiStage))
+        {
             stageController = stageControllerObj.AddComponent<MultiStageController>();
+        }
         else
         {
             Debug.LogWarning($"없는 타입 : {type.Name}");
             return;
         }
-
         stageController.SetInfo(stageType);
 
-        // Player
+        // Player ( Left, Right 나뉘어져 있는 거 좀 맘에 들지 않긴 함 )
         leftPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/LeftPlayer").GetComponent<Player>();
         leftPlayer.transform.position = stageController.GetStagePlayerStartPos(ETeamType.Left);
         leftPlayer.transform.position += Vector3.up * leftPlayer.GetColliderHeight();
@@ -60,38 +64,16 @@ public class GameScene : BaseScene
         rightPlayer.SetInfo((int)stageType);
 
         // Camera
-        cameraGroup.SetInfo(stageType);
-        cameraGroup.SetTarget(leftPlayer, ETeamType.Left);
-        cameraGroup.SetTarget(rightPlayer, ETeamType.Right);
+        cameraGroupController.SetInfo(stageType);
+        cameraGroupController.SetTarget(leftPlayer, ETeamType.Left);
+        cameraGroupController.SetTarget(rightPlayer, ETeamType.Right);
+
+        // Connect Events
+        stageController.ConnectEvents(leftPlayer, rightPlayer);
     }
 
     public override void Clear()
     {
         
     }
-
-    #region Test
-
-    public void ConnectInputAction(bool isConnect)
-    {
-        Managers.Input.OnVKeyEntered -= StageClear;
-        Managers.Input.OnCKeyEntered -= EndGame;
-
-        if (isConnect)
-        {
-            Managers.Input.OnVKeyEntered += StageClear;
-            Managers.Input.OnCKeyEntered += EndGame;
-        }
-    }
-
-    public void StageClear()
-    {
-        // 
-    }
-
-    public void EndGame()
-    {
-        // 결과 UI를 띄울까?
-    }
-    #endregion
 }

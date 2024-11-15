@@ -35,6 +35,11 @@ public class MultiStageController : BaseStageController
         rightStage.ConnectEvents(EndStage);
     }
 
+    public override void ConnectEvents(Player leftPlayer, Player rightPlayer)
+    {
+
+    }
+
     public override Vector3 GetStagePlayerStartPos(ETeamType teamType)
     {
         if (teamType == ETeamType.Left)

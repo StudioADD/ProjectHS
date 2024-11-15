@@ -33,7 +33,7 @@ public class SharkAvoidanceStage : MultiStage
         return true;
     }
 
-    public override void SetInfo()
+    public override void SetInfo(Player player = null)
     {
         base.SetInfo();
 

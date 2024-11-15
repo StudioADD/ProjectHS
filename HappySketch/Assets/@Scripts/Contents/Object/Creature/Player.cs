@@ -216,6 +216,24 @@ public class Player : Creature
 
     }
 
+    public void SetStageInfo(StageEventParam param)
+    {
+        if(param == null)
+        {
+            Debug.LogWarning("StageParam is Null!");
+            return;
+        }
+        
+        if(param is CrossingBridgeParam crossingBridgeParam)
+        {
+
+        }
+        else
+        {
+            Debug.LogWarning("Param is None?");
+            return;
+        }
+    }
 
     #region Input
 
