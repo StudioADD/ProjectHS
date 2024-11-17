@@ -61,17 +61,41 @@ public class UI_GameScene : UI_BaseScene
         ViewBase leftView = leftObject.GetComponent<ViewBase>();
         ViewBase rightView = rightObject.GetComponent<ViewBase>();
 
+        ModelBase leftModel = leftObject.GetComponent<ModelBase>();
+        ModelBase rightModel = rightObject.GetComponent<ModelBase>();
+
         switch (stageType)
         {
             case EStageType.SharkAvoidance:
-                currPresentLeft = new SharkAvoidancePresenter(leftView, new SharkAvoidanceModel(ETeamType.Left));
-                currPresentRight = new SharkAvoidancePresenter(rightView, new SharkAvoidanceModel(ETeamType.Right));
+                if(leftModel is SharkAvoidanceModel leftSharkModel)
+                {
+                    leftSharkModel.SetTeamType(ETeamType.Left);
+                    currPresentLeft = new SharkAvoidancePresenter(leftView, leftSharkModel);
+                }
+
+                if(rightModel is SharkAvoidanceModel rightSharkModel)
+                {
+                    rightSharkModel.SetTeamType(ETeamType.Right);
+                    currPresentRight = new SharkAvoidancePresenter(rightView, rightSharkModel);
+                }
+
                 break;
 
             case EStageType.CollectingCandy:
                 // 캔디 모델로 바꿔야 함
-                currPresentLeft = new CollectCandyPresenter(leftView, new SharkAvoidanceModel(ETeamType.Left));
-                currPresentRight = new CollectCandyPresenter(rightView, new SharkAvoidanceModel(ETeamType.Left));
+
+                if(leftModel is CollectCandyModel leftCandyModel)
+                {
+                    leftCandyModel.SetTeamType(ETeamType.Left);
+                    currPresentLeft = new CollectCandyPresenter(leftView, leftCandyModel);
+                }
+
+                if(rightModel is CollectCandyModel rightCandyModel)
+                {
+                    rightCandyModel.SetTeamType(ETeamType.Right);
+                    currPresentRight = new CollectCandyPresenter(rightView, rightCandyModel);
+                }
+                
                 break;
 
             case EStageType.CrossingBridge:
