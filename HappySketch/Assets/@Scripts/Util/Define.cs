@@ -54,11 +54,4 @@ public static class Define
         Left,
         Right,
     }
-
-    public enum EItemType
-    {
-        Item1,
-        Item2,
-        Item3
-    }
 }

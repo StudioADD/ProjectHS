@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 1247270949}
   - component: {fileID: 1247270950}
   m_Layer: 0
-  m_Name: '@LobbyScene'
+  m_Name: '@ResultScene'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 1812925299}
   - component: {fileID: 1812925303}
   m_Layer: 5
-  m_Name: '@UI_LobbyScene'
+  m_Name: '@UI_ResultScene'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
