@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class ModelBase
+public abstract class ModelBase : MonoBehaviour 
 {
        
 }

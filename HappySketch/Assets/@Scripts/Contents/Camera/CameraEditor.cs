@@ -12,17 +12,14 @@ public class CameraEditor : TeamCamera
     [Space(5f)] [SerializeField]
     BaseObject testTarget;
 
-    [Space(10f)] [Range(0f, 180f)] 
-    [SerializeField] float fieldOfView = 60f;
+    [Space(10f)] 
+    [Range(0f, 180f)]   [SerializeField] float fieldOfView = 60f;
+    [Range(5f, 15f)]    [SerializeField] float targetDistance = 5f;
+    [Range(-10f, 10f)]  [SerializeField] float cameraHeight = 5f;
+    [Range(-10f, 10f)]  [SerializeField] float lookAtHeight = 0f;
+    [Range(0f, 20f)]    [SerializeField] float nearClipping = 0.3f;
+    [Range(20f, 1000f)] [SerializeField] float farClipping = 1000f;
 
-    [Range(5f, 15f)] 
-    [SerializeField] float targetDistance = 5f;
-    
-    [Range(-10f, 10f)] 
-    [SerializeField] float cameraHeight = 5f;
-    
-    [Range(-10f, 10f)] 
-    [SerializeField] float lookAtHeight = 0f;
 
     private void Update()
     {
@@ -38,7 +35,7 @@ public class CameraEditor : TeamCamera
             return false;
 
         stageType = EStageType.None;
-        cameraInfoData = new CameraInfoData(fieldOfView, targetDistance, cameraHeight, lookAtHeight);
+        cameraInfoData = new CameraInfoData(fieldOfView, targetDistance, cameraHeight, lookAtHeight, nearClipping, farClipping);
 
         return true;
     }
@@ -50,6 +47,8 @@ public class CameraEditor : TeamCamera
         targetDistance = 5f;
         cameraHeight = 5f;
         lookAtHeight = 0f;
+        nearClipping = 0.3f;
+        farClipping = 1000f;
     }
 
     private void UpdateCameraInfo()
@@ -58,6 +57,8 @@ public class CameraEditor : TeamCamera
         cameraInfoData.targetDistance = targetDistance;
         cameraInfoData.cameraHeight = cameraHeight;
         cameraInfoData.lookAtHeight = lookAtHeight;
+        cameraInfoData.nearClipping = nearClipping;
+        cameraInfoData.farClipping = farClipping;
     }
 
     public bool LoadCameraInfo()
@@ -76,6 +77,8 @@ public class CameraEditor : TeamCamera
             targetDistance = cameraInfoData.targetDistance;
             cameraHeight = cameraInfoData.cameraHeight;
             lookAtHeight = cameraInfoData.lookAtHeight;
+            nearClipping = cameraInfoData.nearClipping;
+            farClipping = cameraInfoData.farClipping;
         }
 
         return isLoad;

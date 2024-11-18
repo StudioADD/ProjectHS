@@ -48,6 +48,7 @@ public class SceneMgr
             yield return null;
         }
         loadingProgress = 100;
+        LightingController.InitLighting();
     }
 
     private string GetSceneName(Define.EScene type)

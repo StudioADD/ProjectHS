@@ -48,10 +48,18 @@ public class EditCamera : Editor
         if (GUILayout.Button("데이터 저장하기") && isSaveUnocked)
         {
             isSaveUnocked = false;
+            if (!IsPlayEditor())
+            {
+                Debug.LogError("오류! : 세이브는 에디터 실행 상태에서 해야합니다.");
+                return;
+            }
+
             if (cameraEditor.SaveCameraInfo())
                 Debug.Log("스테이지 데이터 저장하기 완료");
         }
 
         GUILayout.Space(20);
     }
+
+    private bool IsPlayEditor() => Application.isEditor && Application.isPlaying;
 }

@@ -12,13 +12,17 @@ public class CameraInfoData
     public float targetDistance = 5f;
     public float cameraHeight = 0f;
     public float lookAtHeight = 0f;
+    public float nearClipping = 0.3f;
+    public float farClipping = 1000f;
 
-    public CameraInfoData(float fieldOfView, float targetDistance, float cameraHeight, float lookAtHeight)
+    public CameraInfoData(float fieldOfView, float targetDistance, float cameraHeight, float lookAtHeight, float nearClipping, float farClipping)
     {
         this.fieldOfView = fieldOfView;
         this.targetDistance = targetDistance;
         this.cameraHeight = cameraHeight;
         this.lookAtHeight = lookAtHeight;
+        this.nearClipping = nearClipping;
+        this.farClipping = farClipping;
     }
 }
 
@@ -80,33 +84,5 @@ public class TeamCamera : InitBase
         cameraInfoData = JsonUtility.FromJson<CameraInfoData>(jsonData);
         
         return true;
-    }
-}
-
-
-public class A : MonoBehaviour
-{
-    [SerializeField] B b;
-
-    public void Test()
-    {
-        b.OnTriggerEvent -= OnTriggerEvent;
-        b.OnTriggerEvent += OnTriggerEvent;
-    }
-
-    public void OnTriggerEvent(Collider other)
-    {
-
-    }
-}
-
-public class B : MonoBehaviour
-{
-    public event Action<Collider> OnTriggerEvent;
-
-    private void OnTriggerEnter(Collider other)
-    {
-        OnTriggerEvent?.Invoke(other);
-        // C# ? -> 이새기 널이야? -> 널 아니면 뒤에 실행.
     }
 }

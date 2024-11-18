@@ -1,14 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 /// <summary>
 /// 두 개의 스테이지에 각각의 플레이어가 플레이하는 스테이지
 /// </summary>
-public class MultiStage : BaseStage
+public abstract class MultiStage : BaseStage
 {
     [field: SerializeField, ReadOnly]
-    public Transform PlayerSpawnPoint { get; protected set; } = null;
+    public Transform PlayerSpawnPoint { get; protected set; }
 
     protected virtual void Reset()
     {
@@ -22,6 +24,10 @@ public class MultiStage : BaseStage
         if (base.Init() == false)
             return false;
 
+        
+
         return true;
     }
+
+    public abstract void ConnectEvents(Action<ETeamType> onEndGameCallBack);
 }

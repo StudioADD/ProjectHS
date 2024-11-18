@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SharkAvoidanceStage : MultiStage
 {
+    [SerializeField, ReadOnly]
+    protected FinishLineObject finishLineObject;
+
     [field: SerializeField, ReadOnly]
     List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
     
@@ -11,8 +15,10 @@ public class SharkAvoidanceStage : MultiStage
     {
         base.Reset();
 
-        Transform[] allChildren = this.GetComponentsInChildren<Transform>();
-        foreach (Transform child in allChildren)
+        finishLineObject = Util.FindChild<FinishLineObject>(gameObject, "FinishLineObject", false);
+
+        Transform[] children = this.GetComponentsInChildren<Transform>();
+        foreach (Transform child in children)
         {
             if (child.TryGetComponent<SpawnPointObject>(out SpawnPointObject spawnPoint))
                 spawnPointList.Add(spawnPoint);
@@ -27,24 +33,21 @@ public class SharkAvoidanceStage : MultiStage
         return true;
     }
 
-    public override void SetInfo()
+    public override void SetInfo(Player player = null)
     {
         base.SetInfo();
 
 
     }
 
-
-
-    #region Test Input
-    protected void ConnectInputActions(bool isConnect)
+    public override void ConnectEvents(Action<Define.ETeamType> onEndGameCallBack)
     {
-
-
-        if(isConnect)
+        if (finishLineObject != null)
         {
-
+            finishLineObject.OnArriveFinishLine -= onEndGameCallBack;
+            finishLineObject.OnArriveFinishLine += onEndGameCallBack;
         }
+        else
+            Debug.LogWarning($"FinishLineObject is Null!!");
     }
-    #endregion
 }

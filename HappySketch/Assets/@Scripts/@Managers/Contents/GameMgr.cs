@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class GameMgr
 {
+    int[] winnerCounts = new int[2];
     bool[] playedStages = new bool[(int)EStageType.Max - 1];
+
+    int currStageId = 0;
 
     public void Init()
     {
@@ -13,40 +17,42 @@ public class GameMgr
 
     public void Clear()
     {
+        for (int i = 0; i < winnerCounts.Length; i++)
+            winnerCounts[i] = 0;
 
-    }
-      
-
-    public void StartGame()
-    {
-        for(int i = 0; i < playedStages.Length; i++)
+        for (int i = 0; i < playedStages.Length; i++)
             playedStages[i] = false;
-
-        StartStage();
     }
 
-    public void EndGame()
+    private void EndGame(ETeamType winnerTeam)
     {
-
+        // 타이틀씬으로 (임시)
+        Managers.Scene.LoadScene(EScene.TitleScene);
+        Clear();
     }
 
-    private void StartStage()
+    public void StartStage()
     {
-        int stageId = 0;
-        while (playedStages[stageId])
-            stageId = Random.Range(1, (int)EStageType.Max - 1);
+        currStageId++;
 
-        stageId = 1; // 테스트
-
-        if(Managers.Scene.CurrScene is GameScene gameScene)
+        if (Managers.Scene.CurrScene is GameScene gameScene)
         {
-            playedStages[stageId - 1] = true;
-            gameScene.StartStage((EStageType)stageId);
+            playedStages[currStageId - 1] = true;
+            gameScene.StartStage((EStageType)currStageId);
         }
     }
-    
-    public void EndStage()
-    {
 
+    public void EndStage(ETeamType winnerTeam)
+    {
+        winnerCounts[(int)winnerTeam] += 1;
+
+        if (winnerCounts[(int)winnerTeam] >= ((int)EStageType.Max / 2))
+        {
+            EndGame(winnerTeam);
+        }
+        else
+        {
+            Managers.Scene.LoadScene(EScene.GameScene);
+        }
     }
 }

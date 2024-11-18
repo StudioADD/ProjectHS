@@ -44,7 +44,7 @@ public static class Define
         MainCamera,
         Player,
         GameController,
-
+        Item,
         Monster,
         CollisionTrigger,
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,5 +26,7 @@ public abstract class BaseStage : InitBase
         return true;
     }
 
-    public virtual void SetInfo() { }
+    public virtual void SetInfo(Player player = null) { }
+
+    
 }
