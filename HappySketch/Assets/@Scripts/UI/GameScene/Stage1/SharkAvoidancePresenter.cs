@@ -13,7 +13,8 @@ public class SharkAvoidancePresenter : PresenterBase
     {
         if(param is SharkAvoidanceParam sharkAvoidanceParam)
         {
-
+            SetRightProgressRatio(sharkAvoidanceParam.CurrDisRatio);
+            SetItemCount(sharkAvoidanceParam.BoosterCount);
         }
     }
 

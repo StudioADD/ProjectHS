@@ -23,7 +23,10 @@ public class CollectCandyPresenter : PresenterBase
     {
         if (param is CollectingCandyParam collectingCandyParam)
         {
-            
+            foreach(ECandyItemType itemType in collectingCandyParam.CandyItemList)
+            {
+                // 수정 필요
+            }
         }
     }
 
