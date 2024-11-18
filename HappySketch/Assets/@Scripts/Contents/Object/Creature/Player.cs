@@ -13,6 +13,7 @@ using UnityEngine.Playables;
 using System.Text;
 using static UnityEngine.GraphicsBuffer;
 using Data;
+using System.Data.Common;
 
 
 public enum EPlayerState
@@ -21,6 +22,7 @@ public enum EPlayerState
     Idle,
     Move,
     Swimming,
+    MoveSwimming,
 
     JumpUp,
     Jump,
@@ -81,7 +83,7 @@ public class Player : Creature
         }
     }
     [SerializeField, ReadOnly]
-    private List<BaseItem> items = new List<BaseItem>();
+    private List<GameObject> items = new List<GameObject>();
 
     [SerializeField, ReadOnly]
     private int trackNum = 2; // 현재 트랙 위치
@@ -115,6 +117,7 @@ public class Player : Creature
                 case EPlayerState.Idle: isChangeState = IdleStateCondition(); break;
                 case EPlayerState.Move: isChangeState = MoveStateCondition(); break;
                 case EPlayerState.Swimming: isChangeState = SwimmingStateCondition(); break;
+                case EPlayerState.MoveSwimming: isChangeState = MoveSwimmingStateCondition(); break;
                 case EPlayerState.JumpUp: isChangeState = JumpUpStateCondition(); break;
                 case EPlayerState.Jump: isChangeState = JumpStateCondition(); break;
                 case EPlayerState.Landing: isChangeState = JumpStateCondition(); break;
@@ -135,6 +138,7 @@ public class Player : Creature
                 case EPlayerState.Idle: IdleStateExit(); break;
                 case EPlayerState.Move: MoveStateExit(); break;
                 case EPlayerState.Swimming: SwimmingStateExit(); break;
+                case EPlayerState.MoveSwimming: MoveSwimmingStateExit(); break;
                 case EPlayerState.JumpUp: JumpUpStateExit(); break;
                 case EPlayerState.Jump: JumpStateExit(); break;
                 case EPlayerState.Landing: LandingStateExit(); break;
@@ -156,6 +160,7 @@ public class Player : Creature
                 case EPlayerState.Idle: IdleStateEnter(); break;
                 case EPlayerState.Move: MoveStateEnter(); break;
                 case EPlayerState.Swimming: SwimmingStateEnter(); break;
+                case EPlayerState.MoveSwimming: MoveSwimmingStateEnter(); break;
                 case EPlayerState.JumpUp: JumpUpStateEnter(); break;
                 case EPlayerState.Jump: JumpStateEnter(); break;
                 case EPlayerState.Landing: LandingStateEnter(); break;
@@ -163,7 +168,7 @@ public class Player : Creature
                 case EPlayerState.Dizz: DizzStateEnter(); break;
                 case EPlayerState.GoBack: GoBackStateEnter(); break;
                 case EPlayerState.LeftCollect: LeftCollectStateEnter(); break;
-                case EPlayerState.RightCollect: LeftCollectStateEnter(); break;
+                case EPlayerState.RightCollect: RightCollectStateEnter(); break;
                 case EPlayerState.Run: RunStateEnter(); break;
             }
         }
@@ -211,13 +216,13 @@ public class Player : Creature
 
     public void SetStageInfo(StageEventParam param)
     {
-        if(param == null)
+        if (param == null)
         {
             Debug.LogWarning("StageParam is Null!");
             return;
         }
-        
-        if(param is CrossingBridgeParam crossingBridgeParam)
+
+        if (param is CrossingBridgeParam crossingBridgeParam)
         {
 
         }
@@ -300,12 +305,12 @@ public class Player : Creature
         {
             if (TeamType == ETeamType.Left)
             {
-                Managers.Input.OnArrowKeyEntered += OnArrowKeySharkAvoidance;
+                Managers.Input.OnWASDKeyEntered += OnArrowKeySharkAvoidance;
                 Managers.Input.OnSpaceKeyEntered += OnBoosterKeySharkAvoidance;
             }
             else
             {
-                Managers.Input.OnWASDKeyEntered += OnArrowKeySharkAvoidance;
+                Managers.Input.OnArrowKeyEntered += OnArrowKeySharkAvoidance;
                 Managers.Input.OnEndKeyEntered += OnBoosterKeySharkAvoidance;
             }
         }
@@ -316,7 +321,12 @@ public class Player : Creature
     }
     public void OnArrowKeySharkAvoidance(Vector2 value)
     {
+
         if (isInputRock)
+        {
+            return;
+        }
+        if (value.x == 0 && value.y == 0)
         {
             return;
         }
@@ -326,26 +336,26 @@ public class Player : Creature
         }
         moveDirection = value;
 
-
-        if (value.y > 0)
+        if (PlayerState == EPlayerState.Idle)
         {
-            if (inputTime >= data.inputCooldown)
+            if (value.y > 0)
             {
-                inputTime = 0f;
-                PlayerState = EPlayerState.Swimming;
+                if (inputTime >= data.inputCooldown)
+                {
+                    inputTime = 0f;
+                    PlayerState = EPlayerState.Swimming;
+                }
             }
             else
-            { //전진 쿨일때 전진 X
-                moveDirection = Vector2.zero;
-                PlayerState = EPlayerState.Idle;
+            {
+                PlayerState = EPlayerState.Move;
             }
-            return;
+        }
+        else 
+        {
+            PlayerState = EPlayerState.MoveSwimming;
         }
 
-        if (PlayerState == EPlayerState.Swimming)
-            ;
-        else
-            PlayerState = EPlayerState.Move;
 
 
     }
@@ -468,7 +478,10 @@ public class Player : Creature
         isInputRock = true;
         hitTime = 0;
 
-
+        if (transform.position != targetPosition)
+        {
+            transform.position = beforePosition;
+        }
 
 
         // 뒤로 밀려나기
@@ -503,8 +516,7 @@ public class Player : Creature
 
     protected virtual bool DizzStateCondition()
     {
-        if (PlayerState != EPlayerState.Hit)
-            return false;
+
         return true;
     }
 
@@ -537,7 +549,7 @@ public class Player : Creature
     #endregion
 
     #region GoBack
-    [SerializeField]
+
 
     protected virtual bool GoBackStateCondition()
     {
@@ -583,16 +595,6 @@ public class Player : Creature
     private Vector3 beforePosition = Vector3.zero;
     protected virtual bool MoveStateCondition()
     {
-        if (isInputRock)
-        {
-            return false;
-        }
-
-        if (rigid.velocity.y != 0)
-        {
-            return false;
-        }
-
 
         if (trackNum + (int)moveDirection.x < 0 || trackNum + (int)moveDirection.x > 3)
         {
@@ -604,7 +606,6 @@ public class Player : Creature
 
     protected virtual void MoveStateEnter()
     {
-        isInputRock = true;
         trackNum += (int)moveDirection.x;
         if (moveDirection.y > 0)
         {
@@ -629,12 +630,7 @@ public class Player : Creature
 
     protected virtual void MoveStateExit()
     {
-        isInputRock = false;
-        if (targetPosition != transform.position)
-        {
-            transform.position = beforePosition;
-            trackNum -= (int)moveDirection.x;
-        }
+        
     }
 
     private void Movement()
@@ -647,28 +643,18 @@ public class Player : Creature
 
     protected virtual bool SwimmingStateCondition()
     {
-        if (isInputRock)
-        {
-            return false;
-        }
-
-        if (rigid.velocity.y != 0)
-        {
-            return false;
-        }
-
 
         if (trackNum + (int)moveDirection.x < 0 || trackNum + (int)moveDirection.x > 3)
         {
             return false;
         }
+       
 
         return true;
     }
 
     protected virtual void SwimmingStateEnter()
     {
-        isInputRock = true;
         trackNum += (int)moveDirection.x;
         if (moveDirection.y > 0)
         {
@@ -693,12 +679,68 @@ public class Player : Creature
 
     protected virtual void SwimmingStateExit()
     {
+
+    }
+
+
+    #endregion
+
+    #region MoveSwimming
+
+    protected virtual bool MoveSwimmingStateCondition()
+    {
+
+        if (trackNum + (int)moveDirection.x < 0 || trackNum + (int)moveDirection.x > 3)
+        {
+            return false;
+        }
+        if (hitTime > 0)
+        {
+            return false;
+        }
+        if (targetPosition.z + moveDirection.y == transform.position.z)
+        {
+            return false;
+        }
+
+
+        return true;
+    }
+
+    protected virtual void MoveSwimmingStateEnter()
+    {
+        isInputRock = true;
+        trackNum += (int)moveDirection.x;
+        if (moveDirection.y > 0)
+        {
+            moveDirection.y *= data.moveSpeed;
+        }
+        
+        targetPosition += new Vector3(moveDirection.x, 0, moveDirection.y);
+        this.transform.forward = (targetPosition - this.transform.position).normalized;
+        Debug.LogWarning($" targetPosition : {targetPosition}");
+    }
+
+    protected virtual void UpdateMoveSwimmingState()
+    {
+        Movement();
+        if (transform.position == targetPosition)
+        {
+            PlayerState = EPlayerState.Idle;
+        }
+
+
+    }
+
+    protected virtual void MoveSwimmingStateExit()
+    {
         isInputRock = false;
         if (targetPosition != transform.position)
         {
             transform.position = beforePosition;
             trackNum -= (int)moveDirection.x;
         }
+        transform.forward = new Vector3(0, 0, 1);
     }
 
 
@@ -759,7 +801,7 @@ public class Player : Creature
 
 
         // 최종적으로 물리적인 점프를 위한 속도 계산
-        Vector3 velocity = transform.forward * distance * data.moveSpeed + Vector3.up * data.jumpForce;
+        Vector3 velocity = direction.normalized * distance * data.moveSpeed + Vector3.up * data.jumpForce;
         InitRigidVelocityY();
         SetRigidVelocity(velocity);
 
@@ -870,12 +912,12 @@ public class Player : Creature
 
     protected virtual void LeftCollectStateEnter()
     {
-
+        CollectItem(true);
     }
 
     protected virtual void UpdateLeftCollectState()
     {
-        Running();
+
         //수집 시 필요한거 
         if (IsEndCurrentState(PlayerState))
         {
@@ -899,12 +941,12 @@ public class Player : Creature
 
     protected virtual void RightCollectStateEnter()
     {
-
+        CollectItem(false);
     }
 
     protected virtual void UpdateRightCollectState()
     {
-        Running();
+
         //수집 시 필요한거 
         if (IsEndCurrentState(PlayerState))
         {
@@ -947,6 +989,7 @@ public class Player : Creature
                 case EPlayerState.Idle: UpdateIdleState(); break;
                 case EPlayerState.Move: UpdateMoveState(); break;
                 case EPlayerState.Swimming: UpdateSwimmingState(); break;
+                case EPlayerState.MoveSwimming: UpdateMoveSwimmingState(); break;
                 case EPlayerState.JumpUp: UpdateJumpUpState(); break;
                 case EPlayerState.Jump: UpdateJumpState(); break;
                 case EPlayerState.Landing: UpdateLandingState(); break;
@@ -1044,18 +1087,34 @@ public class Player : Creature
         }
     }
 
+    protected void CollectItem(bool isLeft)
+    {
+        if (items.Count > 0)
+            foreach (GameObject item in items)
+            {
+                if (item != null)
+                {
+                    if (isLeft && item.transform.position.x < this.transform.position.x)
+                        Destroy(item); // 추후 수집 param 필요
+                    else if (!isLeft && item.transform.position.x > this.transform.position.x)
+                        Destroy(item);// 추후 수집 param 필요
+                }
+            }
+    }
+
+
     public override void OnCollisionTriggerEnter(Collider other)
     {
         if (other.CompareTag("Item"))
         {
-            //items.Add(other.);
+            items.Add(other.gameObject);
         }
     }
     public override void OnCollisionTriggerExit(Collider other)
     {
         if (other.CompareTag("Item"))
         {
-            //items.Remove();
+            items.Remove(other.gameObject);
         }
     }
 

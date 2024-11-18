@@ -27,7 +27,7 @@ public class GameMgr
     private void EndGame(ETeamType winnerTeam)
     {
         // 타이틀씬으로 (임시)
-        Managers.Scene.LoadScene(EScene.TitleScene);
+        Managers.Scene.LoadScene(EScene.ResultScene);
         Clear();
     }
 
