@@ -16,10 +16,10 @@ public abstract class PresenterBase
     }
 
     public abstract void OnStageInfoUpdate(StageParam param);
+
     public void ConnectStageEvents(BaseStage stage)
     {
         stage.OnReceiveStageParam -= OnStageInfoUpdate;
         stage.OnReceiveStageParam += OnStageInfoUpdate;
     }
 }
-
