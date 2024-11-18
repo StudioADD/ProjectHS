@@ -9,6 +9,14 @@ public class SharkAvoidancePresenter : PresenterBase
 
     }
 
+    public override void OnStageInfoUpdate(StageParam param)
+    {
+        if(param is SharkAvoidanceParam sharkAvoidanceParam)
+        {
+
+        }
+    }
+
     /// <summary>
     /// 아이템 수를 설정하는 함수
     /// </summary>

@@ -16,7 +16,10 @@ public enum EStageType
 
 public abstract class BaseStage : InitBase
 {
+    public ETeamType TeamType { get; protected set; }
     public EStageType StageType { get; protected set; }
+
+    public event Action<StageParam> OnReceiveStageParam;
 
     public override bool Init()
     {

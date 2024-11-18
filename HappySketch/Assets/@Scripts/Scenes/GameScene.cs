@@ -52,24 +52,29 @@ public class GameScene : BaseScene
         }
         stageController.SetInfo(stageType);
 
-        // Player ( Left, Right 나뉘어져 있는 거 좀 맘에 들지 않긴 함 )
+        // 스테이지 컨트롤러에서 할까?
         leftPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/LeftPlayer").GetComponent<Player>();
         leftPlayer.transform.position = stageController.GetStagePlayerStartPos(ETeamType.Left);
         leftPlayer.transform.position += Vector3.up * leftPlayer.GetColliderHeight();
-        leftPlayer.SetInfo((int)stageType);
+       //  leftPlayer.SetInfo((int)stageType);
 
         rightPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/RightPlayer").GetComponent<Player>();
         rightPlayer.transform.position = stageController.GetStagePlayerStartPos(ETeamType.Right);
         rightPlayer.transform.position += Vector3.up * rightPlayer.GetColliderHeight();
-        rightPlayer.SetInfo((int)stageType);
+        // rightPlayer.SetInfo((int)stageType);
 
         // Camera
         cameraGroupController.SetInfo(stageType);
-        cameraGroupController.SetTarget(leftPlayer, ETeamType.Left);
+        cameraGroupController.SetTarget(leftPlayer, ETeamType.Left); 
         cameraGroupController.SetTarget(rightPlayer, ETeamType.Right);
 
         // Connect Events
         stageController.ConnectEvents(leftPlayer, rightPlayer);
+
+        // UI 테스트
+        if (Managers.UI.SceneUI is UI_GameScene uiGameScene)
+        {
+        }
     }
 
     public override void Clear()

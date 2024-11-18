@@ -6,8 +6,6 @@ using static Define;
 
 public class CollectingCandyStage : MultiStage
 {
-    
-
     protected override void Reset()
     {
         base.Reset();

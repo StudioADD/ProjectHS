@@ -19,6 +19,14 @@ public class CollectCandyPresenter : PresenterBase
         view.SetPresenter(this);
     }
 
+    public override void OnStageInfoUpdate(StageParam param)
+    {
+        if (param is CollectingCandyParam collectingCandyParam)
+        {
+            
+        }
+    }
+
     public void SetItemCount(EItemType itemType, int itemCount)
     {
         if(view is CollectCandyView candyView)

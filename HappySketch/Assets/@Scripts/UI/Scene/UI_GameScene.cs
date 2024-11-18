@@ -106,6 +106,18 @@ public class UI_GameScene : UI_BaseScene
         }
     }
 
+    public void ConnectStageEvents(BaseStage stage)
+    {
+        if (stage.TeamType == ETeamType.Left)
+        {
+            currPresentLeft.ConnectStageEvents(stage);
+        }
+        else // Right
+        {
+            currPresentRight.ConnectStageEvents(stage);
+        }
+    }
+
     public void ReceiveData(UIDataBase data)
     {
         switch(data)

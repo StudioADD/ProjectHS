@@ -10,4 +10,9 @@ public class TitlePresenter : PresenterBase
     {
         view.SetPresenter(this);
     }
+
+    public override void OnStageInfoUpdate(StageParam param)
+    {
+        // 이새기 확인 요망 (희용)
+    }
 }

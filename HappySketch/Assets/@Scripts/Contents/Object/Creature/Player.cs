@@ -41,6 +41,11 @@ public enum EPlayerState
 
 public class Player : Creature
 {
+    /// <summary>
+    /// Id, IsLeft, TargetPos
+    /// </summary>
+    public event Func<int, bool, Vector3> GetJumpTargetPos;
+
     [SerializeField]
     private EStageType stageType;
     [SerializeField, ReadOnly] private JPlayerData data = null;
@@ -175,8 +180,6 @@ public class Player : Creature
     }
     #endregion
 
-
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -211,25 +214,30 @@ public class Player : Creature
             case EStageType.SharkAvoidance: PlayerState = EPlayerState.Idle; break;
         }
         IsPlayerInputControll = true;
-
     }
 
-    public void SetStageInfo(StageEventParam param)
+    public void ConnectEvents(BaseStage stage)
     {
-        if (param == null)
+        switch(stage)
         {
-            Debug.LogWarning("StageParam is Null!");
-            return;
-        }
+            case SharkAvoidanceStage sharkAvoidanceStage:
+                {
 
-        if (param is CrossingBridgeParam crossingBridgeParam)
-        {
+                    break;
+                }
+            case CollectingCandyStage collectingCandyStage:
+                {
 
-        }
-        else
-        {
-            Debug.LogWarning("Param is None?");
-            return;
+                    break;
+                }
+            case CrossingBridgeStage crossingBridgeStage:
+                {
+
+                    break;
+                }
+            default:
+                Debug.LogWarning($"잘못된 스테이지 타입 : {stage.name}");
+                break;
         }
     }
 

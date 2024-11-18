@@ -26,18 +26,7 @@ public class SingleStageController : BaseStageController
 
     public override void ConnectEvents(Player leftPlayer, Player rightPlayer)
     {
-        StageEventParam param = null;
 
-        switch (StageType)
-        {
-            case EStageType.SharkAvoidance:
-                {
-                    param = new SharkAvoidanceParam();
-                    break;
-                }
-        }
-
-        leftPlayer.SetStageInfo(param);
     }
 
     public override Vector3 GetStagePlayerStartPos(ETeamType teamType)

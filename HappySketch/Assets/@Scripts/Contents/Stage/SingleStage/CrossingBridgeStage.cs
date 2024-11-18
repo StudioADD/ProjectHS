@@ -28,8 +28,10 @@ public class CrossingBridgeStage : SingleStage
     {
         base.SetInfo(player);
 
+        /*
         CrossingBridgeParam param = new CrossingBridgeParam(GetJumpTargetPos);
         player.SetStageInfo(param);
+        */
     }
 
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
