@@ -3,7 +3,7 @@
     {
       "TeamType": 0,
       "TestName": "asdf",
-      "moveSpeed": 0,
+      "moveSpeed": 1,
       "jumpForce": 5,
       "inputCooldown": 0.5,
       "boosterTime": 5,
@@ -13,7 +13,7 @@
     {
       "TeamType": 1,
       "TestName": "asdf",
-      "moveSpeed": 0,
+      "moveSpeed": 1,
       "jumpForce": 5,
       "inputCooldown": 0.5,
       "boosterTime": 5,

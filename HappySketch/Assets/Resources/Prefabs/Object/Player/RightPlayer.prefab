@@ -1267,8 +1267,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 2
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &5224119653452254054
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1906,19 +1906,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionTrigger: {fileID: 0}
   stageType: 0
-  inputCooldown: 0.5
+  data:
+    TeamType: 0
+    TestName: 
+    moveSpeed: 0
+    jumpForce: 0
+    inputCooldown: 0
+    boosterTime: 0
+    hitInputIgnoreTime: 0
+    hitBackDistance: 0
   inputTime: 0
   _boosterCount: 0
-  hitInputIgnoreTime: 3
   hitTime: -1
-  moveSpeed: 3
   _teamType: 1
+  items: []
   trackNum: 2
   IsJump: 0
   isInputRock: 0
   _playerState: 0
   _isPlayerInputControll: 0
-  hitBackDistance: 1
   targetPosition: {x: 0, y: 0, z: 0}
   beforePosition: {x: 0, y: 0, z: 0}
 --- !u!54 &-5540594319716647992

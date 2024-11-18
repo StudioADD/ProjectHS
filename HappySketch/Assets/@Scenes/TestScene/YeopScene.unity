@@ -1022,7 +1022,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageController: {fileID: 0}
-  cameraGroup: {fileID: 575619666}
+  cameraGroupController: {fileID: 0}
   leftPlayer: {fileID: 0}
   rightPlayer: {fileID: 0}
 --- !u!1001 &706259909
@@ -1496,7 +1496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5005944469275754812, guid: a91b6ba2dc888ee4aa5726bfd9788c8a, type: 3}
       propertyPath: stageType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5005944469275754812, guid: a91b6ba2dc888ee4aa5726bfd9788c8a, type: 3}
       propertyPath: hitBackDistance
@@ -1509,6 +1509,10 @@ PrefabInstance:
     - target: {fileID: 8619966498458803347, guid: a91b6ba2dc888ee4aa5726bfd9788c8a, type: 3}
       propertyPath: m_Name
       value: LeftPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8619966498458803347, guid: a91b6ba2dc888ee4aa5726bfd9788c8a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8890435577953970352, guid: a91b6ba2dc888ee4aa5726bfd9788c8a, type: 3}
       propertyPath: m_ApplyRootMotion
