@@ -11,10 +11,8 @@ public static class Define
     {
         Unknown,
         TitleScene,
-        LobbyScene,
+        ResultScene,
         GameScene,
-        RuleScene,
-        IntroPlayerScene
     }
 
     /// <summary>

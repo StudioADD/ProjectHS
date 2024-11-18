@@ -45,7 +45,7 @@ public class CrossingBridgeStage : SingleStage
 
     public Vector3 GetJumpTargetPos(int id, bool isLeft)
     {
-        // 
+
 
         return Vector3.zero;
     }
