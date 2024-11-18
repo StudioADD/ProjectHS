@@ -20,6 +20,7 @@ public enum ECandyItemType
     RedCandy,
     GreenCandy,
     BlueCandy,
+    Max
 }
 
 public class BaseItem : BaseObject

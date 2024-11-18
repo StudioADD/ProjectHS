@@ -21,6 +21,9 @@ public abstract class BaseStage : InitBase
 
     public event Action<StageParam> OnReceiveStageParam;
 
+    // 임시
+    protected StageParam stageParam = null;
+
     public override bool Init()
     {
         if (base.Init() == false)
@@ -30,6 +33,4 @@ public abstract class BaseStage : InitBase
     }
 
     public virtual void SetInfo(Player player = null) { }
-
-    
 }

@@ -29,13 +29,13 @@ public class SharkAvoidanceParam : StageParam
 
 public class CollectingCandyParam : StageParam
 {
-    public List<ECandyItemType> CandyItemList;
+    public int[] CandyItems;
     public int CurrScore;
 
-    public CollectingCandyParam(ETeamType teamType, List<ECandyItemType> CandyItemList, int CurrScore) 
+    public CollectingCandyParam(ETeamType teamType, int[] CandyItems, int CurrScore) 
         : base(teamType)
     {
-        this.CandyItemList = CandyItemList;
+        this.CandyItems = CandyItems;
         this.CurrScore = CurrScore;
     }
 }

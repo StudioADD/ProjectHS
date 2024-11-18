@@ -20,8 +20,19 @@ public class CollectingCandyStage : MultiStage
         return true;
     }
 
+    public override void SetInfo(Player player = null)
+    {
+        base.SetInfo(player);
+
+    }
+
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
     {
         
+    }
+
+    public void OnGetCandyItem()
+    {
+
     }
 }

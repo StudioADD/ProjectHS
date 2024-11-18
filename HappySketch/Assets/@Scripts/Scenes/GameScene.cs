@@ -74,6 +74,7 @@ public class GameScene : BaseScene
         // UI 테스트
         if (Managers.UI.SceneUI is UI_GameScene uiGameScene)
         {
+            // uiGameScene.ConnectStageEvents()
         }
     }
 

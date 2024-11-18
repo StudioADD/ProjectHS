@@ -41,11 +41,6 @@ public enum EPlayerState
 
 public class Player : Creature
 {
-    /// <summary>
-    /// Id, IsLeft, TargetPos
-    /// </summary>
-    public event Func<int, bool, Vector3> GetJumpTargetPos;
-
     [SerializeField]
     private EStageType stageType;
     [SerializeField, ReadOnly] private JPlayerData data = null;
@@ -216,30 +211,43 @@ public class Player : Creature
         IsPlayerInputControll = true;
     }
 
-    public void ConnectEvents(BaseStage stage)
+    #region SharkAvoidanceStage Event
+    Action onMoveEvent; // 앞으로 이동이 끝나면 보내주면 됨
+    Action onAddBoosterItem;
+    Func<bool> onUseBoosterItem;
+    public void ConnectSharkAvoidanceStage(Action onMoveEvent, Action onAddBoosterItem, Func<bool> onUseBoosterItem)
     {
-        switch(stage)
-        {
-            case SharkAvoidanceStage sharkAvoidanceStage:
-                {
-
-                    break;
-                }
-            case CollectingCandyStage collectingCandyStage:
-                {
-
-                    break;
-                }
-            case CrossingBridgeStage crossingBridgeStage:
-                {
-
-                    break;
-                }
-            default:
-                Debug.LogWarning($"잘못된 스테이지 타입 : {stage.name}");
-                break;
-        }
+        this.onMoveEvent = onMoveEvent;
+        this.onAddBoosterItem = onAddBoosterItem;
+        this.onUseBoosterItem = onUseBoosterItem;
     }
+    #endregion
+
+    #region CollectingCandyStage Event
+    Action<ECandyItemType> onCollectCandyItem;
+    Action<bool> onChangeScoreBuff;
+    public void ConnectCollectingCandyStage(Action<ECandyItemType> onCollectCandyItem, Action<bool> onChangeScoreBuff)
+    {
+        this.onCollectCandyItem = onCollectCandyItem;
+        this.onChangeScoreBuff = onChangeScoreBuff;
+    }
+    #endregion
+
+    #region CrossingBridgeStage Event
+    /// <summary>
+    /// Id, IsLeft, TargetPos
+    /// </summary>
+    Func<int, bool, Vector3> getJumpTargetPos;
+    Action onAddGoggleItem;
+    Func<bool> onUseGoggleItem;
+
+    public void ConnectCrossingBridgeStage(Func<int, bool, Vector3> getJumpTargetPos, Action onAddGoggleItem, Func<bool> onUseGoggleItem)
+    {
+        this.getJumpTargetPos = getJumpTargetPos;
+        this.onAddGoggleItem = onAddGoggleItem;
+        this.onUseGoggleItem = onUseGoggleItem;
+    }
+    #endregion
 
     #region Input
 
