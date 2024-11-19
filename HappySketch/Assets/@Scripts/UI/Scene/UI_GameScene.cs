@@ -82,8 +82,6 @@ public class UI_GameScene : UI_BaseScene
                 break;
 
             case EStageType.CollectingCandy:
-                // 캔디 모델로 바꿔야 함
-
                 if(leftModel is CollectCandyModel leftCandyModel)
                 {
                     leftCandyModel.SetTeamType(ETeamType.Left);
@@ -99,9 +97,15 @@ public class UI_GameScene : UI_BaseScene
                 break;
 
             case EStageType.CrossingBridge:
-                // BrigePresenter 설정
-                //currPresentLeft = new SharkAvoidancePresenter(leftView);
-                //currPresentRight = new SharkAvoidancePresenter(rightView);
+                if (leftModel is CrossingBridgeModel leftBridgeModel)
+                {
+                    currPresentLeft = new CollectCandyPresenter(leftView, leftBridgeModel);
+                }
+
+                if (rightModel is CrossingBridgeModel rightBridgeModel)
+                {
+                    currPresentRight = new CollectCandyPresenter(rightView, rightBridgeModel);
+                }
                 break;
         }
     }
@@ -118,6 +122,8 @@ public class UI_GameScene : UI_BaseScene
         }
     }
 
+    
+    // 여기부터 아래 제거 해도 될 듯, 이벤트 방식으로 바뀌었음
     public void ReceiveData(UIDataBase data)
     {
         switch(data)
