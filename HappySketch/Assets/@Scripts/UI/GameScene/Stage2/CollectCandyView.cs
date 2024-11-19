@@ -38,4 +38,12 @@ public class CollectCandyView : ViewBase
 
         this.itemCount[(int)itemType].text = itemCount.ToString();
     }
+
+    public void UpdateItemCount(int[] itemCounts)
+    {
+        for(int i = 0; i < itemCounts.Length; ++i)
+        {
+            itemCount[i].text = itemCounts[i].ToString();
+        }
+    }
 }

@@ -23,10 +23,8 @@ public class CollectCandyPresenter : PresenterBase
     {
         if (param is CollectingCandyParam collectingCandyParam)
         {
-            foreach(ECandyItemType itemType in collectingCandyParam.CandyItemList)
-            {
-                // 수정 필요
-            }
+            SetItemCount(collectingCandyParam.CandyItems);
+            SetScore(collectingCandyParam.CurrScore);
         }
     }
 
@@ -35,6 +33,14 @@ public class CollectCandyPresenter : PresenterBase
         if(view is CollectCandyView candyView)
         {
             candyView.UpdateItemCount(itemType, itemCount);
+        }
+    }
+
+    public void SetItemCount(int[] itemCounts)
+    {
+        if (view is CollectCandyView candyView)
+        {
+            candyView.UpdateItemCount(itemCounts);
         }
     }
 
