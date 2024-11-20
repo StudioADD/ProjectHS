@@ -60,7 +60,7 @@ public class Player : Creature
             if (value == _boosterCount)
                 return;
             _boosterCount = value;
-            (Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, TeamType, _boosterCount));
+            //(Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, TeamType, _boosterCount));
 
         }
     }
