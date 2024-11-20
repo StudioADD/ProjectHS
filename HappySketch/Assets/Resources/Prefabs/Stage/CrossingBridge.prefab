@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a043f0bb50e01b46a206ec6e838fd8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStartPoint: {fileID: 0}
+  playerStartPoint: {fileID: 7142684831380104498}
   platformGroup: {fileID: 0}
   finishLineObject: {fileID: 0}
   currLeftPlayerId: 0

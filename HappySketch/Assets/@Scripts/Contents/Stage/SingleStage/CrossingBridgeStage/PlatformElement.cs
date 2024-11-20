@@ -9,6 +9,7 @@ namespace CrossingBridge
     public class PlatformElement : InitBase
     {
         public event Action<ETeamType, bool> OnLandPlayer = null;
+        
         [field: SerializeField, ReadOnly]
         public bool IsLandable { get; protected set; } = false;
 
