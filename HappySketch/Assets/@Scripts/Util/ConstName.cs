@@ -1,6 +1,7 @@
 
-public static class SkyBoxMaterialName
+public static class StageSkyBoxName
 {
-    // SharkAvoidanceStage
-    public const string SHARKAVOIDANCESTAGE_NAME = "Skybox_01";
+    public const string SHARKAVOIDANCE_NAME = "SharkAvoidanceSkybox";
+    public const string COLLECTINGCANDY_NAME = "CollectingCandySkybox";
+    public const string CROSSINGBRIDGE_NAME = "CrossingBridgeSkybox";
 }

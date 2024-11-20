@@ -28,9 +28,9 @@ public abstract class BaseStage : InitBase
 
     protected virtual void Reset()
     {
-        playerStartPoint = Util.FindChild<Transform>(this.gameObject, "playerStartPoint", false);
+        playerStartPoint = Util.FindChild<Transform>(this.gameObject, "PlayerStartPoint", true);
         playerStartPoint ??= Util.Editor_InstantiateObject(this.transform).transform;
-        playerStartPoint.gameObject.name = "playerStartPoint";
+        playerStartPoint.gameObject.name = "PlayerStartPoint";
     }
 
     public override bool Init()
