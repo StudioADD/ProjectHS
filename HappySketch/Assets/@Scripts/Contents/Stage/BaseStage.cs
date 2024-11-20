@@ -23,8 +23,7 @@ public abstract class BaseStage : InitBase
 
     public event Action<StageParam> OnReceiveStageParam;
 
-    // 임시
-    protected StageParam stageParam = null;
+    protected StageParam stageParam = null; // 임시
 
     protected virtual void Reset()
     {
