@@ -64,24 +64,19 @@ public class SharkAvoidanceView : ViewBase
         }
     }
 
-    public void UpdateLeftProgressRatio(ETeamType teamType, float ratio)
+    public void UpdateLeftProgressRatio(float ratio)
     {
-        ratio = Mathf.Clamp01(ratio);
-
-        if (teamType == ETeamType.Left)
-            progressing.fillAmount = ratio;
-
         leftRectTransfrom.anchoredPosition = new Vector3(progressingWidth * ratio - leftImgWidth / 2.2f, leftRectTransfrom.anchoredPosition.y);
     }
 
-    public void UpdateRightProgressRatio(ETeamType teamType, float ratio)
+    public void UpdateRightProgressRatio(float ratio)
     {
-        ratio = Mathf.Clamp01(ratio);
-
-        if (teamType == ETeamType.Right)
-            progressing.fillAmount = ratio;
-
         rightRectTransfrom.anchoredPosition = new Vector3(progressingWidth * ratio - rightImgWidth / 2.2f, rightRectTransfrom.anchoredPosition.y);
+    }
+
+    public void UpdateProgressingBar(float ratio)
+    {
+        progressing.fillAmount = ratio;
     }
 
     private void ActivateBoosterImage()

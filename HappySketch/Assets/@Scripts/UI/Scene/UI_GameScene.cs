@@ -13,19 +13,10 @@ public class UI_GameScene : UI_BaseScene
 
     private EStageType currStageType;
 
-    //private Dictionary<EStageType, Action<UITeamData>> stageHandle;
-
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
-
-        //stageHandle = new Dictionary<EStageType, Action<UITeamData>>
-        //{
-        //    {EStageType.SharkAvoidance, HandleSharkAvoidance },
-        //    {EStageType.CollectingCandy, HandleCollectingCandy },
-        //    {EStageType.CrossingBridge, HandleCrossingBridge }
-        //};
 
         return true;
     }
@@ -38,10 +29,6 @@ public class UI_GameScene : UI_BaseScene
 
     private void SetStageUI(EStageType stageType)
     {
-        // 여기서 UI Prefab을 생성하야 함!
-        // View 정보 가저와야 함
-
-        // Prefab을 생성해야 함!
         string name = $"UI_{stageType}";
         string prefabPath = $"{PrefabPath.UI_OBJECT_PATH}/{name}";
 
@@ -121,67 +108,4 @@ public class UI_GameScene : UI_BaseScene
             currPresentRight.ConnectStageEvents(stage);
         }
     }
-
-    
-    // 여기부터 아래 제거 해도 될 듯, 이벤트 방식으로 바뀌었음
-    //public void ReceiveData(UIDataBase data)
-    //{
-    //    switch(data)
-    //    {
-    //        case UITeamData teamData:
-    //            stageHandle[data.StageType](teamData);
-    //            break;
-
-    //        case UICommonData commonData:
-    //            HandleCommonData(commonData);
-    //            break;
-    //    }
-    //}
-
-    //private void HandleSharkAvoidance(UITeamData teamData)
-    //{
-    //    switch (teamData.TeamType)
-    //    {
-    //        case ETeamType.Left:
-    //            {
-    //                if (teamData is UIBoosterCountData boosterCountData)
-    //                {
-    //                    (currPresentLeft as SharkAvoidancePresenter).SetItemCount(boosterCountData.BoosterCount);
-    //                }
-    //                else if(teamData is UIRatioData ratioData)
-    //                {
-    //                    (currPresentLeft as SharkAvoidancePresenter).SetLeftProgressRatio(ratioData.Ratio);
-    //                }
-    //            }
-    //            break;
-
-    //        case ETeamType.Right:
-    //            {
-    //                if (teamData is UIBoosterCountData boosterCountData)
-    //                {
-    //                    (currPresentRight as SharkAvoidancePresenter).SetItemCount(boosterCountData.BoosterCount);
-    //                }
-    //                else if (teamData is UIRatioData ratioData)
-    //                {
-    //                    (currPresentLeft as SharkAvoidancePresenter).SetLeftProgressRatio(ratioData.Ratio);
-    //                }
-    //            }
-    //            break;
-    //    }
-    //}
-
-    //private void HandleCollectingCandy(UITeamData teamData)
-    //{
-
-    //}
-
-    //private void HandleCrossingBridge(UITeamData teamData)
-    //{
-
-    //}
-
-    //private void HandleCommonData(UICommonData commonData)
-    //{
-
-    //}
 }
