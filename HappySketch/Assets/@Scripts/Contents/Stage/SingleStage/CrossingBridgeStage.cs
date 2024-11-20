@@ -3,17 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Define;
+using CrossingBridge;
 
 public class CrossingBridgeStage : SingleStage
 {
+    [SerializeField, ReadOnly] PlatformGroup platformGroup;
+
+    // 팀에 따라 좌우로 벌어져있는 정도 ( Left = -f, Right = f )
+    readonly float TeamOffSetPosX = 5.0f;
+
     [SerializeField, ReadOnly]
     protected FinishLineObject finishLineObject;
+
+    [SerializeField, ReadOnly] int currLeftPlayerId = 0;
+    [SerializeField, ReadOnly] int currRightPlayerId = 0;
+
+    [SerializeField, ReadOnly] bool isLeftSavePoint = false;
+    [SerializeField, ReadOnly] bool isRightSavePoint = false;
 
     protected override void Reset()
     {
         base.Reset();
 
         finishLineObject = Util.FindChild<FinishLineObject>(gameObject, "FinishLineObject", false);
+        platformGroup = Util.FindChild<PlatformGroup>(gameObject);
     }
 
     public override bool Init()
@@ -50,5 +63,11 @@ public class CrossingBridgeStage : SingleStage
 
 
         return Vector3.zero;
+    }
+
+    public override Vector3 GetStartPoint(ETeamType teamType)
+    {
+        Vector3 offsetVec = new Vector3((teamType == ETeamType.Left) ? -TeamOffSetPosX : TeamOffSetPosX, 0, 0);
+        return playerStartPoint.transform.position + offsetVec;
     }
 }

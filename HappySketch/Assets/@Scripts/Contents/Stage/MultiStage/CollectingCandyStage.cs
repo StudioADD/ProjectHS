@@ -6,12 +6,6 @@ using static Define;
 
 public class CollectingCandyStage : MultiStage
 {
-    protected override void Reset()
-    {
-        base.Reset();
-
-    }
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -23,7 +17,7 @@ public class CollectingCandyStage : MultiStage
     public override void SetInfo(Player player = null)
     {
         base.SetInfo(player);
-
+         
     }
 
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)

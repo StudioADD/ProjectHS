@@ -9,24 +9,6 @@ using static Define;
 /// </summary>
 public abstract class SingleStage : BaseStage
 {
-    [field: SerializeField, ReadOnly]
-    public Transform LeftPlayerSpawnPoint { get; protected set; } = null;
-    
-    [field: SerializeField, ReadOnly] 
-    public Transform RightPlayerSpawnPoint { get; protected set; } = null;
-
-    protected virtual void Reset()
-    {
-        LeftPlayerSpawnPoint = Util.FindChild<Transform>(this.gameObject, "LeftPlayerSpawnPoint", false);
-        RightPlayerSpawnPoint = Util.FindChild<Transform>(this.gameObject, "RightPlayerSpawnPoint", false);
-
-        LeftPlayerSpawnPoint ??= Util.Editor_InstantiateObject(this.transform).transform;
-        RightPlayerSpawnPoint ??= Util.Editor_InstantiateObject(this.transform).transform;
-
-        LeftPlayerSpawnPoint.gameObject.name = "LeftPlayerSpawnPoint";
-        RightPlayerSpawnPoint.gameObject.name = "RightPlayerSpawnPoint";
-    }
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -36,4 +18,5 @@ public abstract class SingleStage : BaseStage
     }
 
     public abstract void ConnectEvents(Action<ETeamType> onEndGameCallBack);
+    public abstract Vector3 GetStartPoint(ETeamType teamType);
 }

@@ -16,6 +16,8 @@ public enum EStageType
 
 public abstract class BaseStage : InitBase
 {
+    [field: SerializeField, ReadOnly] protected Transform playerStartPoint;
+
     public ETeamType TeamType { get; protected set; }
     public EStageType StageType { get; protected set; }
 
@@ -23,6 +25,13 @@ public abstract class BaseStage : InitBase
 
     // 임시
     protected StageParam stageParam = null;
+
+    protected virtual void Reset()
+    {
+        playerStartPoint = Util.FindChild<Transform>(this.gameObject, "playerStartPoint", false);
+        playerStartPoint ??= Util.Editor_InstantiateObject(this.transform).transform;
+        playerStartPoint.gameObject.name = "playerStartPoint";
+    }
 
     public override bool Init()
     {

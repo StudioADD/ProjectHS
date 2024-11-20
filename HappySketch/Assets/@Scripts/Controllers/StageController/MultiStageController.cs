@@ -43,10 +43,10 @@ public class MultiStageController : BaseStageController
     public override Vector3 GetStagePlayerStartPos(ETeamType teamType)
     {
         if (teamType == ETeamType.Left)
-            return leftStage.PlayerSpawnPoint.position;
+            return leftStage.GetStartPoint();
         
         if (teamType == ETeamType.Right)
-            return rightStage.PlayerSpawnPoint.position;
+            return rightStage.GetStartPoint();
 
         Debug.LogWarning("알 수 없는 팀이 들어옴");
         return Vector3.zero;
