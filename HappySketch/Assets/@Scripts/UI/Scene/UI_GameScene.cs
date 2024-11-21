@@ -30,7 +30,7 @@ public class UI_GameScene : UI_BaseScene
     private void SetStageUI(EStageType stageType)
     {
         string name = $"UI_{stageType}";
-        string prefabPath = $"{PrefabPath.UI_OBJECT_PATH}/{name}";
+        string prefabPath = $"{PrefabPath.UI_STAGE_PATH}/{name}";
 
         GameObject leftObject = Managers.Resource.Instantiate(prefabPath, transform);
         GameObject rightObject = Managers.Resource.Instantiate(prefabPath, transform);

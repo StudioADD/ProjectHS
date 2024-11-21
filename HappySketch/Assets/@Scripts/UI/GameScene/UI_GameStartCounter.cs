@@ -9,6 +9,11 @@ public class UI_GameStartCounter : UI_BaseObject
     [SerializeField, ReadOnly] UI_TextEffect leftTimerText;
     [SerializeField, ReadOnly] UI_TextEffect rightTimerText;
 
+    [SerializeField, ReadOnly] UI_ImageEffect leftGoImage;
+    [SerializeField, ReadOnly] UI_ImageEffect rightGoImage;
+
+    private WaitForSeconds waitForSecond = new WaitForSeconds(1f);
+
     int _currTime = 0;
     public int CurrTIme 
     {
@@ -25,6 +30,9 @@ public class UI_GameStartCounter : UI_BaseObject
     {
         leftTimerText = Util.FindChild<UI_TextEffect>(gameObject, "LeftTimerText", true);
         rightTimerText = Util.FindChild<UI_TextEffect>(gameObject, "RightTimerText", true);
+
+        leftGoImage = Util.FindChild<UI_ImageEffect>(gameObject, "LeftGoImage", false);
+        rightGoImage = Util.FindChild<UI_ImageEffect>(gameObject, "RightGoImage", false);
     }
 
     public override bool Init()
@@ -57,15 +65,27 @@ public class UI_GameStartCounter : UI_BaseObject
     private IEnumerator CoGameStartCounter(int time, Action onEndCount = null)
     {
         CurrTIme = time;
-        yield return new WaitForSeconds(1);
+        yield return waitForSecond;
 
         while (CurrTIme > 1)
         {
             CurrTIme -= 1;
-            yield return new WaitForSeconds(1);
+            yield return waitForSecond;
         }
 
         onEndCount?.Invoke();
+
+        leftTimerText.gameObject.SetActive(false);
+        rightTimerText.gameObject.SetActive(false);
+
+        
+        leftGoImage.gameObject.SetActive(true);
+        rightGoImage.gameObject.SetActive(true);
+        leftGoImage.OpenImageEffectUI();
+        rightGoImage.OpenImageEffectUI();
+
+        yield return waitForSecond;
+
         coGameStartCounter = null;
         Managers.Resource.Destroy(gameObject);
     }
