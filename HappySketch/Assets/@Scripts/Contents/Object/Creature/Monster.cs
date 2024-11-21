@@ -4,14 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
-public enum EMonsterType
-{
-    TestMonster = 0,
-    SmallMonster,
-    BigMonster,
-
-    Max
-}
 public class Monster : Creature
 {
     public EMonsterType MonsterType { get; protected set; }

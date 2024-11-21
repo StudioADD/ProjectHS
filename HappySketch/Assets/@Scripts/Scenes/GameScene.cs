@@ -70,6 +70,7 @@ public class GameScene : BaseScene
         // Connect Events
         stageController.ConnectEvents(leftPlayer, rightPlayer);
 
+
         // UI Start Effect ( 3, 2, 1 )
         UIGameStartCounterParam param = new UIGameStartCounterParam(3, Test);
         coWaitCondition = StartCoroutine(CoWaitCondition(
