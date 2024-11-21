@@ -11,6 +11,8 @@ public class CollectingCandyStage : MultiStage
         if (base.Init() == false)
             return false;
 
+        StageType = EStageType.CollectingCandy;
+
         return true;
     }
 

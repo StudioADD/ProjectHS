@@ -15,7 +15,7 @@ public class UI_StageInstructionWindow : InitBase
 
     private void StartStage()
     {
-        Managers.Game.StartStage();
+        Managers.Game.SetStageInfo();
         gameObject.SetActive(false);
     }
 

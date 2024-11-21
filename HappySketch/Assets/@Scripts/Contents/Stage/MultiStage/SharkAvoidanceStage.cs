@@ -31,6 +31,8 @@ public class SharkAvoidanceStage : MultiStage
         if (base.Init() == false)
             return false;
 
+        StageType = EStageType.SharkAvoidance;
+
         return true;
     }
 

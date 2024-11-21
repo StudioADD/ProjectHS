@@ -629,7 +629,7 @@ public class Player : Creature
         }
 
         beforePosition = transform.position;
-        targetPosition = transform.position + new Vector3(moveDirection.x, 0, moveDirection.y);
+        targetPosition = transform.position + new Vector3(moveDirection.x * data.moveSpeed / 2, 0, moveDirection.y);
 
     }
 
@@ -651,7 +651,7 @@ public class Player : Creature
 
     private void Movement()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 1 / data.inputCooldown * Time.deltaTime); // 이동속도 data로 뺄수 있게 해줄것
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 1f);// 1 / data.inputCooldown * Time.deltaTime); // 이동속도 data로 뺄수 있게 해줄것
     }
     #endregion
 
@@ -678,7 +678,7 @@ public class Player : Creature
         }
 
         beforePosition = transform.position;
-        targetPosition = transform.position + new Vector3(moveDirection.x, 0, moveDirection.y);
+        targetPosition = transform.position + new Vector3(moveDirection.x * data.moveSpeed, 0, moveDirection.y);
 
     }
 

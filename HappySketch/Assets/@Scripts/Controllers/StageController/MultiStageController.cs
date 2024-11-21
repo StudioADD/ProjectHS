@@ -9,7 +9,7 @@ public class MultiStageController : BaseStageController
     [SerializeField, ReadOnly] MultiStage leftStage = null;
     [SerializeField, ReadOnly] MultiStage rightStage = null;
 
-    const int STAGE_DISTANCE = 50;
+    const int STAGE_DISTANCE = 5000;
 
     public override bool Init()
     {

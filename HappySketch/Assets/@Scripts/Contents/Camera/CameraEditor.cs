@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class CameraEditor : TeamCamera
 {
+    [SerializeField, ReadOnly] StageEditor stageEditor;
+
     [Header ("[ 카메라 세팅 영역 ]")]
-    [Space(5f)] [SerializeField]
+    [Space(5f)] [SerializeField, ReadOnly]
     EStageType stageType = EStageType.None;
     
     [Space(5f)] [SerializeField]
@@ -29,6 +31,11 @@ public class CameraEditor : TeamCamera
         UpdateCameraInfo();
     }
 
+    private void Start()
+    {
+        stageType = stageEditor.StageType;
+    }
+
     public override bool Init()
     {
         if (base.Init() == false)
@@ -37,12 +44,20 @@ public class CameraEditor : TeamCamera
         stageType = EStageType.None;
         cameraInfoData = new CameraInfoData(fieldOfView, targetDistance, cameraHeight, lookAtHeight, nearClipping, farClipping);
 
+        stageEditor = FindObjectOfType<StageEditor>();
+
         return true;
+    }
+
+    public override void SetTarget(BaseObject target)
+    {
+        base.SetTarget(target);
+
+        LoadCameraInfo();
     }
 
     public void InitCameraInfo()
     {
-        stageType = EStageType.None;
         fieldOfView = 60f;
         targetDistance = 5f;
         cameraHeight = 5f;

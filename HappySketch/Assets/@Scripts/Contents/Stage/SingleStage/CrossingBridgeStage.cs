@@ -34,6 +34,8 @@ public class CrossingBridgeStage : SingleStage
         if (base.Init() == false)
             return false;
 
+        StageType = EStageType.CrossingBridge;
+
         return true;
     }
 

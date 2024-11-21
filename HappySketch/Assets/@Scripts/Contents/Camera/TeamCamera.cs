@@ -58,7 +58,7 @@ public class TeamCamera : InitBase
         cam.fieldOfView = cameraInfoData.fieldOfView;
     }
 
-    public void SetTarget(BaseObject target)
+    public virtual void SetTarget(BaseObject target)
     {
         this.target = target;
     }

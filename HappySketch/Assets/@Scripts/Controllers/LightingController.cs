@@ -21,9 +21,10 @@ public static class LightingController
                 {
                     string path = $"{LoadPath.MATERIALS_PATH}/{StageSkyBoxName.SHARKAVOIDANCE_NAME}";
                     RenderSettings.skybox = Managers.Resource.Load<Material>(path);
-                    RenderSettings.fogColor = new Color(22, 151, 221);
-                    RenderSettings.fogDensity = 0.002f;
                     RenderSettings.fog = true;
+                    RenderSettings.fogColor = Util.HexColor("#1697DD");
+                    RenderSettings.fogMode = FogMode.ExponentialSquared;
+                    RenderSettings.fogDensity = 0.002f;
                     break;
                 }
             case EStageType.CollectingCandy:

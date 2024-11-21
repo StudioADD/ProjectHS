@@ -23,5 +23,15 @@ public class UIFadeEffectParam : UIParam
 #endregion
 
 #region ObjectUI Param
+public class UIGameStartCounterParam : UIParam
+{
+    public int time;
+    public Action onEndCount;
 
+    public UIGameStartCounterParam(int time, Action onEndCount = null)
+    {
+        this.time = time;
+        this.onEndCount = onEndCount;
+    }
+}
 #endregion
