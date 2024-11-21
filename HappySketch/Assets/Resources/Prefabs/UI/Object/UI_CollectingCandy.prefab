@@ -696,7 +696,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7311108731428558610}
   - component: {fileID: 1058364263703348800}
-  - component: {fileID: 5194547414747799889}
   m_Layer: 5
   m_Name: UI_CollectingCandy
   m_TagString: Untagged
@@ -742,20 +741,6 @@ MonoBehaviour:
   - {fileID: 9013201142004367506}
   - {fileID: 4465355147328700154}
   - {fileID: 5803310724499102517}
---- !u!114 &5194547414747799889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2899559002470789342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6cb55fab5a0e5441bab812d3708484d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  second: 0
-  minute: 0
 --- !u!1 &5010912300642716741
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,8 +7,6 @@ using static Define;
 
 public class CollectCandyModel : ModelBase
 {
-    public ETeamType TeamType { get; private set; }
-
     [SerializeField, ReadOnly]
     private int second = 0;
 
@@ -19,9 +17,9 @@ public class CollectCandyModel : ModelBase
 
     private WaitForSeconds waitForOneSecond = new WaitForSeconds(1f);
 
-    public void SetTeamType(ETeamType teamType)
+    public CollectCandyModel(ETeamType teamType) : base(teamType)
     {
-        TeamType = teamType;
+
     }
 
     public string GetFormattedTime()
@@ -31,7 +29,7 @@ public class CollectCandyModel : ModelBase
 
     public void StartTimer()
     {
-        StartCoroutine(TimeCoroutine());
+        CoroutineHelper.StartCoroutine(TimeCoroutine());
     }
 
     private void IncreaseTime()

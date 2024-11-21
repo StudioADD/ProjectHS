@@ -85,7 +85,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7311108731428558610}
   - component: {fileID: 8156977162464811679}
-  - component: {fileID: -4853664150664666779}
   m_Layer: 5
   m_Name: UI_CrossingBridge
   m_TagString: Untagged
@@ -126,18 +125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 0}
---- !u!114 &-4853664150664666779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2899559002470789342}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bf5e93ef613dce41b982544e95efe41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5010912300642716741
 GameObject:
   m_ObjectHideFlags: 0

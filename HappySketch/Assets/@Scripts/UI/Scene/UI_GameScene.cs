@@ -48,51 +48,21 @@ public class UI_GameScene : UI_BaseScene
         ViewBase leftView = leftObject.GetComponent<ViewBase>();
         ViewBase rightView = rightObject.GetComponent<ViewBase>();
 
-        ModelBase leftModel = leftObject.GetComponent<ModelBase>();
-        ModelBase rightModel = rightObject.GetComponent<ModelBase>();
-
         switch (stageType)
         {
             case EStageType.SharkAvoidance:
-                if(leftModel is SharkAvoidanceModel leftSharkModel)
-                {
-                    leftSharkModel.SetTeamType(ETeamType.Left);
-                    currPresentLeft = new SharkAvoidancePresenter(leftView, leftSharkModel);
-                }
-
-                if(rightModel is SharkAvoidanceModel rightSharkModel)
-                {
-                    rightSharkModel.SetTeamType(ETeamType.Right);
-                    currPresentRight = new SharkAvoidancePresenter(rightView, rightSharkModel);
-                }
-
+                currPresentLeft = new SharkAvoidancePresenter(leftView, new SharkAvoidanceModel(ETeamType.Left));
+                currPresentRight = new SharkAvoidancePresenter(rightView, new SharkAvoidanceModel(ETeamType.Right));
                 break;
 
             case EStageType.CollectingCandy:
-                if(leftModel is CollectCandyModel leftCandyModel)
-                {
-                    leftCandyModel.SetTeamType(ETeamType.Left);
-                    currPresentLeft = new CollectCandyPresenter(leftView, leftCandyModel);
-                }
-
-                if(rightModel is CollectCandyModel rightCandyModel)
-                {
-                    rightCandyModel.SetTeamType(ETeamType.Right);
-                    currPresentRight = new CollectCandyPresenter(rightView, rightCandyModel);
-                }
-                
+                currPresentLeft = new CollectCandyPresenter(leftView, new CollectCandyModel(ETeamType.Left));
+                currPresentRight = new CollectCandyPresenter(rightView, new CollectCandyModel(ETeamType.Right));
                 break;
 
             case EStageType.CrossingBridge:
-                if (leftModel is CrossingBridgeModel leftBridgeModel)
-                {
-                    currPresentLeft = new CollectCandyPresenter(leftView, leftBridgeModel);
-                }
-
-                if (rightModel is CrossingBridgeModel rightBridgeModel)
-                {
-                    currPresentRight = new CollectCandyPresenter(rightView, rightBridgeModel);
-                }
+                currPresentLeft = new CrossingBridgePresenter(leftView, new CrossingBridgeModel(ETeamType.Left));
+                currPresentRight = new CrossingBridgePresenter(rightView, new CrossingBridgeModel(ETeamType.Right));
                 break;
         }
     }
