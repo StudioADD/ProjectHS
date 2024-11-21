@@ -28,11 +28,11 @@ public class UI_GameStartCounter : UI_BaseObject
 
     private void Reset()
     {
-        leftTimerText = Util.FindChild<UI_TextEffect>(gameObject, "LeftTimerText", true);
-        rightTimerText = Util.FindChild<UI_TextEffect>(gameObject, "RightTimerText", true);
+        leftTimerText = Util.FindChild<UI_TextEffect>(gameObject, "LeftTimerText");
+        rightTimerText = Util.FindChild<UI_TextEffect>(gameObject, "RightTimerText");
 
-        leftGoImage = Util.FindChild<UI_ImageEffect>(gameObject, "LeftGoImage", false);
-        rightGoImage = Util.FindChild<UI_ImageEffect>(gameObject, "RightGoImage", false);
+        leftGoImage = Util.FindChild<UI_ImageEffect>(gameObject, "LeftGoImage");
+        rightGoImage = Util.FindChild<UI_ImageEffect>(gameObject, "RightGoImage");
     }
 
     public override bool Init()
@@ -51,12 +51,12 @@ public class UI_GameStartCounter : UI_BaseObject
         {
             if (coGameStartCounter == null)
             {
-                coGameStartCounter = StartCoroutine(CoGameStartCounter(gameStartCounterParam.time, gameStartCounterParam.onEndCount));
+                coGameStartCounter = StartCoroutine(CoGameStartCounter(gameStartCounterParam.Time, gameStartCounterParam.OnEndCount));
             }
             else
             {
                 Debug.LogWarning("타이머 중복 호출로 인해 타이머 변경 및 콜백 무시");
-                CurrTIme = gameStartCounterParam.time;
+                CurrTIme = gameStartCounterParam.Time;
             }
         }
     }
@@ -73,19 +73,15 @@ public class UI_GameStartCounter : UI_BaseObject
             yield return waitForSecond;
         }
 
-        onEndCount?.Invoke();
+        leftTimerText.CloseTextEffectUI();
+        rightTimerText.CloseTextEffectUI();
 
-        leftTimerText.gameObject.SetActive(false);
-        rightTimerText.gameObject.SetActive(false);
-
-        
-        leftGoImage.gameObject.SetActive(true);
-        rightGoImage.gameObject.SetActive(true);
         leftGoImage.OpenImageEffectUI();
         rightGoImage.OpenImageEffectUI();
 
         yield return waitForSecond;
 
+        onEndCount?.Invoke();
         coGameStartCounter = null;
         Managers.Resource.Destroy(gameObject);
     }

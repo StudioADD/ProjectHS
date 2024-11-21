@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static Define;
 
 public class UIParam { }
 
@@ -25,13 +26,23 @@ public class UIFadeEffectParam : UIParam
 #region ObjectUI Param
 public class UIGameStartCounterParam : UIParam
 {
-    public int time;
-    public Action onEndCount;
+    public int Time { get; private set; }
+    public Action OnEndCount { get; private set; }
 
     public UIGameStartCounterParam(int time, Action onEndCount = null)
     {
-        this.time = time;
-        this.onEndCount = onEndCount;
+        this.Time = time;
+        this.OnEndCount = onEndCount;
+    }
+}
+
+public class UIWinLoseParam : UIParam
+{
+    public ETeamType WinTeam { get; private set; }
+
+    public UIWinLoseParam(ETeamType winTeam)
+    {
+        WinTeam = winTeam;
     }
 }
 #endregion

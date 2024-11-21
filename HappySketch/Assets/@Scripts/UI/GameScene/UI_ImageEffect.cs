@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class UI_ImageEffect : InitBase
 {
-    Animator animator;
-    Image image;
+    private Animator animator;
+    private Image image;
 
     public override bool Init()
     {
@@ -19,8 +19,20 @@ public class UI_ImageEffect : InitBase
         return true;
     }
 
+    public void SetSprite(Sprite sprite)
+    {
+        image.sprite = sprite;
+    }
+
     public void OpenImageEffectUI()
     {
+        gameObject.SetActive(true);
         animator.SetTrigger("OnTrigger");
     }
+
+    public void CloseTextEffectUI()
+    {
+        gameObject.SetActive(false);
+    }
 }
+ 

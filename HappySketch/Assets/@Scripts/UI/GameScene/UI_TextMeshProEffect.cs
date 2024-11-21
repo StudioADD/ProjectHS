@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_TextEffect : InitBase
+public class UI_TextMeshProEffect : InitBase
 {
-    Animator animator;
-    Text text;
+    private Animator animator;
+    private TextMeshProUGUI text;
 
     public override bool Init()
     {
@@ -14,21 +15,26 @@ public class UI_TextEffect : InitBase
             return false;
 
         animator = GetComponent<Animator>();
-        text = GetComponent<Text>();
+        text = GetComponent<TextMeshProUGUI>();
         text.text = "";
 
         return true;
     }
 
+    public void SetPosition(Vector3 position)
+    {
+        text.rectTransform.position = position;
+    }
+
     public void OpenTextEffectUI(string str)
     {
-        this.gameObject.SetActive(true);
+        gameObject.SetActive(true);
         animator.SetTrigger("OnTrigger");
         text.text = str;
     }
 
     public void CloseTextEffectUI()
     {
-        this.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 }
