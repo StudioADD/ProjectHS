@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 436867860}
   - component: {fileID: 436867859}
   m_Layer: 5
-  m_Name: Image
+  m_Name: trophy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
