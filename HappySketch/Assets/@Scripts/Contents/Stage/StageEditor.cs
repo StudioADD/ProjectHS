@@ -15,19 +15,36 @@ public enum EMaterialType
 }
 
 public class StageEditor : InitBase
-{ 
+{
+    [SerializeField, ReadOnly] CameraEditor cameraEditor;
     [SerializeField, ReadOnly] BaseStage currStage = null;
 
-    [Header("[ 카메라 세팅 영역 ]")]
-    [Space(5f)] [SerializeField]
-    EStageType stageType = EStageType.None;
-    
+    [SerializeField, ReadOnly] Player player = null;
+    [SerializeField, ReadOnly] Transform playerStartPoint;
+
+    [Header("[ 스테이지 세팅 영역 ]")]
+    [Space(5f)]
+    public EStageType StageType = EStageType.None;
+
+    private void Start()
+    {
+        PlayStage();
+    }
+
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
 
-        stageType = EStageType.None;
+        cameraEditor = FindObjectOfType<CameraEditor>();
+        currStage = FindObjectOfType<BaseStage>();
+        StageType = currStage.StageType;
+
+        if (currStage == null)
+        {
+            Debug.LogError("스테이지를 소환하고 테스트해주세요.");
+            UnityEditor.EditorApplication.isPlaying = false;
+        }
 
         return true;
     }
@@ -41,18 +58,27 @@ public class StageEditor : InitBase
             GameObject.DestroyImmediate(currStage.gameObject);
         }
 
-        if (stageType == EStageType.None)
+        if (StageType == EStageType.None)
         {
             Debug.LogWarning("소환할 스테이지 타입을 설정해주세요.");
             return;
         }
 
-        string loadPath = $"{Application.dataPath}/Resources/Prefabs/{PrefabPath.STAGE_PATH}/{stageType}.prefab";
+        string loadPath = $"{Application.dataPath}/Resources/Prefabs/{PrefabPath.STAGE_PATH}/{StageType}.prefab";
         GameObject go = PrefabUtility.LoadPrefabContents(loadPath);
         Util.Editor_InstantiateObject(go);
+    }
 
-        // currStage = (BaseStage)PrefabUtility.InstantiatePrefab(currStage).GetComponent<BaseStage>();
-        // currStage.gameObject.transform.position = Vector3.zero;
+    public void PlayStage()
+    {
+        playerStartPoint = Util.FindChild<Transform>(currStage.gameObject, "PlayerStartPoint", true);
+
+        player = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/LeftPlayer").GetComponent<Player>();
+        player.transform.position = playerStartPoint.position;
+        player.transform.position += Vector3.up * player.GetColliderHeight();
+        player.SetInfo((int)StageType);
+
+        cameraEditor.SetTarget(player);
     }
 }
 #endif

@@ -15,23 +15,35 @@ public static class LightingController
 
     public static void SetStageLighting(EStageType stageType)
     {
-        switch(stageType)
+        switch (stageType)
         {
             case EStageType.SharkAvoidance:
                 {
-                    string path = $"{LoadPath.MATERIALS_PATH}/{SkyBoxMaterialName.SHARKAVOIDANCESTAGE_NAME}";
+                    string path = $"{LoadPath.MATERIALS_PATH}/{StageSkyBoxName.SHARKAVOIDANCE_NAME}";
                     RenderSettings.skybox = Managers.Resource.Load<Material>(path);
-
-                    RenderSettings.fogColor = new Color(22, 151, 221);
-                    RenderSettings.fogDensity = 0.002f;
                     RenderSettings.fog = true;
+                    RenderSettings.fogColor = Util.HexColor("#1697DD");
+                    RenderSettings.fogMode = FogMode.ExponentialSquared;
+                    RenderSettings.fogDensity = 0.002f;
                     break;
                 }
-            default: // 기본 세팅
+            case EStageType.CollectingCandy:
                 {
-                    InitLighting();
+                    string path = $"{LoadPath.MATERIALS_PATH}/{StageSkyBoxName.COLLECTINGCANDY_NAME}";
+                    RenderSettings.skybox = Managers.Resource.Load<Material>(path);
+                    RenderSettings.fog = false;
                     break;
                 }
+            case EStageType.CrossingBridge:
+                {
+                    string path = $"{LoadPath.MATERIALS_PATH}/{StageSkyBoxName.CROSSINGBRIDGE_NAME}";
+                    RenderSettings.skybox = Managers.Resource.Load<Material>(path);
+                    RenderSettings.fog = false;
+                    break;
+                }
+            default:
+                InitLighting();
+                break;
         }
 
         DynamicGI.UpdateEnvironment();

@@ -60,7 +60,7 @@ public class Player : Creature
             if (value == _boosterCount)
                 return;
             _boosterCount = value;
-            (Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, TeamType, _boosterCount));
+            //(Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, TeamType, _boosterCount));
 
         }
     }
@@ -175,8 +175,6 @@ public class Player : Creature
     }
     #endregion
 
-
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -211,27 +209,45 @@ public class Player : Creature
             case EStageType.SharkAvoidance: PlayerState = EPlayerState.Idle; break;
         }
         IsPlayerInputControll = true;
-
     }
 
-    public void SetStageInfo(StageEventParam param)
+    #region SharkAvoidanceStage Event
+    Action onMoveEvent; // 앞으로 이동이 끝나면 보내주면 됨
+    Action onAddBoosterItem;
+    Func<bool> onUseBoosterItem;
+    public void ConnectSharkAvoidanceStage(Action onMoveEvent, Action onAddBoosterItem, Func<bool> onUseBoosterItem)
     {
-        if (param == null)
-        {
-            Debug.LogWarning("StageParam is Null!");
-            return;
-        }
-
-        if (param is CrossingBridgeParam crossingBridgeParam)
-        {
-
-        }
-        else
-        {
-            Debug.LogWarning("Param is None?");
-            return;
-        }
+        this.onMoveEvent = onMoveEvent;
+        this.onAddBoosterItem = onAddBoosterItem;
+        this.onUseBoosterItem = onUseBoosterItem;
     }
+    #endregion
+
+    #region CollectingCandyStage Event
+    Action<ECandyItemType> onCollectCandyItem;
+    Action<bool> onChangeScoreBuff;
+    public void ConnectCollectingCandyStage(Action<ECandyItemType> onCollectCandyItem, Action<bool> onChangeScoreBuff)
+    {
+        this.onCollectCandyItem = onCollectCandyItem;
+        this.onChangeScoreBuff = onChangeScoreBuff;
+    }
+    #endregion
+
+    #region CrossingBridgeStage Event
+    /// <summary>
+    /// Id, IsLeft, TargetPos
+    /// </summary>
+    Func<int, bool, Vector3> getJumpTargetPos;
+    Action onAddGoggleItem;
+    Func<bool> onUseGoggleItem;
+
+    public void ConnectCrossingBridgeStage(Func<int, bool, Vector3> getJumpTargetPos, Action onAddGoggleItem, Func<bool> onUseGoggleItem)
+    {
+        this.getJumpTargetPos = getJumpTargetPos;
+        this.onAddGoggleItem = onAddGoggleItem;
+        this.onUseGoggleItem = onUseGoggleItem;
+    }
+    #endregion
 
     #region Input
 
@@ -613,7 +629,7 @@ public class Player : Creature
         }
 
         beforePosition = transform.position;
-        targetPosition = transform.position + new Vector3(moveDirection.x, 0, moveDirection.y);
+        targetPosition = transform.position + new Vector3(moveDirection.x * data.moveSpeed / 2, 0, moveDirection.y);
 
     }
 
@@ -635,7 +651,7 @@ public class Player : Creature
 
     private void Movement()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 1 / data.inputCooldown * Time.deltaTime); // 이동속도 data로 뺄수 있게 해줄것
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 1f);// 1 / data.inputCooldown * Time.deltaTime); // 이동속도 data로 뺄수 있게 해줄것
     }
     #endregion
 
@@ -662,7 +678,7 @@ public class Player : Creature
         }
 
         beforePosition = transform.position;
-        targetPosition = transform.position + new Vector3(moveDirection.x, 0, moveDirection.y);
+        targetPosition = transform.position + new Vector3(moveDirection.x * data.moveSpeed, 0, moveDirection.y);
 
     }
 

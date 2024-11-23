@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using static Define;
 
 public abstract class BaseStageController : InitBase
 {
     public EStageType StageType { get; protected set; }
+
 
     public override bool Init()
     {
@@ -23,7 +26,15 @@ public abstract class BaseStageController : InitBase
     public virtual void SetInfo(EStageType stageType)
     {
         StageType = stageType;
+
         LightingController.SetStageLighting(stageType);
+
+       
+    }
+
+    public virtual void StartStage()
+    {
+
     }
 
     public abstract void ConnectEvents(Player leftPlayer, Player rightPlayer);

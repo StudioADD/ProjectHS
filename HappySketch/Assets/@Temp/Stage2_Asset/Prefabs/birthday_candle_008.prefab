@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 063d6baba367a704db721011c114b432, type: 3}
@@ -51,11 +52,48 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 063d6baba367a704db721011c114b432, type: 3}
+      propertyPath: m_DirtyAABB
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 063d6baba367a704db721011c114b432, type: 3}
+      propertyPath: m_AABB.m_Center.x
+      value: -0.014748126
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 063d6baba367a704db721011c114b432, type: 3}
+      propertyPath: m_AABB.m_Center.y
+      value: 5.012347
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 063d6baba367a704db721011c114b432, type: 3}
+      propertyPath: m_AABB.m_Center.z
+      value: -0.030984223
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 063d6baba367a704db721011c114b432, type: 3}
+      propertyPath: m_AABB.m_Extent.x
+      value: 0.5383524
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 063d6baba367a704db721011c114b432, type: 3}
+      propertyPath: m_AABB.m_Extent.y
+      value: 5.0153065
+      objectReference: {fileID: 0}
+    - target: {fileID: -3887185075125053422, guid: 063d6baba367a704db721011c114b432, type: 3}
+      propertyPath: m_AABB.m_Extent.z
+      value: 0.5301911
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 063d6baba367a704db721011c114b432, type: 3}
       propertyPath: m_Name
       value: birthday_candle_008
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 063d6baba367a704db721011c114b432, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 396520746448656691}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 063d6baba367a704db721011c114b432, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7976619319249764327}
   m_SourcePrefab: {fileID: 100100000, guid: 063d6baba367a704db721011c114b432, type: 3}
 --- !u!1 &3650148399592326968 stripped
 GameObject:
@@ -64,7 +102,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &396520746448656691
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -81,7 +119,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &7976619319249764327
 MonoBehaviour:
   m_ObjectHideFlags: 0

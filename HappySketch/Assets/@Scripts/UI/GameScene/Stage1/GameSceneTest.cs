@@ -25,7 +25,7 @@ public class GameSceneTest : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            gameScene.StartStage(EStageType.CollectingCandy);
+            gameScene.StartStage(EStageType.CrossingBridge);
         }
     }
 }

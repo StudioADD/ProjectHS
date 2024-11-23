@@ -9,16 +9,6 @@ using static Define;
 /// </summary>
 public abstract class MultiStage : BaseStage
 {
-    [field: SerializeField, ReadOnly]
-    public Transform PlayerSpawnPoint { get; protected set; }
-
-    protected virtual void Reset()
-    {
-        PlayerSpawnPoint = Util.FindChild<Transform>(this.gameObject, "PlayerSpawnPoint", false);
-        PlayerSpawnPoint ??= Util.Editor_InstantiateObject(this.transform).transform;
-        PlayerSpawnPoint.gameObject.name = "PlayerSpawnPoint";
-    }
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -30,4 +20,6 @@ public abstract class MultiStage : BaseStage
     }
 
     public abstract void ConnectEvents(Action<ETeamType> onEndGameCallBack);
+
+    public Vector3 GetStartPoint() => playerStartPoint.position;
 }

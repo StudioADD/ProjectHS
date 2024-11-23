@@ -12,10 +12,13 @@ public class UI_BaseObject : InitBase
         return true;
     }
 
-    public virtual void SetInfo(UIParam param = null) { }
+    public virtual void SetInfo(UIParam param = null)
+    {
+    }
 
     public virtual void OpenObjectUI()
     {
+        Managers.UI.SetCanvas(gameObject, true);
         this.gameObject.SetActive(true);
     }
 

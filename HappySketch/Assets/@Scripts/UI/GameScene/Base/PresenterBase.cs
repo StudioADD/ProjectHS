@@ -14,5 +14,12 @@ public abstract class PresenterBase
 
         view.SetPresenter(this);
     }
-}
 
+    public abstract void OnStageInfoUpdate(StageParam param);
+
+    public void ConnectStageEvents(BaseStage stage)
+    {
+        stage.OnReceiveStageParam -= OnStageInfoUpdate;
+        stage.OnReceiveStageParam += OnStageInfoUpdate;
+    }
+}

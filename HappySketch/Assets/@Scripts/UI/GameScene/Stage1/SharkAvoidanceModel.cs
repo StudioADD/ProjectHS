@@ -7,19 +7,13 @@ using static Define;
 
 public class SharkAvoidanceModel : ModelBase
 {
-    public ETeamType TeamType { get; private set; }
     private int itemCount;
     private float leftProgressRatio;
     private float rightProgressRatio;
 
-    public SharkAvoidanceModel(ETeamType teamType)
+    public SharkAvoidanceModel(ETeamType teamType) : base(teamType)
     {
-        TeamType = teamType;
-    }
 
-    public void SetTeamType(ETeamType teamType)
-    {
-        TeamType = teamType;
     }
 
     public void SetItemCount(int itemCount)

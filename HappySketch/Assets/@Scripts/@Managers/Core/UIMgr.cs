@@ -129,13 +129,12 @@ public class UIMgr
         }
     }
     
-    public T SpawnObjectUI<T>(Transform parent = null, UIParam param = null) where T : UI_BaseObject
+    public T SpawnObjectUI<T>(UIParam param = null, Transform parent = null) where T : UI_BaseObject
     {
         string name = typeof(T).Name;
 
         GameObject go = Managers.Resource.Instantiate($"{PrefabPath.UI_OBJECT_PATH}/{name}");
         UI_BaseObject objUI = go.GetOrAddComponent<UI_BaseObject>();
-        objUI.CloseObjectUI();
 
         if(param != null)
             objUI.SetInfo(param);
@@ -144,6 +143,16 @@ public class UIMgr
         objUI.OpenObjectUI();
 
         return objUI as T;
+    }
+
+    public bool IsPopupActiveSelf<T>() where T : UI_BasePopup
+    {
+        string name = typeof(T).Name;
+
+        if (popupPool.TryGetValue(name, out UI_BasePopup popup))
+            return popup.gameObject.activeSelf;
+
+        return false;
     }
 
     public T OpenPopupUI<T>(UIParam param = null) where T : UI_BasePopup

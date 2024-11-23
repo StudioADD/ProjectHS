@@ -31,14 +31,14 @@ public class GameMgr
         Clear();
     }
 
-    public void StartStage()
+    public void SetStageInfo()
     {
         currStageId++;
 
         if (Managers.Scene.CurrScene is GameScene gameScene)
         {
             playedStages[currStageId - 1] = true;
-            gameScene.StartStage((EStageType)currStageId);
+            gameScene.SetStageInfo((EStageType)currStageId);
         }
     }
 

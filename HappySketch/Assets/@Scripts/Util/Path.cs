@@ -8,16 +8,19 @@ public static class DataPath
 }
 
 /// <summary>
-/// "Assets/Resource/" 이후 경로
+/// "Assets/Resources/" 이후 경로
 /// </summary>
 public static class LoadPath
 {
     //Materials
     public const string MATERIALS_PATH = "Materials";
+
+    // Texture
+    public const string UI_TEXTURE_PATH = "Textures/UI";
 }
 
 /// <summary>
-/// "Assets/Resource/Prefabs/" 이후 경로
+/// "Assets/Resources/Prefabs/" 이후 경로
 /// </summary>
 public static class PrefabPath
 {
@@ -35,4 +38,6 @@ public static class PrefabPath
     public const string UI_PATH = "UI";
     public const string UI_POPUP_PATH = "UI/Popup";
     public const string UI_OBJECT_PATH = "UI/Object";
+    public const string UI_STAGE_PATH = "UI/Stage";
+
 }

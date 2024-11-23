@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class SharkAvoidanceStage : MultiStage
 {
@@ -29,6 +30,8 @@ public class SharkAvoidanceStage : MultiStage
     {
         if (base.Init() == false)
             return false;
+
+        StageType = EStageType.SharkAvoidance;
 
         return true;
     }

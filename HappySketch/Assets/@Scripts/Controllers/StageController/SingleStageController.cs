@@ -26,30 +26,12 @@ public class SingleStageController : BaseStageController
 
     public override void ConnectEvents(Player leftPlayer, Player rightPlayer)
     {
-        StageEventParam param = null;
 
-        switch (StageType)
-        {
-            case EStageType.SharkAvoidance:
-                {
-                    param = new SharkAvoidanceParam();
-                    break;
-                }
-        }
-
-        leftPlayer.SetStageInfo(param);
     }
 
     public override Vector3 GetStagePlayerStartPos(ETeamType teamType)
     {
-        if (teamType == ETeamType.Left)
-            return singleStage.LeftPlayerSpawnPoint.position;
-
-        if (teamType == ETeamType.Right)
-            return singleStage.RightPlayerSpawnPoint.position;
-
-        Debug.LogWarning("알 수 없는 팀이 들어옴");
-        return Vector3.zero;
+        return singleStage.GetStartPoint(teamType);
     }
 
     public void Clear()

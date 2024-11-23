@@ -79,6 +79,18 @@ public static class Util
         return 0f;
     }
 
+    /// <summary>
+    /// #헥사코드
+    /// </summary>
+    public static Color HexColor(string hexCode)
+    {
+        if (UnityEngine.ColorUtility.TryParseHtmlString(hexCode, out Color color))
+            return color;
+
+        Debug.LogError("[UnityExtension::HexColor]invalid hex code - " + hexCode);
+        return Color.white;
+    }
+
 #if UNITY_EDITOR
     public static GameObject Editor_InstantiateObject(Transform transform)
     {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using static Define;
@@ -26,7 +27,7 @@ public class GameScene : BaseScene
         return true;
     }
 
-    public void StartStage(EStageType stageType)
+    public void SetStageInfo(EStageType stageType)
     {
         // UI ( GameStart )
         if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
@@ -52,24 +53,45 @@ public class GameScene : BaseScene
         }
         stageController.SetInfo(stageType);
 
-        // Player ( Left, Right 나뉘어져 있는 거 좀 맘에 들지 않긴 함 )
+        // Player
         leftPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/LeftPlayer").GetComponent<Player>();
         leftPlayer.transform.position = stageController.GetStagePlayerStartPos(ETeamType.Left);
         leftPlayer.transform.position += Vector3.up * leftPlayer.GetColliderHeight();
-        leftPlayer.SetInfo((int)stageType);
 
         rightPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/RightPlayer").GetComponent<Player>();
         rightPlayer.transform.position = stageController.GetStagePlayerStartPos(ETeamType.Right);
         rightPlayer.transform.position += Vector3.up * rightPlayer.GetColliderHeight();
-        rightPlayer.SetInfo((int)stageType);
 
         // Camera
         cameraGroupController.SetInfo(stageType);
-        cameraGroupController.SetTarget(leftPlayer, ETeamType.Left);
+        cameraGroupController.SetTarget(leftPlayer, ETeamType.Left); 
         cameraGroupController.SetTarget(rightPlayer, ETeamType.Right);
 
         // Connect Events
         stageController.ConnectEvents(leftPlayer, rightPlayer);
+
+
+        // UI Start Effect ( 3, 2, 1 )
+        UIGameStartCounterParam param = new UIGameStartCounterParam(3, Test);
+        coWaitCondition = StartCoroutine(CoWaitCondition(
+           () => Managers.UI.IsPopupActiveSelf<UI_FadeEffectPopup>() == false,
+           () => Managers.UI.SpawnObjectUI<UI_GameStartCounter>(param)
+           ));
+    }
+
+    Coroutine coWaitCondition = null;
+    private IEnumerator CoWaitCondition(Func<bool> conditionFunc, Action onCondition)
+    {
+        while (!conditionFunc.Invoke())
+            yield return null;
+
+        onCondition?.Invoke();
+    }
+
+    public void Test()
+    {
+        leftPlayer.SetInfo((int)stageController.StageType);
+        rightPlayer.SetInfo((int)stageController.StageType);
     }
 
     public override void Clear()
