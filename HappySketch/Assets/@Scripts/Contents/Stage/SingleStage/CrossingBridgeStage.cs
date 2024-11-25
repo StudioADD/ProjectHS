@@ -10,6 +10,7 @@ public class CrossingBridgeStage : SingleStage
     [SerializeField, ReadOnly] PlatformGroup platformGroup;
 
     // 팀에 따라 좌우로 벌어져있는 정도 ( Left = -f, Right = f )
+    // 플랫폼 좌우 1,2 스타트, 세이브, 앤드 포인트는 Offset 값
     readonly float TeamOffSetPosX = 5.0f;
 
     [SerializeField, ReadOnly]

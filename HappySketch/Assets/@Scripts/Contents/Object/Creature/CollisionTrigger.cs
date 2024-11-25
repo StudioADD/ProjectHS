@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class CollisionTrigger : InitBase
 {
@@ -16,6 +17,7 @@ public class CollisionTrigger : InitBase
 
         Collider = GetComponent<Collider>();
         Collider.isTrigger = true;
+        Collider.excludeLayers += 1 << (int)ELayer.Default;
         return true;
     }
 
