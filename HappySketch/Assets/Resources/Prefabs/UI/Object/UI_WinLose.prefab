@@ -123,7 +123,7 @@ MonoBehaviour:
   leftImage: {fileID: 0}
   rightImage: {fileID: 0}
   backgroundImage: {fileID: 7218532024630395013}
-  goalText: {fileID: 7862613398498795514}
+  goalText: {fileID: 0}
 --- !u!1 &2637320844432339268
 GameObject:
   m_ObjectHideFlags: 0
