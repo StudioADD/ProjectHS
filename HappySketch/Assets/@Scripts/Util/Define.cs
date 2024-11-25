@@ -23,13 +23,12 @@ public static class Define
         Default = 0,
         TransparentFX = 1,
         IgnoreRaycast = 2,
-
+        OverUI = 3,
         Water = 4,
         UI = 5,
 
         Player = 6,
         Monster = 7,
-
     }
 
     /// <summary>
@@ -42,21 +41,18 @@ public static class Define
         MainCamera,
         Player,
         GameController,
-        Item,
+        
         Monster,
         CollisionTrigger,
+        Ground,
+        Booster,
+        Item,
+        DestroyObj,
     }
 
     public enum ETeamType
     {
         Left,
         Right,
-    }
-
-    public enum EItemType
-    {
-        Item1,
-        Item2,
-        Item3
     }
 }

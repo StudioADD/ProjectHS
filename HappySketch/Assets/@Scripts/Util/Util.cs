@@ -9,6 +9,15 @@ using UnityEngine;
 
 public static class Util
 {
+    private static readonly Dictionary<Enum, string> enumDict = new Dictionary<Enum, string>();
+    public static string EnumToString(this Enum value)
+    {
+        if (!enumDict.ContainsKey(value))
+            enumDict.Add(value, value.ToString());
+
+        return enumDict[value];
+    }
+
     public static T GetOrAddComponent<T>(GameObject go) where T : Component
     {
         T component = go.GetComponent<T>();

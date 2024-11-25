@@ -9,16 +9,17 @@ TagManager:
   - Ground
   - Booster
   - Item
+  - DestroyObj
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - OverUI
   - Water
   - UI
   - Player
   - Monster
-  - OverUI
+  - 
   - 
   - 
   - 

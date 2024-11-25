@@ -2,33 +2,15 @@
   "Monsters": [
     {
       "DataId": 0,
-      "Name": "ㅁㄴㅇㄹ",
-      "MoveSpeed": 100,
-      "Damage": 0
+      "Name": "Shark",
+      "MoveSpeed": 10.0,
+      "SternTime": 2.0
     },
     {
       "DataId": 1,
-      "Name": "qwer",
-      "MoveSpeed": 1,
-      "Damage": 0
-    },
-    {
-      "DataId": 2,
-      "Name": "asd",
-      "MoveSpeed": 2,
-      "Damage": 0
-    },
-    {
-      "DataId": 3,
-      "Name": "fzxc",
-      "MoveSpeed": 3,
-      "Damage": 0
-    },
-    {
-      "DataId": 4,
-      "Name": "sd",
-      "MoveSpeed": 4,
-      "Damage": 0
+      "Name": "BigShark",
+      "MoveSpeed": 5.0,
+      "SternTime": 3.0
     }
   ]
 }
