@@ -12,7 +12,7 @@ public abstract class PresenterBase
         this.view = view;
         this.model = model;
 
-        view.SetPresenter(this);
+        //view.SetPresenter(this);
     }
 
     public abstract void OnStageInfoUpdate(StageParam param);

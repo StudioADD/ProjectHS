@@ -49,6 +49,11 @@ public class Player : Creature
     private float inputTime = 0f; // 입력시간 
 
     [SerializeField, ReadOnly]
+    private float moveDistance = 5f;
+
+    private float moveSpeed = 5f;
+    private float inputCooldown = 0.5f;
+    [SerializeField, ReadOnly]
     private int _boosterCount = 0; // 부스터 게이지
     public virtual int BoosterCount
     {
@@ -60,8 +65,6 @@ public class Player : Creature
             if (value == _boosterCount)
                 return;
             _boosterCount = value;
-            //(Managers.UI.SceneUI as UI_GameScene).ReceiveData(new UIBoosterCountData(stageType, TeamType, _boosterCount));
-
         }
     }
 
@@ -106,7 +109,7 @@ public class Player : Creature
                 return;
             }
 
-            if (_playerState == value)
+            if (_playerState != EPlayerState.Move &&_playerState == value)
             {
                 return;
             }
@@ -291,6 +294,7 @@ public class Player : Creature
 
             case EStageType.SharkAvoidance: SharkAvoidanceConnectInputActions(isConnect); break;
             case EStageType.CollectingCandy: Stage2ConnectInputActions(isConnect); break;
+                case EStageType.CrossingBridge: Stage3ConnectInputActions(isConnect);break;
                 // 스테이지 추가
         }
     }
@@ -356,13 +360,13 @@ public class Player : Creature
         {
             if (value.y > 0)
             {
-                if (inputTime >= data.inputCooldown)
+                if (inputTime >= inputCooldown)
                 {
                     inputTime = 0f;
                     PlayerState = EPlayerState.Swimming;
                 }
             }
-            else
+            else if (value.x != 0)
             {
                 PlayerState = EPlayerState.Move;
             }
@@ -382,11 +386,12 @@ public class Player : Creature
         {
             return;
         }
-        if (_boosterCount == 3)
+        if (BoosterCount == 3)
         {
             boosterTimer = 0;
             BoosterCount = 0;
-            data.inputCooldown = 0.25f;
+            inputCooldown = 0.25f;
+            onUseBoosterItem();
 
         }
 
@@ -432,6 +437,40 @@ public class Player : Creature
 
     #region stage3
 
+    public void Stage3ConnectInputActions(bool isConnect)
+    {
+        if (isConnect)
+        {
+            if (TeamType == ETeamType.Left)
+            {
+                Managers.Input.OnArrowKeyEntered += OnArrowKeyStage3;
+                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+            }
+            else
+            {
+                Managers.Input.OnWASDKeyEntered += OnArrowKeyStage3;
+                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+            }
+        }
+
+    }
+
+    public void OnArrowKeyStage3(Vector2 value)
+    {
+
+        if (value.x > 0)
+        {
+            // 오른쪽 점프 위치 
+            //targetPostion = 우 
+        }
+        else if (value.x < 0)
+        {
+            // 왼쪽 점프 위치 
+            //targetPostion = 좌
+        }
+
+
+    }
 
     #endregion
     public void OnJumpKey()
@@ -464,12 +503,11 @@ public class Player : Creature
 
     protected virtual void UpdateIdleState()
     {
-
     }
 
     protected virtual void IdleStateExit()
     {
-
+        
     }
     #endregion
 
@@ -504,7 +542,7 @@ public class Player : Creature
         this.transform.position = new Vector3(transform.position.x, beforePosition.y, transform.position.z);
         beforePosition = transform.position;
         targetPosition = transform.position;
-        targetPosition.z -= data.hitBackDistance;
+        targetPosition.z -= 3f;
 
 
     }
@@ -546,7 +584,7 @@ public class Player : Creature
     protected virtual void UpdateDizzState()
     {
         hitTime += Time.deltaTime;
-        if (hitTime >= data.hitInputIgnoreTime - 0.5f)
+        if (hitTime >= 2.5f)
         {
             if (stageType == EStageType.CollectingCandy) // 추후 변경
                 PlayerState = EPlayerState.Run;
@@ -576,7 +614,7 @@ public class Player : Creature
 
     protected virtual void GoBackStateEnter()
     {
-        targetPosition = transform.position + new Vector3(0, 0, data.hitBackDistance);
+        targetPosition = transform.position + new Vector3(0, 0, 3f);
         beforePosition = transform.position;
 
 
@@ -586,7 +624,7 @@ public class Player : Creature
     {
         Movement();
         hitTime += Time.deltaTime;
-        if (hitTime >= data.hitInputIgnoreTime)
+        if (hitTime >= 3f)
         {
             hitTime = -1;
             if (stageType == EStageType.CollectingCandy) // 추후 변경
@@ -625,11 +663,11 @@ public class Player : Creature
         trackNum += (int)moveDirection.x;
         if (moveDirection.y > 0)
         {
-            moveDirection.y *= data.moveSpeed;
+            moveDirection.y *= moveDistance;
         }
 
         beforePosition = transform.position;
-        targetPosition = transform.position + new Vector3(moveDirection.x * data.moveSpeed / 2, 0, moveDirection.y);
+        targetPosition = transform.position + new Vector3(moveDirection.x * moveDistance, 0, moveDirection.y);
 
     }
 
@@ -651,7 +689,7 @@ public class Player : Creature
 
     private void Movement()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 1f);// 1 / data.inputCooldown * Time.deltaTime); // 이동속도 data로 뺄수 있게 해줄것
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);// 1 / data.inputCooldown * Time.deltaTime); // 이동속도 data로 뺄수 있게 해줄것
     }
     #endregion
 
@@ -674,11 +712,11 @@ public class Player : Creature
         trackNum += (int)moveDirection.x;
         if (moveDirection.y > 0)
         {
-            moveDirection.y *= data.moveSpeed;
+            moveDirection.y *= 5;
         }
 
         beforePosition = transform.position;
-        targetPosition = transform.position + new Vector3(moveDirection.x * data.moveSpeed, 0, moveDirection.y);
+        targetPosition = transform.position + new Vector3(moveDirection.x * moveDistance, 0, moveDirection.y);
 
     }
 
@@ -695,7 +733,7 @@ public class Player : Creature
 
     protected virtual void SwimmingStateExit()
     {
-
+        //onMoveEvent();
     }
 
 
@@ -729,10 +767,10 @@ public class Player : Creature
         trackNum += (int)moveDirection.x;
         if (moveDirection.y > 0)
         {
-            moveDirection.y *= data.moveSpeed;
+            moveDirection.y *= moveDistance;
         }
         
-        targetPosition += new Vector3(moveDirection.x, 0, moveDirection.y);
+        targetPosition += new Vector3(moveDirection.x * moveDistance, 0, moveDirection.y);
         this.transform.forward = (targetPosition - this.transform.position).normalized;
         Debug.LogWarning($" targetPosition : {targetPosition}");
     }
@@ -808,7 +846,8 @@ public class Player : Creature
     protected virtual void JumpStateEnter()
     {
         beforePosition = transform.position;
-        targetPosition = transform.position + Vector3.forward * data.moveSpeed; // 추후 이동거리로 뺄것
+        if(targetPosition == Vector3.zero) 
+            targetPosition = transform.position + Vector3.forward * moveDistance; // 추후 이동거리로 뺄것
         // 목표 위치로의 벡터 계산
         Vector3 direction = targetPosition - transform.position;
 
@@ -817,7 +856,7 @@ public class Player : Creature
 
 
         // 최종적으로 물리적인 점프를 위한 속도 계산
-        Vector3 velocity = direction.normalized * distance * data.moveSpeed + Vector3.up * data.jumpForce;
+        Vector3 velocity = direction.normalized * distance * moveDistance + Vector3.up * 5;
         InitRigidVelocityY();
         SetRigidVelocity(velocity);
 
@@ -837,7 +876,7 @@ public class Player : Creature
 
     protected virtual void JumpStateExit()
     {
-
+        targetPosition = Vector3.zero;
     }
     #endregion
 
@@ -912,7 +951,7 @@ public class Player : Creature
     }
     protected void Running()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.01f * data.moveSpeed); // 추후 2스테이지 data로 뺄것
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.01f * moveDistance); // 추후 2스테이지 data로 뺄것
     }
 
 
@@ -994,7 +1033,7 @@ public class Player : Creature
                 }
             }
 
-            if (inputTime < data.inputCooldown)
+            if (inputTime < inputCooldown)
             {
                 inputTime += Time.deltaTime;
             }
@@ -1078,10 +1117,9 @@ public class Player : Creature
         if (boosterTimer >= 0)
         {
             boosterTimer += Time.deltaTime;
-            if (boosterTimer >= data.boosterTime)
+            if (boosterTimer >= 3)
             {
                 boosterTimer = -1;
-                data.inputCooldown = 0.5f;
             }
         }
     }
@@ -1100,6 +1138,7 @@ public class Player : Creature
         else if (other.CompareTag("Booster"))
         {
             BoosterCount++;
+            onAddBoosterItem();
         }
     }
 
