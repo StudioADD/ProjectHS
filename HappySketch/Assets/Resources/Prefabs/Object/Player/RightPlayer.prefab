@@ -1906,7 +1906,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionTrigger: {fileID: 0}
   stageType: 0
+  Body: {fileID: 2763855251503368451}
+  Root: {fileID: 1825053149162484051}
   data:
+    DataId: 0
+    MoveSpeed: 0
+    JumpPower: 0
     TeamType: 0
     TestName: 
     moveSpeed: 0
@@ -1916,7 +1921,7 @@ MonoBehaviour:
     hitInputIgnoreTime: 0
     hitBackDistance: 0
   inputTime: 0
-  _boosterCount: 0
+  moveDistance: 5
   hitTime: -1
   _teamType: 1
   items: []

@@ -4237,7 +4237,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionTrigger: {fileID: 0}
   stageType: 0
+  Body: {fileID: 475486996808424222}
+  Root: {fileID: 4891776208667885881}
   data:
+    DataId: 0
+    MoveSpeed: 0
+    JumpPower: 0
     TeamType: 0
     TestName: 
     moveSpeed: 0
@@ -4247,15 +4252,15 @@ MonoBehaviour:
     hitInputIgnoreTime: 0
     hitBackDistance: 0
   inputTime: 0
-  _boosterCount: 0
+  moveDistance: 5
   hitTime: -1
   _teamType: 0
+  items: []
   trackNum: 2
   IsJump: 0
   isInputRock: 0
   _playerState: 0
   _isPlayerInputControll: 0
-  hitBackDistance: 1
   targetPosition: {x: 0, y: 0, z: 0}
   beforePosition: {x: 0, y: 0, z: 0}
 --- !u!54 &-5495427387872469524
