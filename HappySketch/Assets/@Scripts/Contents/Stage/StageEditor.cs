@@ -71,6 +71,7 @@ public class StageEditor : InitBase
 
     public void PlayStage()
     {
+        LightingController.SetStageLighting(StageType);
         playerStartPoint = Util.FindChild<Transform>(currStage.gameObject, "PlayerStartPoint", true);
 
         player = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/LeftPlayer").GetComponent<Player>();
