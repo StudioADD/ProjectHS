@@ -16,9 +16,9 @@ public class CameraEditor : TeamCamera
 
     [Space(10f)] 
     [Range(0f, 180f)]   [SerializeField] float fieldOfView = 60f;
-    [Range(5f, 15f)]    [SerializeField] float targetDistance = 5f;
-    [Range(-10f, 10f)]  [SerializeField] float cameraHeight = 5f;
-    [Range(-10f, 10f)]  [SerializeField] float lookAtHeight = 0f;
+    [Range(5f, 20f)]    [SerializeField] float targetDistance = 5f;
+    [Range(-10f, 30f)]  [SerializeField] float cameraHeight = 5f;
+    [Range(-10f, 40f)]  [SerializeField] float lookAtHeight = 0f;
     [Range(0f, 20f)]    [SerializeField] float nearClipping = 0.3f;
     [Range(20f, 1000f)] [SerializeField] float farClipping = 1000f;
 
@@ -74,6 +74,10 @@ public class CameraEditor : TeamCamera
         cameraInfoData.lookAtHeight = lookAtHeight;
         cameraInfoData.nearClipping = nearClipping;
         cameraInfoData.farClipping = farClipping;
+
+        cam.fieldOfView = cameraInfoData.fieldOfView;
+        cam.nearClipPlane = cameraInfoData.nearClipping;
+        cam.farClipPlane = cameraInfoData.farClipping;
     }
 
     public bool LoadCameraInfo()
