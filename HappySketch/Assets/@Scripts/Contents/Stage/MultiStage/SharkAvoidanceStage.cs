@@ -53,4 +53,6 @@ public class SharkAvoidanceStage : MultiStage
         else
             Debug.LogWarning($"FinishLineObject is Null!!");
     }
+
+    // Coroutine coStage
 }

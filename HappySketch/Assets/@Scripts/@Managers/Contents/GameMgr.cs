@@ -31,6 +31,11 @@ public class GameMgr
         Clear();
     }
 
+    public EStageType GetCurrStageType()
+    {
+        return (EStageType)currStageId;
+    }
+    
     public void SetStageInfo()
     {
         currStageId++;
