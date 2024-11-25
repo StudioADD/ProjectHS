@@ -27,10 +27,6 @@ public class CollectCandyView : ViewBase
         this.score.text = score.ToString();
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="itemType"></param>
     public void UpdateItemCount(EItemType itemType, int itemCount)
     {
         if (itemType < 0 && (int)itemType >= this.itemCount.Length)

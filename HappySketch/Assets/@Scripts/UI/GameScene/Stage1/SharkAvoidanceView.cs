@@ -18,10 +18,16 @@ public class SharkAvoidanceView : ViewBase
     private Image rightImage;
 
     [SerializeField]
-    private Image boosterImage;
+    private Image[] activeBoosterImage;
 
     [SerializeField]
-    private Image[] items;
+    private Image inactiveBoosterImage;
+
+    [SerializeField]
+    private Image[] activeItems;
+
+    [SerializeField]
+    private Image[] inactiveItems;
 
     private float progressingWidth;
     private RectTransform leftRectTransfrom;
@@ -43,6 +49,13 @@ public class SharkAvoidanceView : ViewBase
         leftImgWidth = leftImage.GetComponent<RectTransform>().rect.width;
         rightImgWidth = rightImage.GetComponent<RectTransform>().rect.width;
 
+        DeActivateBoosterImage();
+        SetActiveActiveItemsImage(false);
+        SetActiveInActiveItemsImage(false);
+        UpdateLeftProgressRatio(0f);
+        UpdateRightProgressRatio(0f);
+        UpdateProgressingBar(0f);
+
         return true;
     }
 
@@ -50,17 +63,24 @@ public class SharkAvoidanceView : ViewBase
     {
         Debug.Log($"아이템 개수: {count}");
 
-        if (count == 0) DeActivateBoosterImage();
-        else if (count == 3) ActivateBoosterImage();
-
-        for (int i = 0; i < count; ++i)
+        if (count == 0)
         {
-            items[i].gameObject.SetActive(true);
+            DeActivateBoosterImage();
+            SetActiveInActiveItemsImage(false);
+            SetActiveActiveItemsImage(false);
         }
-
-        for (int i = count; i < items.Length; ++i)
+        else if (count == 3)
         {
-            items[i].gameObject.SetActive(false);
+            ActivateBoosterImage();
+            SetActiveInActiveItemsImage(false);
+            SetActiveActiveItemsImage(true);
+        }
+        else
+        {
+            for (int i = 0; i < count; ++i)
+            {
+                inactiveItems[i].gameObject.SetActive(true);
+            }
         }
     }
 
@@ -81,11 +101,37 @@ public class SharkAvoidanceView : ViewBase
 
     private void ActivateBoosterImage()
     {
-        boosterImage.color = Color.white;
+        foreach(Image image in activeBoosterImage)
+        {
+            image.gameObject.SetActive(true);
+        }
+
+        inactiveBoosterImage.gameObject.SetActive(false);
     }
 
     private void DeActivateBoosterImage()
     {
-        boosterImage.color = Color.gray;
+        foreach(Image image in activeBoosterImage)
+        {
+            image.gameObject.SetActive(false);
+        }
+
+        inactiveBoosterImage.gameObject.SetActive(true);
+    }
+
+    private void SetActiveInActiveItemsImage(bool isActive)
+    {
+        foreach (Image image in inactiveItems)
+        {
+            image.gameObject.SetActive(isActive);
+        }
+    }
+
+    private void SetActiveActiveItemsImage(bool isActive)
+    {
+        foreach (Image image in activeItems)
+        {
+            image.gameObject.SetActive(isActive);
+        }
     }
 }
