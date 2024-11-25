@@ -56,6 +56,8 @@ public class TeamCamera : InitBase
     {
         LoadCameraDataInfo(stageType);
         cam.fieldOfView = cameraInfoData.fieldOfView;
+        cam.nearClipPlane = cameraInfoData.nearClipping;
+        cam.farClipPlane = cameraInfoData.farClipping;
     }
 
     public virtual void SetTarget(BaseObject target)
