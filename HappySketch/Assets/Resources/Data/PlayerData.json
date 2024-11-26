@@ -1,24 +1,19 @@
-{
+﻿{
   "Players": [
     {
-      "TeamType": 0,
-      "TestName": "asdf",
-      "moveSpeed": 10,
-      "jumpForce": 5,
-      "inputCooldown": 0.5,
-      "boosterTime": 5,
-      "hitInputIgnoreTime": 3,
-      "hitBackDistance": 3
+      "DataId": 0,
+      "MoveSpeed": 10.0,
+      "JumpPower": 0.0
     },
     {
-      "TeamType": 1,
-      "TestName": "asdf",
-      "moveSpeed": 10,
-      "jumpForce": 5,
-      "inputCooldown": 0.5,
-      "boosterTime": 5,
-      "hitInputIgnoreTime": 3,
-      "hitBackDistance": 3
+      "DataId": 1,
+      "MoveSpeed": 10.0,
+      "JumpPower": 5.0
+    },
+    {
+      "DataId": 2,
+      "MoveSpeed": 1.0,
+      "JumpPower": 5.0
     }
   ]
 }

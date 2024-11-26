@@ -194,6 +194,7 @@ public class Player : Creature
 
     public override void SetInfo(int templateID = 0)
     {
+        stageType = (EStageType)templateID;
         data = Managers.Data.PlayerDict[(int)stageType];
         switch (stageType)
         {
@@ -203,8 +204,8 @@ public class Player : Creature
                 targetPosition = transform.position;
                 targetPosition.z += 1000;
                 break; // 추후 스테이지2 나오면  바꿔야함
-            case EStageType.SharkAvoidance: 
-                PlayerState =  EPlayerState.Idle;
+            case EStageType.SharkAvoidance:
+                PlayerState = EPlayerState.Idle;
                 break;
         }
         IsPlayerInputControll = true;
@@ -519,14 +520,14 @@ public class Player : Creature
         {
             case EStageType.CollectingCandy:
                 StartCoroutine(CoBlinkingEffect());
-               
+
                 break;
             case EStageType.SharkAvoidance:
                 PlayerState = EPlayerState.Hit;
                 break;
 
         }
-        
+
     }
     protected virtual bool HitStateCondition()
     {
@@ -720,7 +721,7 @@ public class Player : Creature
 
     private void Movement()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, data.moveSpeed * Time.deltaTime);// 1 / data.inputCooldown * Time.deltaTime); // 이동속도 data로 뺄수 있게 해줄것
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, data.MoveSpeed * Time.deltaTime);// 1 / data.inputCooldown * Time.deltaTime); // 이동속도 data로 뺄수 있게 해줄것
     }
     #endregion
 
@@ -878,8 +879,12 @@ public class Player : Creature
     protected virtual void JumpStateEnter()
     {
         beforePosition = transform.position;
-        if (targetPosition == Vector3.zero)
-            targetPosition = transform.position + Vector3.forward * moveDistance; // 추후 이동거리로 뺄것
+        targetPosition = transform.position + Vector3.forward * data.MoveSpeed; // 추후 이동거리로 뺄것
+        if (false)
+        {
+            //targetPosition 받아올것
+        }
+
         // 목표 위치로의 벡터 계산
         Vector3 direction = targetPosition - transform.position;
 
@@ -888,7 +893,7 @@ public class Player : Creature
 
 
         // 최종적으로 물리적인 점프를 위한 속도 계산
-        Vector3 velocity = direction.normalized * distance * moveDistance + Vector3.up * 5;
+        Vector3 velocity = direction.normalized * distance * moveDistance + Vector3.up * data.JumpPower;
         InitRigidVelocityY();
         SetRigidVelocity(velocity);
 
@@ -921,31 +926,31 @@ public class Player : Creature
 
     protected virtual void LandingStateEnter()
     {
+        InitRigidVelocity();
+
 
     }
 
     protected virtual void UpdateLandingState()
     {
-
         if (IsEndCurrentState(PlayerState))
-        {
             switch (stageType)
             {
-                case EStageType.None:
-                case EStageType.SharkAvoidance:
                 case EStageType.CrossingBridge:
                     PlayerState = EPlayerState.Idle; break;
 
                 case EStageType.CollectingCandy: PlayerState = EPlayerState.Run; break;
             }
 
-        }
+
+
 
     }
 
 
     protected virtual void LandingStateExit()
     {
+
         IsJump = false;
     }
     #endregion
@@ -961,8 +966,8 @@ public class Player : Creature
     {
 
         beforePosition = transform.position;
-        targetPosition = new Vector3(0, transform.position.y, 1000); // 추후 트랙 끝 position 받아올것
-
+        targetPosition = new Vector3(transform.position.x, transform.position.y, 1000); // 추후 트랙 끝 position 받아올것
+        //Running();
     }
 
     protected virtual void UpdateRunState()
@@ -1005,6 +1010,7 @@ public class Player : Creature
     protected virtual void UpdateLeftCollectState()
     {
 
+        Running();
         //수집 시 필요한거 
         if (IsEndCurrentState(PlayerState))
         {
@@ -1033,7 +1039,7 @@ public class Player : Creature
 
     protected virtual void UpdateRightCollectState()
     {
-
+        Running();
         //수집 시 필요한거 
         if (IsEndCurrentState(PlayerState))
         {
@@ -1207,6 +1213,9 @@ public class Player : Creature
             items.Remove(other.gameObject);
         }
     }
-
+    private void OnDestroy()
+    {
+        UnConnectInputActions();
+    }
 
 }

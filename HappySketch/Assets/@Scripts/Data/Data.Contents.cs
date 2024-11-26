@@ -14,15 +14,6 @@ namespace Data
         public float JumpPower;
 
 
-        public int TeamType;
-        public string TestName;
-        public float moveSpeed;
-        public float jumpForce;
-
-        public float inputCooldown; // stage1 전진 쿨다운
-        public float boosterTime; // stage1 부스터 시간
-        public float hitInputIgnoreTime; // stage1 stage2 hit 시간
-        public float hitBackDistance; // hit시 뒤로 밀려나는 거리
     }
 
     public class PlayerDataLoader : ILoader<int, JPlayerData>
@@ -32,8 +23,8 @@ namespace Data
         public Dictionary<int, JPlayerData> MakeDict()
         {
             Dictionary<int, JPlayerData> PlayerDict = new Dictionary<int, JPlayerData>();
-            foreach (JPlayerData test in Players)
-                PlayerDict.Add(test.TeamType, test);
+            foreach (JPlayerData player in Players)
+                PlayerDict.Add(player.DataId, player);
             return PlayerDict;
         }
     }
