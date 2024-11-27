@@ -22,7 +22,10 @@ public class SharkAvoidanceStage : MultiStage
 
     [field: SerializeField, ReadOnly]
     List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
-    
+
+    [SerializeField, ReadOnly] 
+    SharkAvoidanceParam sharkAvoidanceParam = null;
+
     protected override void Reset()
     {
         base.Reset();
@@ -51,7 +54,7 @@ public class SharkAvoidanceStage : MultiStage
     {
         base.SetInfo(player);
 
-
+        sharkAvoidanceParam = new SharkAvoidanceParam(TeamType, 1f, 0);
     }
 
     public override void StartStage()
@@ -81,8 +84,9 @@ public class SharkAvoidanceStage : MultiStage
         while (Managers.Game.IsGamePlay)
         {
             EStageSection stageSection = CheckStageSection();
+            OnReceiveStageParamCallBack(sharkAvoidanceParam);
 
-            switch(stageSection)
+            switch (stageSection)
             {
                 case EStageSection.Level1:
                     SpawnMonster(UnityEngine.Random.Range(1, 3));
@@ -108,13 +112,14 @@ public class SharkAvoidanceStage : MultiStage
         float stageLength = Mathf.Abs(finishLineObject.transform.position.z - playerStartPoint.position.z);
         float goalLength = Mathf.Abs(finishLineObject.transform.position.z - player.transform.position.z);
 
-        int goalPercent = (int)(goalLength / stageLength * 100); // 0 ~ 100
+        sharkAvoidanceParam.CurrDisRatio = goalLength / stageLength;
+        int goalPercent = (int)(sharkAvoidanceParam.CurrDisRatio * 100); // 0 ~ 100
 
-        if (goalPercent > 90) // 테스트
+        if (goalPercent > 99) // 테스트
             return EStageSection.Level1; // EStageSection.None;
-        else if (goalPercent > 45)
+        else if (goalPercent > 50)
             return EStageSection.Level1;
-        else // 55 ~ 100
+        else
             return EStageSection.Level2;
     }
 
@@ -141,7 +146,7 @@ public class SharkAvoidanceStage : MultiStage
                         int spawnPointNum1 = UnityEngine.Random.Range(0, 4) * 2;
                         int spawnPointNum2 = spawnPointNum1 + (UnityEngine.Random.Range(1, 4) * 2);
                         if(spawnPointNum2 >= spawnPointList.Count)
-                            spawnPointNum2 -= spawnPointList.Count;
+                            spawnPointNum2 -= spawnPointList.Count + 1;
 
                         MonsterCreater.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum1].transform.position);
                         MonsterCreater.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum2].transform.position);
@@ -165,11 +170,11 @@ public class SharkAvoidanceStage : MultiStage
                     {
                         int spawnExceptionNum = UnityEngine.Random.Range(0, 4) * 2;
 
-                        for(int i = 0; i < 3; i++)
+                        for(int i = 1; i <= 3; i++)
                         {
                             int spawnPointNum = spawnExceptionNum + (i * 2);
                             if (spawnPointNum >= spawnPointList.Count)
-                                spawnPointNum -= spawnPointList.Count - 1;
+                                spawnPointNum -= spawnPointList.Count + 1;
 
                             MonsterCreater.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum].transform.position);
                         }

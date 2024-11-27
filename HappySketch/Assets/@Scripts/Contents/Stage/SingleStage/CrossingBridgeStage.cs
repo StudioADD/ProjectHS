@@ -27,7 +27,7 @@ public class CrossingBridgeStage : SingleStage
         base.Reset();
 
         finishLineObject = Util.FindChild<FinishLineObject>(gameObject, "FinishLineObject", false);
-        platformGroup = Util.FindChild<PlatformGroup>(gameObject);
+        platformGroup = Util.FindChild< PlatformGroup>(gameObject);
     }
 
     public override bool Init()

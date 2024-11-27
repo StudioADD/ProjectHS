@@ -13,7 +13,11 @@ public abstract class MultiStage : BaseStage
     [SerializeField, ReadOnly] protected Player player;
 
     public event Action<StageParam> OnReceiveStageParam;
-    protected StageParam stageParam = null; // 임시
+
+    protected void OnReceiveStageParamCallBack(StageParam stageParam)
+    {
+        OnReceiveStageParam?.Invoke(stageParam);
+    }
 
     public override bool Init()
     {
@@ -27,6 +31,8 @@ public abstract class MultiStage : BaseStage
     {
         StageType = Managers.Game.GetCurrStageType();
         this.player = player;
+
+        TeamType = player.TeamType;
     }
 
     public override void StartStage()
