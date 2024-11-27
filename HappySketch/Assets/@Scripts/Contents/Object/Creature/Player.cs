@@ -46,10 +46,9 @@ public class Player : Creature
     private EStageType stageType;
 
     [SerializeField]
-    private GameObject Body;
+    private GameObject[] Body = new GameObject[3];
 
-    [SerializeField]
-    private GameObject Root;
+
 
 
     [SerializeField, ReadOnly] private JPlayerData data = null;
@@ -110,6 +109,7 @@ public class Player : Creature
             {
                 return;
             }
+
 
             bool isChangeState = true;
             switch (value)
@@ -204,7 +204,7 @@ public class Player : Creature
                 targetPosition = transform.position;
                 targetPosition.z += 1000;
                 break; // 추후 스테이지2 나오면  바꿔야함
-            case EStageType.SharkAvoidance:
+            default:
                 PlayerState = EPlayerState.Idle;
                 break;
         }
@@ -345,7 +345,7 @@ public class Player : Creature
 
     public void OnArrowKeySharkAvoidance(Vector2 value)
     {
-
+        Debug.LogWarning(value);
         if (isInputRock)
         {
             return;
@@ -362,9 +362,9 @@ public class Player : Creature
 
         if (PlayerState == EPlayerState.Idle)
         {
-            if (value.y > 0)
+            if (value.x == 0)
             {
-                if (inputTime >= inputCooldown)
+                if (value.y > 0 && inputTime >= inputCooldown)
                 {
                     inputTime = 0f;
                     PlayerState = EPlayerState.Swimming;
@@ -372,7 +372,10 @@ public class Player : Creature
             }
             else if (value.x != 0)
             {
-                PlayerState = EPlayerState.Move;
+                if (value.y > 0)
+                    PlayerState = EPlayerState.MoveSwimming;
+                else
+                    PlayerState = EPlayerState.Move;
             }
         }
         else
@@ -497,8 +500,6 @@ public class Player : Creature
 
     protected virtual void IdleStateEnter()
     {
-        InitRigidVelocityX();
-        beforePosition = transform.position;
 
     }
 
@@ -548,16 +549,13 @@ public class Player : Creature
         isInputRock = true;
         hitTime = 0;
 
-        if (transform.position != targetPosition)
-        {
-            transform.position = beforePosition;
-        }
+
 
 
         // 뒤로 밀려나기
-        this.transform.position = new Vector3(transform.position.x, beforePosition.y, transform.position.z);
+        targetPosition = new Vector3(beforePosition.x, beforePosition.y, beforePosition.z);
         beforePosition = transform.position;
-        targetPosition = transform.position;
+
         targetPosition.z -= 3f;
 
 
@@ -586,13 +584,16 @@ public class Player : Creature
         WaitForSeconds wait = new WaitForSeconds(0.1f);
         while (time <= 3f)
         {
-            Body.SetActive(!Body.activeSelf);
-            Root.SetActive(!Root.activeSelf);
-            time += 0.1f;
+            foreach (GameObject go in Body)
+            {
+                go.SetActive(!go.activeSelf);
+            }
             yield return wait;
         }
-        Body.SetActive(true);
-        Root.SetActive(true);
+        foreach (GameObject go in Body)
+        {
+            go.SetActive(true);
+        }
     }
 
     #endregion
@@ -697,10 +698,11 @@ public class Player : Creature
         {
             moveDirection.y *= moveDistance;
         }
-
+        Debug.LogWarning(moveDirection);
+        Debug.LogWarning(transform.position);
         beforePosition = transform.position;
         targetPosition = transform.position + new Vector3(moveDirection.x * moveDistance, 0, moveDirection.y);
-
+        Debug.LogWarning(targetPosition);
     }
 
     protected virtual void UpdateMoveState()
@@ -708,6 +710,7 @@ public class Player : Creature
         Movement();
         if (transform.position == targetPosition)
         {
+            Debug.LogWarning(targetPosition);
             PlayerState = EPlayerState.Idle;
         }
 
@@ -776,6 +779,7 @@ public class Player : Creature
     protected virtual bool MoveSwimmingStateCondition()
     {
 
+
         if (trackNum + (int)moveDirection.x < 0 || trackNum + (int)moveDirection.x > 3)
         {
             return false;
@@ -788,6 +792,15 @@ public class Player : Creature
         {
             return false;
         }
+        if(targetPosition.z != transform.position.z)
+        {
+            moveDirection.y = 0;
+        }
+        if(targetPosition.x != transform.position.x)
+        {
+            moveDirection.x = 0;
+        }
+
 
 
         return true;
@@ -796,15 +809,22 @@ public class Player : Creature
     protected virtual void MoveSwimmingStateEnter()
     {
         isInputRock = true;
-        trackNum += (int)moveDirection.x;
-        if (moveDirection.y > 0)
+        float x = 0, z = 0;
+        if (targetPosition.z == transform.position.z)
         {
-            moveDirection.y *= moveDistance;
+            z = moveDirection.y * moveDistance;
+        }
+        else
+        {
+            trackNum +=(int) moveDirection.x;
+            x = moveDirection.x * moveDistance;
         }
 
-        targetPosition += new Vector3(moveDirection.x * moveDistance, 0, moveDirection.y);
+
+
+        targetPosition += new Vector3(x, 0, z);
         this.transform.forward = (targetPosition - this.transform.position).normalized;
-        Debug.LogWarning($" targetPosition : {targetPosition}");
+        //Debug.LogWarning($" targetPosition : {targetPosition}");
     }
 
     protected virtual void UpdateMoveSwimmingState()
