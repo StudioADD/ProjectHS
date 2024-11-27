@@ -11,11 +11,8 @@ public enum EEffectType
 public class EffectObject : BaseObject
 {
     [SerializeField, ReadOnly]
-    List<ParticleSystem> particleList = new List<ParticleSystem>();
+    protected List<ParticleSystem> particleList = new List<ParticleSystem>();
 
-    [SerializeField, ReadOnly] float maxDuration = 0;
-
-    [System.Obsolete]
     protected virtual void Reset()
     {
         Transform[] myChildren = this.GetComponentsInChildren<Transform>();
@@ -25,8 +22,6 @@ public class EffectObject : BaseObject
             if (child.TryGetComponent<ParticleSystem>(out ParticleSystem particle))
             {
                 particleList.Add(particle);
-                float time = (particle.duration + particle.startDelay);
-                maxDuration = Mathf.Max(maxDuration, time);
             }
         }
     }
@@ -52,10 +47,4 @@ public class EffectObject : BaseObject
 
     }
 
-    IEnumerator CoWaitEndEffect()
-    {
-        yield return new WaitForSeconds(maxDuration);
-
-        Managers.Resource.Destroy(gameObject);
-    }
 }
