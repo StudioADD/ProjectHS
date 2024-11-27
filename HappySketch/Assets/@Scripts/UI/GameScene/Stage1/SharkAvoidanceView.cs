@@ -86,6 +86,7 @@ public class SharkAvoidanceView : ViewBase
 
     public void UpdateLeftProgressRatio(float ratio)
     {
+        Debug.Log($"hahahah : {ratio}");
         leftRectTransfrom.anchoredPosition = new Vector3(progressingWidth * ratio - leftImgWidth / 2.2f, leftRectTransfrom.anchoredPosition.y);
     }
 
@@ -133,5 +134,10 @@ public class SharkAvoidanceView : ViewBase
         {
             image.gameObject.SetActive(isActive);
         }
+    }
+
+    public float GetProgressRatio()
+    {
+        return progressing.fillAmount;
     }
 }
