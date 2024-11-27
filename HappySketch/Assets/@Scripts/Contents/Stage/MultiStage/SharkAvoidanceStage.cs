@@ -23,7 +23,7 @@ public class SharkAvoidanceStage : MultiStage
     [field: SerializeField, ReadOnly]
     List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
 
-    [SerializeField, ReadOnly] 
+    [field: SerializeField, ReadOnly] 
     SharkAvoidanceParam sharkAvoidanceParam = null;
 
     protected override void Reset()
@@ -84,6 +84,11 @@ public class SharkAvoidanceStage : MultiStage
         while (Managers.Game.IsGamePlay)
         {
             EStageSection stageSection = CheckStageSection();
+            
+            // 테스트(임시)
+            sharkAvoidanceParam.BoosterCount++;
+            if (sharkAvoidanceParam.BoosterCount == 4)
+                sharkAvoidanceParam.BoosterCount = 0;
             OnReceiveStageParamCallBack(sharkAvoidanceParam);
 
             switch (stageSection)
@@ -107,6 +112,17 @@ public class SharkAvoidanceStage : MultiStage
         coSpawnMonster = null;
     }
 
+    protected override IEnumerator CoReceiveStageParam()
+    {
+        while(true)
+        {
+
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        coReceiveStageParam = null;
+    }
+
     private EStageSection CheckStageSection()
     {
         float stageLength = Mathf.Abs(finishLineObject.transform.position.z - playerStartPoint.position.z);
@@ -114,6 +130,7 @@ public class SharkAvoidanceStage : MultiStage
 
         sharkAvoidanceParam.CurrDisRatio = goalLength / stageLength;
         int goalPercent = (int)(sharkAvoidanceParam.CurrDisRatio * 100); // 0 ~ 100
+        sharkAvoidanceParam.CurrDisRatio = Mathf.Abs(sharkAvoidanceParam.CurrDisRatio - 1);
 
         if (goalPercent > 99) // 테스트
             return EStageSection.Level1; // EStageSection.None;

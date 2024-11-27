@@ -46,4 +46,10 @@ public abstract class MultiStage : BaseStage
     }
 
     public Vector3 GetStartPoint() => playerStartPoint.position;
+
+    protected Coroutine coReceiveStageParam = null;
+    protected virtual IEnumerator CoReceiveStageParam() 
+    {     
+        yield return null;
+    }
 }

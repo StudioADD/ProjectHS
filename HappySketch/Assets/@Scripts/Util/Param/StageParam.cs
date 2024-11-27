@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
+[Serializable]
 public class StageParam 
 {
     public ETeamType TeamType;
@@ -14,6 +15,7 @@ public class StageParam
     }
 }
 
+[Serializable]
 public class SharkAvoidanceParam : StageParam
 {
     public float CurrDisRatio; // 0 ~ 1
@@ -27,6 +29,7 @@ public class SharkAvoidanceParam : StageParam
     }
 }
 
+[Serializable]
 public class CollectingCandyParam : StageParam
 {
     public int[] CandyItems;
@@ -40,6 +43,7 @@ public class CollectingCandyParam : StageParam
     }
 }
 
+[Serializable]
 public class CrossingBridgeParam : StageParam
 {
     public bool isHaveGoggle;
