@@ -20,4 +20,10 @@ public class CandyItem : BaseItem
 
         return true;
     }
+
+    public override void SetInfo(EItemType itemType)
+    {
+
+
+    }
 }

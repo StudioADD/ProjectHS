@@ -9720,6 +9720,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2534209590926565114}
+  - component: {fileID: 3794560849352943257}
   m_Layer: 0
   m_Name: ItemGainEffect
   m_TagString: Untagged
@@ -9743,6 +9744,26 @@ Transform:
   - {fileID: 8169935608285484659}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3794560849352943257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4177780339709550915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2453ab2bbe8e0154c9b23c511cf88c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleList:
+  - {fileID: 9204627964833261235}
+  - {fileID: 1984711848660388560}
+  - {fileID: 6994358016080901716}
+  - {fileID: 3843904555450068461}
+  - {fileID: 528815339854446333}
+  - {fileID: 5185812797677614009}
+  maxDuration: 1.65
 --- !u!1 &5017115458027817410
 GameObject:
   m_ObjectHideFlags: 0

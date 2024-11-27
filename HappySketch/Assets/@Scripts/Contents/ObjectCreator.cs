@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public static class ObjectCreator
 {
@@ -60,10 +61,34 @@ public static class ObjectCreator
     public static T SpawnItem<T>(EItemType itemType, Vector3 spawnPosition) where T : BaseItem
     {
         string name = Util.EnumToString(itemType);
-        BaseItem item = null;
+        BaseItem item = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_ITEM_PATH}/{name}").GetComponent<BaseItem>();
 
+        if (item == null)
+        {
+            Debug.LogWarning($"아이템 스폰 실패 : {name}");
+            return null;
+        }
 
-
+        item.transform.parent = ItemRoot.transform.transform;
+        item.transform.localPosition = spawnPosition;
+        item.SetInfo(itemType); // ItemParam 고려
         return item as T;
+    }
+
+    public static T SpawnEffect<T>(EEffectType effectType, Vector3 spawnPosition) where T : EffectObject
+    {
+        string name = Util.EnumToString(effectType);
+        EffectObject effect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/{name}").GetComponent<EffectObject>();
+
+        if (effect == null)
+        {
+            Debug.LogWarning($"이펙트 스폰 실패 : {name}");
+            return null;
+        }
+
+        effect.transform.parent = EffectRoot.transform.transform;
+        effect.transform.localPosition = spawnPosition;
+        effect.SetInfo(); // 인자 생기면 EffectParam 고려
+        return effect as T;
     }
 }

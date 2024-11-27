@@ -14,7 +14,7 @@ public enum EItemType
     Max
 }
 
-public class BaseItem : BaseObject
+public abstract class BaseItem : BaseObject
 {
     protected EItemType itemType = EItemType.Max;
 
@@ -28,8 +28,5 @@ public class BaseItem : BaseObject
         return true;
     }
 
-    public virtual void SetInfo()
-    {
-
-    }
+    public abstract void SetInfo(EItemType itemType);
 }

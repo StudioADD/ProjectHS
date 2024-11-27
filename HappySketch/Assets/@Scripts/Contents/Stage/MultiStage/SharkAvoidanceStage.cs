@@ -117,6 +117,11 @@ public class SharkAvoidanceStage : MultiStage
     {
         while(Managers.Game.IsGamePlay)
         {
+
+            float stageLength = Mathf.Abs(finishLineObject.transform.position.z - playerStartPoint.position.z);
+            float goalLength = Mathf.Abs(finishLineObject.transform.position.z - player.transform.position.z);
+            sharkAvoidanceParam.CurrDisRatio = Mathf.Abs(goalLength / stageLength - 1);
+
             OnReceiveStageParamCallBack(sharkAvoidanceParam);
             yield return new WaitForSeconds(0.5f);
         }
@@ -126,16 +131,11 @@ public class SharkAvoidanceStage : MultiStage
 
     private EStageSection CheckStageSection()
     {
-        float stageLength = Mathf.Abs(finishLineObject.transform.position.z - playerStartPoint.position.z);
-        float goalLength = Mathf.Abs(finishLineObject.transform.position.z - player.transform.position.z);
-
-        sharkAvoidanceParam.CurrDisRatio = goalLength / stageLength;
         int goalPercent = (int)(sharkAvoidanceParam.CurrDisRatio * 100); // 0 ~ 100
-        sharkAvoidanceParam.CurrDisRatio = Mathf.Abs(sharkAvoidanceParam.CurrDisRatio - 1);
 
-        if (goalPercent > 99) // 테스트
+        if (goalPercent < 1) // 테스트
             return EStageSection.Level1; // EStageSection.None;
-        else if (goalPercent > 50)
+        else if (goalPercent < 50)
             return EStageSection.Level1;
         else
             return EStageSection.Level2;
