@@ -17,9 +17,9 @@ public static class MonsterCreater
     }
     #endregion
 
-    public static T SpawnMonster<T>() where T : BaseMonster
+    public static T SpawnMonster<T>(EMonsterType monsterType, Vector3 spawnPosition) where T : BaseMonster
     {
-        string name = typeof(T).Name;
+        string name = Util.EnumToString(monsterType);
         BaseMonster monster = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_MONSTER_PATH}/{name}").GetComponent<BaseMonster>();
 
         if(monster == null)
@@ -29,6 +29,8 @@ public static class MonsterCreater
         }
 
         monster.transform.parent = MonsterRoot.transform.transform;
+        monster.transform.localPosition = spawnPosition;
+        monster.SetInfo((int)monsterType);
         return monster as T;
     }
 }

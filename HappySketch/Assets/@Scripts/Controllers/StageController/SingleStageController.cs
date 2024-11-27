@@ -15,18 +15,26 @@ public class SingleStageController : BaseStageController
         return true;
     }
 
-    public override void SetInfo(EStageType stageType)
+    public override void SetInfo(EStageType stageType, Player leftPlayer, Player rightPlayer)
     {
-        base.SetInfo(stageType);
+        base.SetInfo(stageType, leftPlayer, rightPlayer);
 
         string prefabPath = $"{PrefabPath.STAGE_PATH}/{stageType}";
         singleStage = Managers.Resource.Instantiate(prefabPath, this.transform).GetComponent<SingleStage>();
         singleStage.transform.position = Vector3.zero;
+
+        SetPlayerPosition(leftPlayer, rightPlayer);
+        singleStage.SetInfo(leftPlayer, rightPlayer);
     }
 
-    public override void ConnectEvents(Player leftPlayer, Player rightPlayer)
+    public override void StartStage()
     {
+        singleStage.StartStage();
+    }
 
+    public override void ConnectEvents()
+    {
+        singleStage.ConnectEvents(EndStage);
     }
 
     public override Vector3 GetStagePlayerStartPos(ETeamType teamType)

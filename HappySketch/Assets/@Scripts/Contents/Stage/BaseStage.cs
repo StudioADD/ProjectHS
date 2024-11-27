@@ -40,5 +40,5 @@ public abstract class BaseStage : InitBase
         return true;
     }
 
-    public virtual void SetInfo(Player player = null) { }
+    public abstract void StartStage();
 }

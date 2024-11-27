@@ -9,17 +9,31 @@ using static Define;
 /// </summary>
 public abstract class MultiStage : BaseStage
 {
+    [SerializeField, ReadOnly] protected Player player;
+
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
 
-        
-
         return true;
     }
 
-    public abstract void ConnectEvents(Action<ETeamType> onEndGameCallBack);
+    public virtual void SetInfo(Player player)
+    {
+        StageType = Managers.Game.GetCurrStageType();
+        this.player = player;
+    }
+
+    public override void StartStage()
+    {
+        player.SetInfo((int)StageType);
+    }
+
+    public virtual void ConnectEvents(Action<ETeamType> onEndGameCallBack)
+    {
+
+    }
 
     public Vector3 GetStartPoint() => playerStartPoint.position;
 }

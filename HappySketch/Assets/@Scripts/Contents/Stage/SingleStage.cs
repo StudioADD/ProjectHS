@@ -9,6 +9,9 @@ using static Define;
 /// </summary>
 public abstract class SingleStage : BaseStage
 {
+    [SerializeField, ReadOnly] protected Player leftPlayer;
+    [SerializeField, ReadOnly] protected Player rightPlayer;
+
     public override bool Init()
     {
         if (base.Init() == false)
@@ -17,6 +20,21 @@ public abstract class SingleStage : BaseStage
         return true;
     }
 
+    public virtual void SetInfo(Player leftPlayer, Player rightPlayer)
+    {
+        StageType = Managers.Game.GetCurrStageType();
+
+        this.leftPlayer = leftPlayer;
+        this.rightPlayer = rightPlayer;
+    }
+
+    public override void StartStage()
+    {
+        leftPlayer.SetInfo((int)StageType);
+        rightPlayer.SetInfo((int)StageType);
+    }
+
     public abstract void ConnectEvents(Action<ETeamType> onEndGameCallBack);
+
     public abstract Vector3 GetStartPoint(ETeamType teamType);
 }

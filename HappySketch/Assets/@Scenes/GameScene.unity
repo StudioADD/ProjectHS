@@ -516,8 +516,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageController: {fileID: 0}
   cameraGroupController: {fileID: 575619666}
-  leftPlayer: {fileID: 0}
-  rightPlayer: {fileID: 0}
 --- !u!1 &1881109159
 GameObject:
   m_ObjectHideFlags: 0
@@ -1051,6 +1049,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ead10547cd6e6e4daf17bcdbdcab07f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stageInstructionWindow: {fileID: 0}
 --- !u!224 &5015858522216215145
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1190,10 +1189,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5813657533237236193}
+  - component: {fileID: 4928105179659095066}
   - component: {fileID: 380109043277741077}
   - component: {fileID: 6933680896999052060}
   - component: {fileID: 132766041065488057}
-  - component: {fileID: 4928105179659095066}
   m_Layer: 5
   m_Name: '@UI_GameScene'
   m_TagString: Untagged

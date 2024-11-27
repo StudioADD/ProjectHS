@@ -38,7 +38,7 @@ public class Shark : BaseMonster
     {
         if(other.TryGetComponent(out Player player))
         {
-            // 플레이어에게 히트 이벤트 발생시켜야 함
+            player.OnHit();
         }
         else if(other.CompareTag(Util.EnumToString(Define.ETag.Player)))
         {

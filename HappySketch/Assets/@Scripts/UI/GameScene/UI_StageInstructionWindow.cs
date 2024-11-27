@@ -13,6 +13,11 @@ public class UI_StageInstructionWindow : InitBase
         return true;
     }
 
+    public void SetInfo()
+    {
+
+    }
+
     private void StartStage()
     {
         Managers.Game.SetStageInfo();

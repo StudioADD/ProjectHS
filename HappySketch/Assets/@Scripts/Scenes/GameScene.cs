@@ -9,9 +9,6 @@ public class GameScene : BaseScene
     [SerializeField, ReadOnly] BaseStageController stageController;
     [SerializeField] CameraGroupController cameraGroupController;
 
-    [SerializeField, ReadOnly] Player leftPlayer;
-    [SerializeField, ReadOnly] Player rightPlayer;
-
     protected virtual void Reset()
     {
         cameraGroupController = Util.FindChild<CameraGroupController>(gameObject);
@@ -29,10 +26,6 @@ public class GameScene : BaseScene
 
     public void SetStageInfo(EStageType stageType)
     {
-        // UI ( GameStart )
-        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
-            uI_GameScene.StartStage(stageType);
-        
         // StageController
         Type type = Type.GetType($"{stageType}Stage");
         GameObject stageControllerObj = new GameObject("StageController");
@@ -41,6 +34,7 @@ public class GameScene : BaseScene
         if (type.BaseType == typeof(SingleStage))
         {
             stageController = stageControllerObj.AddComponent<SingleStageController>();
+            
         }
         else if(type.BaseType == typeof(MultiStage))
         {
@@ -51,16 +45,11 @@ public class GameScene : BaseScene
             Debug.LogWarning($"없는 타입 : {type.Name}");
             return;
         }
-        stageController.SetInfo(stageType);
 
         // Player
-        leftPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/LeftPlayer").GetComponent<Player>();
-        leftPlayer.transform.position = stageController.GetStagePlayerStartPos(ETeamType.Left);
-        leftPlayer.transform.position += Vector3.up * leftPlayer.GetColliderHeight();
-
-        rightPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/RightPlayer").GetComponent<Player>();
-        rightPlayer.transform.position = stageController.GetStagePlayerStartPos(ETeamType.Right);
-        rightPlayer.transform.position += Vector3.up * rightPlayer.GetColliderHeight();
+        Player leftPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/LeftPlayer").GetComponent<Player>();
+        Player rightPlayer = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_PLAYER_PATH}/RightPlayer").GetComponent<Player>();
+        stageController.SetInfo(stageType, leftPlayer, rightPlayer);
 
         // Camera
         cameraGroupController.SetInfo(stageType);
@@ -68,11 +57,10 @@ public class GameScene : BaseScene
         cameraGroupController.SetTarget(rightPlayer, ETeamType.Right);
 
         // Connect Events
-        stageController.ConnectEvents(leftPlayer, rightPlayer);
-
+        stageController.ConnectEvents();
 
         // UI Start Effect ( 3, 2, 1 )
-        UIGameStartCounterParam param = new UIGameStartCounterParam(3, Test);
+        UIGameStartCounterParam param = new UIGameStartCounterParam(3, StartStage);
         coWaitCondition = StartCoroutine(CoWaitCondition(
            () => Managers.UI.IsPopupActiveSelf<UI_FadeEffectPopup>() == false,
            () => Managers.UI.SpawnObjectUI<UI_GameStartCounter>(param)
@@ -88,10 +76,14 @@ public class GameScene : BaseScene
         onCondition?.Invoke();
     }
 
-    public void Test()
+    public void StartStage()
     {
-        leftPlayer.SetInfo((int)stageController.StageType);
-        rightPlayer.SetInfo((int)stageController.StageType);
+        Managers.Game.StartStage();
+        stageController.StartStage();
+
+        // UI ( GameStart )
+        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
+            uI_GameScene.StartStage();
     }
 
     public override void Clear()

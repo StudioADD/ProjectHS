@@ -9,7 +9,6 @@ public abstract class BaseStageController : InitBase
 {
     public EStageType StageType { get; protected set; }
 
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -18,25 +17,28 @@ public abstract class BaseStageController : InitBase
         return true;
     }
 
+    public virtual void SetInfo(EStageType stageType, Player leftPlayer, Player rightPlayer)
+    {
+        StageType = stageType;
+
+        LightingController.SetStageLighting(stageType);
+    }
+
     public virtual void EndStage(ETeamType winnerTeam)
     {
         Managers.Game.EndStage(winnerTeam);
     }
 
-    public virtual void SetInfo(EStageType stageType)
+    protected void SetPlayerPosition(Player leftPlayer, Player rightPlayer)
     {
-        StageType = stageType;
+        leftPlayer.transform.position = GetStagePlayerStartPos(ETeamType.Left);
+        leftPlayer.transform.position += Vector3.up * leftPlayer.GetColliderHeight();
 
-        LightingController.SetStageLighting(stageType);
-
-       
+        rightPlayer.transform.position = GetStagePlayerStartPos(ETeamType.Right);
+        rightPlayer.transform.position += Vector3.up * rightPlayer.GetColliderHeight();
     }
 
-    public virtual void StartStage()
-    {
-
-    }
-
-    public abstract void ConnectEvents(Player leftPlayer, Player rightPlayer);
+    public abstract void StartStage();
+    public abstract void ConnectEvents();
     public abstract Vector3 GetStagePlayerStartPos(ETeamType teamType);
 }

@@ -19,9 +19,9 @@ public class MultiStageController : BaseStageController
         return true;
     }
 
-    public override void SetInfo(EStageType stageType)
+    public override void SetInfo(EStageType stageType, Player leftPlayer, Player rightPlayer)
     {
-        base.SetInfo(stageType);
+        base.SetInfo(stageType, leftPlayer, rightPlayer);
 
         string prefabPath = $"{PrefabPath.STAGE_PATH}/{stageType}";
 
@@ -31,13 +31,22 @@ public class MultiStageController : BaseStageController
         leftStage.transform.position = Vector3.left * STAGE_DISTANCE;
         rightStage.transform.position = Vector3.right * STAGE_DISTANCE;
 
-        leftStage.ConnectEvents(EndStage);
-        rightStage.ConnectEvents(EndStage);
+        SetPlayerPosition(leftPlayer, rightPlayer);
+
+        leftStage.SetInfo(leftPlayer);
+        rightStage.SetInfo(rightPlayer);
     }
 
-    public override void ConnectEvents(Player leftPlayer, Player rightPlayer)
+    public override void StartStage()
     {
+        leftStage.StartStage();
+        rightStage.StartStage();
+    }
 
+    public override void ConnectEvents()
+    {
+        leftStage.ConnectEvents(EndStage);
+        rightStage.ConnectEvents(EndStage);
     }
 
     public override Vector3 GetStagePlayerStartPos(ETeamType teamType)

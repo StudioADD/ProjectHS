@@ -22,9 +22,9 @@ public class CollectingCandyStage : MultiStage
          
     }
 
-    public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
+    public override void StartStage()
     {
-        
+
     }
 
     public void OnGetCandyItem()

@@ -5,6 +5,8 @@ using static Define;
 
 public class GameMgr
 {
+    public bool IsGamePlay { get; private set; } = false;
+
     int[] winnerCounts = new int[2];
     bool[] playedStages = new bool[(int)EStageType.Max - 1];
 
@@ -17,6 +19,8 @@ public class GameMgr
 
     public void Clear()
     {
+        currStageId = 0;
+
         for (int i = 0; i < winnerCounts.Length; i++)
             winnerCounts[i] = 0;
 
@@ -26,13 +30,18 @@ public class GameMgr
 
     private void EndGame(ETeamType winnerTeam)
     {
-        // 타이틀씬으로 (임시)
         Managers.Scene.LoadScene(EScene.ResultScene);
         Clear();
     }
 
     public EStageType GetCurrStageType()
     {
+        if(currStageId == 0)
+        {
+            Debug.LogWarning("currStage가 세팅되지 않음");
+            return 0;
+        }
+
         return (EStageType)currStageId;
     }
     
@@ -40,15 +49,26 @@ public class GameMgr
     {
         currStageId++;
 
+        if (Managers.UI.SceneUI is UI_GameScene uiGameScene)
+        {
+            uiGameScene.SetInfo((EStageType)currStageId);
+        }
+
         if (Managers.Scene.CurrScene is GameScene gameScene)
         {
-            playedStages[currStageId - 1] = true;
+            playedStages[currStageId] = true;
             gameScene.SetStageInfo((EStageType)currStageId);
         }
     }
 
+    public void StartStage()
+    {
+        IsGamePlay = true;
+    }
+
     public void EndStage(ETeamType winnerTeam)
     {
+        IsGamePlay = false;
         winnerCounts[(int)winnerTeam] += 1;
 
         if (winnerCounts[(int)winnerTeam] >= ((int)EStageType.Max / 2))

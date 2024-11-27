@@ -8,10 +8,17 @@ using UnityEngine.UI;
 
 public class UI_GameScene : UI_BaseScene
 {
+    [SerializeField, ReadOnly] UI_StageInstructionWindow stageInstructionWindow;
+
     private PresenterBase currPresentLeft;
     private PresenterBase currPresentRight;
 
-    private EStageType currStageType;
+    private EStageType currStageType = EStageType.None;
+
+    private void Reset()
+    {
+        stageInstructionWindow = Util.FindChild<UI_StageInstructionWindow>(this.gameObject);
+    }
 
     public override bool Init()
     {
@@ -21,15 +28,26 @@ public class UI_GameScene : UI_BaseScene
         return true;
     }
 
-    public void StartStage(EStageType stageType)
+    public void SetInfo(EStageType stageType)
     {
         currStageType = stageType;
-        SetStageUI(stageType);
+        
     }
 
-    private void SetStageUI(EStageType stageType)
+    public void StartStage()
     {
-        string name = $"UI_{stageType}";
+        SetStageUI();
+    }
+
+    private void SetStageUI()
+    {
+        if(currStageType == EStageType.None)
+        {
+            Debug.LogError("CurrStageType is None");
+            return;
+        }
+
+        string name = $"UI_{currStageType}";
         string prefabPath = $"{PrefabPath.UI_STAGE_PATH}/{name}";
 
         GameObject leftObject = Managers.Resource.Instantiate(prefabPath, transform);
@@ -48,7 +66,7 @@ public class UI_GameScene : UI_BaseScene
         ViewBase leftView = leftObject.GetComponent<ViewBase>();
         ViewBase rightView = rightObject.GetComponent<ViewBase>();
 
-        switch (stageType)
+        switch (currStageType)
         {
             case EStageType.SharkAvoidance:
                 currPresentLeft = new SharkAvoidancePresenter(leftView, new SharkAvoidanceModel(ETeamType.Left));

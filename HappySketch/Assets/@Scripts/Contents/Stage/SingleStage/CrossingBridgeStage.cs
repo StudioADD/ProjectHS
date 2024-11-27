@@ -40,14 +40,16 @@ public class CrossingBridgeStage : SingleStage
         return true;
     }
 
-    public override void SetInfo(Player player = null)
+    public override void SetInfo(Player leftPlayer, Player rightPlayer)
     {
-        base.SetInfo(player);
+        base.SetInfo(leftPlayer, rightPlayer);
 
-        /*
-        CrossingBridgeParam param = new CrossingBridgeParam(GetJumpTargetPos);
-        player.SetStageInfo(param);
-        */
+
+    }
+
+    public override void StartStage()
+    {
+
     }
 
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
