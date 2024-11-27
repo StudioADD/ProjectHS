@@ -24,6 +24,8 @@ public class CollectingCandyStage : MultiStage
 
     public override void StartStage()
     {
+        base.StartStage();
+
 
     }
 

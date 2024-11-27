@@ -18,8 +18,8 @@ public abstract class BaseStage : InitBase
 {
     [field: SerializeField, ReadOnly] protected Transform playerStartPoint;
 
-    public ETeamType TeamType { get; protected set; }
-    public EStageType StageType { get; protected set; }
+    [field: SerializeField, ReadOnly] public ETeamType TeamType { get; protected set; }
+    [field: SerializeField, ReadOnly] public EStageType StageType { get; protected set; }
 
     public event Action<StageParam> OnReceiveStageParam;
 

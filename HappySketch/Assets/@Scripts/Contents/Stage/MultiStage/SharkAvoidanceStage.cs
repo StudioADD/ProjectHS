@@ -52,6 +52,8 @@ public class SharkAvoidanceStage : MultiStage
 
     public override void StartStage()
     {
+        base.StartStage();
+
         if(coSpawnMonster != null)
             StopCoroutine(coSpawnMonster);
 
@@ -130,7 +132,7 @@ public class SharkAvoidanceStage : MultiStage
                     else
                     {
                         int spawnPointNum1 = UnityEngine.Random.Range(0, 4) * 2;
-                        int spawnPointNum2 = spawnPointNum1 + UnityEngine.Random.Range(1, 4) * 2;
+                        int spawnPointNum2 = spawnPointNum1 + (UnityEngine.Random.Range(1, 4) * 2);
                         if(spawnPointNum2 >= spawnPointList.Count)
                             spawnPointNum2 -= spawnPointList.Count;
 
@@ -145,7 +147,7 @@ public class SharkAvoidanceStage : MultiStage
                     if (!isBigShark)
                     {
                         int spawnPointNum1 = UnityEngine.Random.Range(0, 3) * 2 + 1;
-                        int spawnPointNum2 = (spawnPointNum1 + 1) + UnityEngine.Random.Range(1, 3) * 2;
+                        int spawnPointNum2 = spawnPointNum1 + 1 + UnityEngine.Random.Range(1, 3) * 2;
                         if (spawnPointNum2 >= spawnPointList.Count)
                             spawnPointNum2 -= spawnPointList.Count;
 
@@ -160,9 +162,9 @@ public class SharkAvoidanceStage : MultiStage
                         {
                             int spawnPointNum = spawnExceptionNum + (i * 2);
                             if (spawnPointNum >= spawnPointList.Count)
-                                spawnPointNum -= spawnPointList.Count;
+                                spawnPointNum -= spawnPointList.Count - 1;
 
-                            MonsterCreater.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointList[spawnPointNum].transform.position);
+                            MonsterCreater.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum].transform.position);
                         }
                     }
                 }

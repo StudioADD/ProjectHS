@@ -20,7 +20,6 @@ public abstract class BaseStageController : InitBase
     public virtual void SetInfo(EStageType stageType, Player leftPlayer, Player rightPlayer)
     {
         StageType = stageType;
-
         LightingController.SetStageLighting(stageType);
     }
 

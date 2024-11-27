@@ -20,12 +20,17 @@ public class GameScene : BaseScene
             return false;
 
         SceneType = Define.EScene.GameScene;
+        Managers.Game.SetStageId();
 
         return true;
     }
 
     public void SetStageInfo(EStageType stageType)
     {
+        // UI ( GameStart )
+        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
+            uI_GameScene.StartStage();
+
         // StageController
         Type type = Type.GetType($"{stageType}Stage");
         GameObject stageControllerObj = new GameObject("StageController");
@@ -80,10 +85,6 @@ public class GameScene : BaseScene
     {
         Managers.Game.StartStage();
         stageController.StartStage();
-
-        // UI ( GameStart )
-        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
-            uI_GameScene.StartStage();
     }
 
     public override void Clear()

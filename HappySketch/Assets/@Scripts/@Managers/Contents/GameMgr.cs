@@ -28,6 +28,11 @@ public class GameMgr
             playedStages[i] = false;
     }
 
+    public void SetStageId()
+    {
+        currStageId++;
+    }
+
     private void EndGame(ETeamType winnerTeam)
     {
         Managers.Scene.LoadScene(EScene.ResultScene);
@@ -47,8 +52,6 @@ public class GameMgr
     
     public void SetStageInfo()
     {
-        currStageId++;
-
         if (Managers.UI.SceneUI is UI_GameScene uiGameScene)
         {
             uiGameScene.SetInfo((EStageType)currStageId);

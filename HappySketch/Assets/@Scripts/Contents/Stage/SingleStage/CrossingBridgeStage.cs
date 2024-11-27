@@ -49,6 +49,8 @@ public class CrossingBridgeStage : SingleStage
 
     public override void StartStage()
     {
+        base.StartStage();
+
 
     }
 
