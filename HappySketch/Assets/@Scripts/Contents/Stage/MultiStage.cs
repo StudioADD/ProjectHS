@@ -9,7 +9,11 @@ using static Define;
 /// </summary>
 public abstract class MultiStage : BaseStage
 {
+    [field: SerializeField, ReadOnly] public ETeamType TeamType { get; protected set; }
     [SerializeField, ReadOnly] protected Player player;
+
+    public event Action<StageParam> OnReceiveStageParam;
+    protected StageParam stageParam = null; // 임시
 
     public override bool Init()
     {

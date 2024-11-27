@@ -87,13 +87,24 @@ public class UI_GameScene : UI_BaseScene
 
     public void ConnectStageEvents(BaseStage stage)
     {
-        if (stage.TeamType == ETeamType.Left)
+        switch(stage)
         {
-            currPresentLeft.ConnectStageEvents(stage);
+            case MultiStage multiStage:
+                {
+                    if (multiStage.TeamType == ETeamType.Left)
+                        currPresentLeft.ConnectStageEvents(stage);
+                    else // Right
+                        currPresentRight.ConnectStageEvents(stage);
+                    break;
+                }
+            case SingleStage singleStage:
+                {
+                    currPresentLeft.ConnectStageEvents(stage);
+                    currPresentRight.ConnectStageEvents(stage);
+                    break;
+                }
         }
-        else // Right
-        {
-            currPresentRight.ConnectStageEvents(stage);
-        }
+
+       
     }
 }

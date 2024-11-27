@@ -10,6 +10,15 @@ public class SharkAvoidancePresenter : PresenterBase
 
     }
 
+    public override void ConnectStageEvents(BaseStage stage)
+    {
+        if (stage is MultiStage multiStage)
+        {
+            multiStage.OnReceiveStageParam -= OnStageInfoUpdate;
+            multiStage.OnReceiveStageParam += OnStageInfoUpdate;
+        }
+    }
+
     public override void OnStageInfoUpdate(StageParam param)
     {
         if(param is SharkAvoidanceParam sharkAvoidanceParam)

@@ -37,6 +37,11 @@ public class SingleStageController : BaseStageController
         singleStage.ConnectEvents(EndStage);
     }
 
+    public BaseStage GetStage()
+    {
+        return singleStage;
+    }
+
     public override Vector3 GetStagePlayerStartPos(ETeamType teamType)
     {
         return singleStage.GetStartPoint(teamType);

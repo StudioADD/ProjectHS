@@ -112,7 +112,6 @@ public class SharkAvoidanceStage : MultiStage
 
     private void SpawnMonster(int spawnCount)
     {
-       
         switch(spawnCount)
         {
             case 1:

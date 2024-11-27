@@ -17,13 +17,7 @@ public enum EStageType
 public abstract class BaseStage : InitBase
 {
     [field: SerializeField, ReadOnly] protected Transform playerStartPoint;
-
-    [field: SerializeField, ReadOnly] public ETeamType TeamType { get; protected set; }
     [field: SerializeField, ReadOnly] public EStageType StageType { get; protected set; }
-
-    public event Action<StageParam> OnReceiveStageParam;
-
-    protected StageParam stageParam = null; // 임시
 
     protected virtual void Reset()
     {

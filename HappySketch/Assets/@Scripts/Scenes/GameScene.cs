@@ -27,10 +27,6 @@ public class GameScene : BaseScene
 
     public void SetStageInfo(EStageType stageType)
     {
-        // UI ( GameStart )
-        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
-            uI_GameScene.StartStage();
-
         // StageController
         Type type = Type.GetType($"{stageType}Stage");
         GameObject stageControllerObj = new GameObject("StageController");
@@ -63,6 +59,23 @@ public class GameScene : BaseScene
 
         // Connect Events
         stageController.ConnectEvents();
+        
+        // UI ( GameStart )
+        if (Managers.UI.SceneUI is UI_GameScene uI_GameScene)
+        {
+            uI_GameScene.StartStage();
+            
+            switch(stageController)
+            {
+                case MultiStageController multiStageController:
+                    uI_GameScene.ConnectStageEvents(multiStageController.GetStage(ETeamType.Left));
+                    uI_GameScene.ConnectStageEvents(multiStageController.GetStage(ETeamType.Right));
+                    break;
+                case SingleStageController singleStageController:
+                    uI_GameScene.ConnectStageEvents(singleStageController.GetStage());
+                    break;
+            }
+        }
 
         // UI Start Effect ( 3, 2, 1 )
         UIGameStartCounterParam param = new UIGameStartCounterParam(3, StartStage);
@@ -81,7 +94,7 @@ public class GameScene : BaseScene
         onCondition?.Invoke();
     }
 
-    public void StartStage()
+    public void  StartStage()
     {
         Managers.Game.StartStage();
         stageController.StartStage();
