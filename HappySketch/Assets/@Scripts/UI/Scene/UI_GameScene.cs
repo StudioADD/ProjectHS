@@ -95,16 +95,14 @@ public class UI_GameScene : UI_BaseScene
                         currPresentLeft.ConnectStageEvents(stage);
                     else // Right
                         currPresentRight.ConnectStageEvents(stage);
-                    break;
                 }
+                break;
             case SingleStage singleStage:
                 {
                     currPresentLeft.ConnectStageEvents(stage);
                     currPresentRight.ConnectStageEvents(stage);
-                    break;
                 }
+                break;
         }
-
-       
     }
 }

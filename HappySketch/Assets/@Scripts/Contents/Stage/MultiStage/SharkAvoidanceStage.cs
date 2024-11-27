@@ -106,7 +106,7 @@ public class SharkAvoidanceStage : MultiStage
                 EndMonsterSpawnDelay = StartMonsterSpawnDelay;
 
             float delayTime = UnityEngine.Random.Range(StartMonsterSpawnDelay, EndMonsterSpawnDelay);
-            Debug.Log($"{delayTime}초 뒤에 몬스터 생성");
+            //Debug.Log($"{delayTime}초 뒤에 몬스터 생성");
             yield return new WaitForSeconds(delayTime); // 임시
         }
 

@@ -7,7 +7,11 @@ public class SharkAvoidancePresenter : PresenterBase
 {
     public SharkAvoidancePresenter(ViewBase view, ModelBase model) : base(view, model)
     {
-
+        if(model is SharkAvoidanceModel sharkModel)
+        {
+            sharkModel.progressEvent -= SetProgressRatio;
+            sharkModel.progressEvent += SetProgressRatio;
+        }
     }
 
     public override void ConnectStageEvents(BaseStage stage)
@@ -32,7 +36,7 @@ public class SharkAvoidancePresenter : PresenterBase
     /// 아이템 수를 설정하는 함수
     /// </summary>
     /// <param name="count"> 아이템 수: 0 ~ 3 </param>
-    public void SetItemCount(int count)
+    private void SetItemCount(int count)
     {
         if (model is SharkAvoidanceModel sharkModel)
             sharkModel.SetItemCount(count);
@@ -45,7 +49,7 @@ public class SharkAvoidancePresenter : PresenterBase
     /// 총 이동경로 대비 현재 이동 경로 비율
     /// </summary>
     /// <param name="ratio">비율: 0 ~ 1 </param>
-    public void SetProgressRatio(ETeamType teamType, float ratio)
+    private void SetProgressRatio(ETeamType teamType, float ratio)
     {
         if (model is SharkAvoidanceModel sharkModel)
         {
@@ -54,24 +58,24 @@ public class SharkAvoidancePresenter : PresenterBase
                 switch (teamType)
                 {
                     case ETeamType.Left:
-                        sharkModel.SetLeftProgressRatio(ratio);
+                        sharkModel.SetLeftProgressRatio(sharkView.GetProgressRatio(), ratio);
                         sharkView.UpdateLeftProgressRatio(ratio);
-
-                        if(sharkModel.TeamType == ETeamType.Left)
-                            sharkView.UpdateProgressingBar(ratio);
 
                         break;
 
                     case ETeamType.Right:
-                        sharkModel.SetRightProgressRatio(ratio);
+                        sharkModel.SetRightProgressRatio(sharkView.GetProgressRatio(), ratio);
                         sharkView.UpdateRightProgressRatio(ratio);
-
-                        if (sharkModel.TeamType == ETeamType.Right)
-                            sharkView.UpdateProgressingBar(ratio);
 
                         break;
                 }
             }
         }
+    }
+
+    private void SetProgressRatio(float ratio)
+    {
+        if (view is SharkAvoidanceView sharkView)
+            sharkView.UpdateProgressingBar(ratio);
     }
 }
