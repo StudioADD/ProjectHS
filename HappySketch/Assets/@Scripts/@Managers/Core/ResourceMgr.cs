@@ -45,7 +45,7 @@ public class ResourceMgr
             return Managers.Pool.Pop(original, position).GameObject;
 
         GameObject go = Object.Instantiate(original, parent);
-        go.transform.position = position;
+        //go.transform.position = position;
         go.name = original.name;
         return go;
     }
