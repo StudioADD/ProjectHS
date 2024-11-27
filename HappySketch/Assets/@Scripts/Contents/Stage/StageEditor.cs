@@ -71,6 +71,9 @@ public class StageEditor : InitBase
 
     public void PlayStage()
     {
+        Managers.Game.SetStageId((int)StageType);
+        Managers.Game.StartStage();
+
         LightingController.SetStageLighting(StageType);
         playerStartPoint = Util.FindChild<Transform>(currStage.gameObject, "PlayerStartPoint", true);
 
@@ -80,6 +83,18 @@ public class StageEditor : InitBase
         player.SetInfo((int)StageType);
 
         cameraEditor.SetTarget(player);
+        
+        switch(currStage)
+        {
+            case MultiStage multiStage:
+                multiStage.SetInfo(player);
+                break;
+            case SingleStage singleStage:
+                singleStage.SetInfo(player, player);
+                break;
+        }
+
+        currStage.StartStage();
     }
 }
 #endif

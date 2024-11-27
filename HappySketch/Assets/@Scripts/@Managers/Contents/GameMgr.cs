@@ -28,9 +28,15 @@ public class GameMgr
             playedStages[i] = false;
     }
 
-    public void SetStageId()
+    public void SetStageId(int stageId = -1)
     {
-        currStageId++;
+        if(stageId == -1)
+        {
+            currStageId++;
+            return;
+        }
+
+        currStageId = stageId;
     }
 
     private void EndGame(ETeamType winnerTeam)

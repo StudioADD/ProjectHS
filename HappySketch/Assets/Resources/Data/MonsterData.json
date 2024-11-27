@@ -9,7 +9,7 @@
     {
       "DataId": 1,
       "Name": "BigShark",
-      "MoveSpeed": 5.0,
+      "MoveSpeed": 10.0,
       "SternTime": 3.0
     }
   ]

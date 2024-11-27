@@ -6,6 +6,10 @@ using static Define;
 
 public class SharkAvoidanceStage : MultiStage
 {
+    // 임시 테스트 코드
+    [SerializeField] float StartMonsterSpawnDelay = 5f;
+    [SerializeField] float EndMonsterSpawnDelay = 7f;
+
     enum EStageSection
     {
         None,
@@ -88,8 +92,12 @@ public class SharkAvoidanceStage : MultiStage
                     break;
             }
 
-            
-            yield return new WaitForSeconds(5f); // 임시
+            if (EndMonsterSpawnDelay < StartMonsterSpawnDelay)
+                EndMonsterSpawnDelay = StartMonsterSpawnDelay;
+
+            float delayTime = UnityEngine.Random.Range(StartMonsterSpawnDelay, EndMonsterSpawnDelay);
+            Debug.Log($"{delayTime}초 뒤에 몬스터 생성");
+            yield return new WaitForSeconds(delayTime); // 임시
         }
 
         coSpawnMonster = null;
