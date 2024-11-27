@@ -54,7 +54,7 @@ public class SharkAvoidanceStage : MultiStage
     {
         base.SetInfo(player);
 
-        sharkAvoidanceParam = new SharkAvoidanceParam(TeamType, 1f, 0);
+        sharkAvoidanceParam = new SharkAvoidanceParam(TeamType, 0, 0);
     }
 
     public override void StartStage()
@@ -65,6 +65,7 @@ public class SharkAvoidanceStage : MultiStage
             StopCoroutine(coSpawnMonster);
 
         coSpawnMonster = StartCoroutine(CoSpawnMonster());
+        coReceiveStageParam = StartCoroutine(CoReceiveStageParam());
     }
 
     public override void ConnectEvents(Action<Define.ETeamType> onEndGameCallBack)
@@ -114,9 +115,9 @@ public class SharkAvoidanceStage : MultiStage
 
     protected override IEnumerator CoReceiveStageParam()
     {
-        while(true)
+        while(Managers.Game.IsGamePlay)
         {
-
+            OnReceiveStageParamCallBack(sharkAvoidanceParam);
             yield return new WaitForSeconds(0.5f);
         }
 
@@ -147,7 +148,7 @@ public class SharkAvoidanceStage : MultiStage
             case 1:
                 {
                     int spawnPointNum = UnityEngine.Random.Range(0, 4) * 2;
-                    MonsterCreater.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum].transform.position);
+                    ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum].transform.position);
                 }
                 break;
             case 2:
@@ -156,7 +157,7 @@ public class SharkAvoidanceStage : MultiStage
                     if(isBigShark)
                     {
                         int spawnPointNum = UnityEngine.Random.Range(0, 3) * 2 + 1;
-                        MonsterCreater.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointList[spawnPointNum].transform.position);
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointList[spawnPointNum].transform.position);
                     }
                     else
                     {
@@ -165,8 +166,8 @@ public class SharkAvoidanceStage : MultiStage
                         if(spawnPointNum2 >= spawnPointList.Count)
                             spawnPointNum2 -= spawnPointList.Count + 1;
 
-                        MonsterCreater.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum1].transform.position);
-                        MonsterCreater.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum2].transform.position);
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum1].transform.position);
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum2].transform.position);
                     }
                 }
                 break;
@@ -180,8 +181,8 @@ public class SharkAvoidanceStage : MultiStage
                         if (spawnPointNum2 >= spawnPointList.Count)
                             spawnPointNum2 -= spawnPointList.Count + 1;
 
-                        MonsterCreater.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointList[spawnPointNum1].transform.position);
-                        MonsterCreater.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum2].transform.position);
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointList[spawnPointNum1].transform.position);
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum2].transform.position);
                     }
                     else
                     {
@@ -193,7 +194,7 @@ public class SharkAvoidanceStage : MultiStage
                             if (spawnPointNum >= spawnPointList.Count)
                                 spawnPointNum -= spawnPointList.Count + 1;
 
-                            MonsterCreater.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum].transform.position);
+                            ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum].transform.position);
                         }
                     }
                 }

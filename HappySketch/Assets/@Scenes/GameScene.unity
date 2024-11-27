@@ -1049,7 +1049,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ead10547cd6e6e4daf17bcdbdcab07f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageInstructionWindow: {fileID: 0}
+  stageInstructionWindow: {fileID: 3495595638100831351}
 --- !u!224 &5015858522216215145
 RectTransform:
   m_ObjectHideFlags: 0

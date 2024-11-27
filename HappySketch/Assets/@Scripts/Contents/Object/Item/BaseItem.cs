@@ -4,35 +4,32 @@ using UnityEngine;
 using static Define;
 public enum EItemType
 {
-    // 지울 예정ㅋ
-    RedCandy,
-    GreenCandy,
-    BlueCandy,
-    Bomb,
-    Star,
-    // 일단 다 지우장
-        
-    Max
-}
+    // SharkAvoidanceStage
+    BoosterItem,
 
-public enum ECandyItemType
-{
-    RedCandy,
-    GreenCandy,
-    BlueCandy,
+    // CollectingCandyStage
+
+
+
     Max
 }
 
 public class BaseItem : BaseObject
 {
     protected EItemType itemType = EItemType.Max;
-    protected float score = 0f;
+
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
-        this.gameObject.tag = ETag.Item.ToString();
+        this.gameObject.tag = Util.EnumToString(Define.ETag.Item);
+        this.gameObject.layer = (int)Define.ELayer.Item;
         this.ObjectType = EObjectType.Item;
         return true;
+    }
+
+    public virtual void SetInfo()
+    {
+
     }
 }
