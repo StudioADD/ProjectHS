@@ -156,7 +156,7 @@ public class SharkAvoidanceStage : MultiStage
                         int spawnPointNum1 = UnityEngine.Random.Range(0, 3) * 2 + 1;
                         int spawnPointNum2 = spawnPointNum1 + 1 + UnityEngine.Random.Range(1, 3) * 2;
                         if (spawnPointNum2 >= spawnPointList.Count)
-                            spawnPointNum2 -= spawnPointList.Count;
+                            spawnPointNum2 -= spawnPointList.Count + 1;
 
                         MonsterCreater.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointList[spawnPointNum1].transform.position);
                         MonsterCreater.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum2].transform.position);
