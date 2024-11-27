@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor.MPE;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,52 +9,75 @@ using static Define;
 
 public class SharkAvoidanceModel : ModelBase
 {
-    private int itemCount;
-    private float leftProgressRatio;
-    private float rightProgressRatio;
-    private float targetRatio;
+    private enum CoroutineType
+    {
+        Left,
+        Right,
+        Bar,
+        Last
+    }
 
-    private Coroutine setProgressCoroutine;
+    private class Ratio
+    {
+        public float ratio;
+        public float currRatio;
+
+        public Ratio(float ratio = 0f, float currRatio = 0f)
+        {
+            this.ratio = ratio;
+            this.currRatio = currRatio;
+        }
+    }
+
+    private int leftItemCount;
+    private int rightItemCount;
+
+    private Ratio leftRatio = new Ratio();
+    private Ratio rightRatio = new Ratio();
+    private Ratio progressRatio = new Ratio();
+
+    private float leftCurrRatio;
+    private float rightCurrRatio;
+
+    private Coroutine[] coroutines = new Coroutine[(int)CoroutineType.Last];
 
     public event UnityAction<float> progressEvent;
+    public event UnityAction<float> leftRatioEvent;
+    public event UnityAction<float> rightRatioEvent;
 
     private const float PROGRESS_TIME = 3f;
 
-    public SharkAvoidanceModel(ETeamType teamType) : base(teamType)
+    public SharkAvoidanceModel() : base()
     {
 
     }
 
-    public void SetItemCount(int itemCount)
+    public void SetLeftItemCount(int itemCount)
     {
-        this.itemCount = itemCount;
+        leftItemCount = itemCount;
     }
 
-    public void SetLeftProgressRatio(float currRatio, float ratio)
+    public void SetRightItemCount(int itemCount)
     {
-        leftProgressRatio = ratio;
-
-        if (TeamType == ETeamType.Left)
-            SetTargetRatio(currRatio, ratio);
+        rightItemCount = itemCount;
     }
 
-    public void SetRightProgressRatio(float currRatio, float ratio)
+    public void SetLeftRatio(float ratio)
     {
-        rightProgressRatio = ratio;
+        leftRatio.ratio = ratio;
 
-        if (TeamType == ETeamType.Right)
-            SetTargetRatio(currRatio, ratio);
+        if(coroutines[(int)CoroutineType.Left] == null)
+            coroutines[(int)CoroutineType.Left] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(leftRatio, leftRatioEvent, CoroutineType.Left));
     }
 
-    private void SetTargetRatio(float currRatio, float ratio)
+    public void SetRightRatio(float ratio)
     {
-        targetRatio = ratio;
+        rightRatio.ratio = ratio;
 
-        if (setProgressCoroutine == null)
-            CoroutineHelper.StartCoroutine(SetProgressCoroutine(currRatio));
+        if (coroutines[(int)CoroutineType.Right] == null)
+            coroutines[(int)CoroutineType.Right] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(rightRatio, rightRatioEvent, CoroutineType.Right));
     }
-
-    private IEnumerator SetProgressCoroutine(float currRatio)
+    private IEnumerator SetProgressCoroutine(Ratio ratio, UnityAction<float> action, CoroutineType coroutineType)
     {
         float elapsed = 0f;
 
@@ -61,15 +85,15 @@ public class SharkAvoidanceModel : ModelBase
         {
             elapsed += Time.deltaTime;
 
-            currRatio = Mathf.Lerp(currRatio, targetRatio, elapsed / PROGRESS_TIME);
+            ratio.currRatio = Mathf.Lerp(ratio.currRatio, ratio.ratio, elapsed / PROGRESS_TIME);
 
-            progressEvent?.Invoke(currRatio);
+            action?.Invoke(ratio.currRatio);
 
             yield return null;
         }
 
-        progressEvent?.Invoke(targetRatio);
+        action?.Invoke(ratio.ratio);
 
-        setProgressCoroutine = null;
+        coroutines[(int)coroutineType] = null;
     }
 }

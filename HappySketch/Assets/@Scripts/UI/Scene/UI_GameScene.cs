@@ -69,18 +69,19 @@ public class UI_GameScene : UI_BaseScene
         switch (currStageType)
         {
             case EStageType.SharkAvoidance:
-                currPresentLeft = new SharkAvoidancePresenter(leftView, new SharkAvoidanceModel(ETeamType.Left));
-                currPresentRight = new SharkAvoidancePresenter(rightView, new SharkAvoidanceModel(ETeamType.Right));
+                SharkAvoidanceModel sharkModel = new SharkAvoidanceModel();
+                currPresentLeft = new SharkAvoidancePresenter(leftView, sharkModel, ETeamType.Left);
+                currPresentRight = new SharkAvoidancePresenter(rightView, sharkModel, ETeamType.Right);
                 break;
 
             case EStageType.CollectingCandy:
-                currPresentLeft = new CollectCandyPresenter(leftView, new CollectCandyModel(ETeamType.Left));
-                currPresentRight = new CollectCandyPresenter(rightView, new CollectCandyModel(ETeamType.Right));
+                currPresentLeft = new CollectCandyPresenter(leftView, new CollectCandyModel(), ETeamType.Left);
+                currPresentRight = new CollectCandyPresenter(rightView, new CollectCandyModel(), ETeamType.Right);
                 break;
 
             case EStageType.CrossingBridge:
-                currPresentLeft = new CrossingBridgePresenter(leftView, new CrossingBridgeModel(ETeamType.Left));
-                currPresentRight = new CrossingBridgePresenter(rightView, new CrossingBridgeModel(ETeamType.Right));
+                currPresentLeft = new CrossingBridgePresenter(leftView, new CrossingBridgeModel(), ETeamType.Left);
+                currPresentRight = new CrossingBridgePresenter(rightView, new CrossingBridgeModel(), ETeamType.Right);
                 break;
         }
     }
@@ -91,10 +92,16 @@ public class UI_GameScene : UI_BaseScene
         {
             case MultiStage multiStage:
                 {
-                    if (multiStage.TeamType == ETeamType.Left)
-                        currPresentLeft.ConnectStageEvents(stage);
-                    else // Right
-                        currPresentRight.ConnectStageEvents(stage);
+                    switch(multiStage.TeamType)
+                    {
+                        case ETeamType.Left:
+                            currPresentLeft.ConnectStageEvents(stage);
+                            break;
+
+                        case ETeamType.Right:
+                            currPresentRight.ConnectStageEvents(stage);
+                            break;
+                    }
                 }
                 break;
             case SingleStage singleStage:

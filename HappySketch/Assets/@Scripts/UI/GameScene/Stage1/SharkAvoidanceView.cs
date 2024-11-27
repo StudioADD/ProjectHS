@@ -52,17 +52,15 @@ public class SharkAvoidanceView : ViewBase
         DeActivateBoosterImage();
         SetActiveActiveItemsImage(false);
         SetActiveInActiveItemsImage(false);
-        UpdateLeftProgressRatio(0f);
-        UpdateRightProgressRatio(0f);
-        UpdateProgressingBar(0f);
+        UpdateLeftRatio(0f);
+        UpdateRightRatio(0f);
+        UpdateProgressingBarRatio(0f);
 
         return true;
     }
 
     public void UpdateItemCount(int count)
     {
-        Debug.Log($"아이템 개수: {count}");
-
         if (count == 0)
         {
             DeActivateBoosterImage();
@@ -84,18 +82,17 @@ public class SharkAvoidanceView : ViewBase
         }
     }
 
-    public void UpdateLeftProgressRatio(float ratio)
+    public void UpdateLeftRatio(float ratio)
     {
-        Debug.Log($"hahahah : {ratio}");
         leftRectTransfrom.anchoredPosition = new Vector3(progressingWidth * ratio - leftImgWidth / 2.2f, leftRectTransfrom.anchoredPosition.y);
     }
 
-    public void UpdateRightProgressRatio(float ratio)
+    public void UpdateRightRatio(float ratio)
     {
         rightRectTransfrom.anchoredPosition = new Vector3(progressingWidth * ratio - rightImgWidth / 2.2f, rightRectTransfrom.anchoredPosition.y);
     }
 
-    public void UpdateProgressingBar(float ratio)
+    public void UpdateProgressingBarRatio(float ratio)
     {
         progressing.fillAmount = ratio;
     }

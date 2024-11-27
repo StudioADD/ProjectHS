@@ -5,9 +5,7 @@ using static Define;
 
 public class CrossingBridgeModel : ModelBase
 {
-    
-
-    public CrossingBridgeModel(ETeamType teamType) : base(teamType)
+    public CrossingBridgeModel() : base()
     {
 
     }

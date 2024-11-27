@@ -5,7 +5,7 @@ using static Define;
 
 public class CrossingBridgePresenter : PresenterBase
 {
-    public CrossingBridgePresenter(ViewBase view, ModelBase model) : base(view, model)
+    public CrossingBridgePresenter(ViewBase view, ModelBase model, ETeamType teamType) : base(view, model, teamType)
     {
 
     }
@@ -18,7 +18,7 @@ public class CrossingBridgePresenter : PresenterBase
             // 내 팀타입 필요 (희용)
             // singleStage.OnLeftReceiveStageParam
 
-            switch (model.TeamType)
+            switch (teamType)
             {
                 case ETeamType.Left:
                     singleStage.OnLeftReceiveStageParam -= OnStageInfoUpdate;

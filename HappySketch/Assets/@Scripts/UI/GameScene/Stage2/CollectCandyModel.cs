@@ -17,7 +17,7 @@ public class CollectCandyModel : ModelBase
 
     private WaitForSeconds waitForOneSecond = new WaitForSeconds(1f);
 
-    public CollectCandyModel(ETeamType teamType) : base(teamType)
+    public CollectCandyModel() : base()
     {
 
     }

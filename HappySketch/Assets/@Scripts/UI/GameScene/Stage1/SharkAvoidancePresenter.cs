@@ -5,12 +5,28 @@ using static Define;
 
 public class SharkAvoidancePresenter : PresenterBase
 {
-    public SharkAvoidancePresenter(ViewBase view, ModelBase model) : base(view, model)
+    public SharkAvoidancePresenter(ViewBase view, ModelBase model, ETeamType teamType) : base(view, model, teamType)
     {
         if(model is SharkAvoidanceModel sharkModel)
         {
-            sharkModel.progressEvent -= SetProgressRatio;
-            sharkModel.progressEvent += SetProgressRatio;
+            sharkModel.leftRatioEvent -= SetLeftRatio;
+            sharkModel.leftRatioEvent += SetLeftRatio;
+
+            sharkModel.rightRatioEvent -= SetRightRatio;
+            sharkModel.rightRatioEvent += SetRightRatio;
+
+            switch(teamType)
+            {
+                case ETeamType.Left:
+                    sharkModel.leftRatioEvent -= SetProgressRatio;
+                    sharkModel.leftRatioEvent += SetProgressRatio;
+                    break;
+
+                case ETeamType.Right:
+                    sharkModel.rightRatioEvent -= SetProgressRatio;
+                    sharkModel.rightRatioEvent += SetProgressRatio;
+                    break;
+            }
         }
     }
 
@@ -39,8 +55,21 @@ public class SharkAvoidancePresenter : PresenterBase
     private void SetItemCount(int count)
     {
         if (model is SharkAvoidanceModel sharkModel)
-            sharkModel.SetItemCount(count);
+        {
+            switch(teamType)
+            {
+                case ETeamType.Left:
+                    sharkModel.SetLeftItemCount(count);
+                    break;
 
+                case ETeamType.Right:
+                    sharkModel.SetRightItemCount(count);
+                    break;
+            }
+        }
+
+        // ItemCount에도 에니메이션 구현할 거면
+        // Model 쪽으로 빼는 것도 고려해야 함!
         if (view is SharkAvoidanceView sharkView)
             sharkView.UpdateItemCount(count);
     }
@@ -58,15 +87,11 @@ public class SharkAvoidancePresenter : PresenterBase
                 switch (teamType)
                 {
                     case ETeamType.Left:
-                        sharkModel.SetLeftProgressRatio(sharkView.GetProgressRatio(), ratio);
-                        sharkView.UpdateLeftProgressRatio(ratio);
-
+                        sharkModel.SetLeftRatio(ratio);
                         break;
 
                     case ETeamType.Right:
-                        sharkModel.SetRightProgressRatio(sharkView.GetProgressRatio(), ratio);
-                        sharkView.UpdateRightProgressRatio(ratio);
-
+                        sharkModel.SetRightRatio(ratio);
                         break;
                 }
             }
@@ -76,6 +101,18 @@ public class SharkAvoidancePresenter : PresenterBase
     private void SetProgressRatio(float ratio)
     {
         if (view is SharkAvoidanceView sharkView)
-            sharkView.UpdateProgressingBar(ratio);
+            sharkView.UpdateProgressingBarRatio(ratio);
+    }
+
+    private void SetLeftRatio(float ratio)
+    {
+        if (view is SharkAvoidanceView sharkView)
+            sharkView.UpdateLeftRatio(ratio);
+    }
+
+    private void SetRightRatio(float ratio)
+    {
+        if (view is SharkAvoidanceView sharkView)
+            sharkView.UpdateRightRatio(ratio);
     }
 }
