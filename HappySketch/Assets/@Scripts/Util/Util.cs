@@ -12,6 +12,11 @@ public static class Util
     private static readonly Dictionary<Enum, string> enumDict = new Dictionary<Enum, string>();
     public static string EnumToString(this Enum value)
     {
+#if UNITY_EDITOR
+        if(Application.isPlaying == false)
+            return value.ToString();
+#endif
+
         if (!enumDict.ContainsKey(value))
             enumDict.Add(value, value.ToString());
 
