@@ -1,17 +1,17 @@
 ﻿{
   "Players": [
     {
-      "DataId": 0,
+      "DataId": 1,
       "MoveSpeed": 10.0,
       "JumpPower": 0.0
     },
     {
-      "DataId": 1,
+      "DataId": 2,
       "MoveSpeed": 10.0,
       "JumpPower": 5.0
     },
     {
-      "DataId": 2,
+      "DataId": 3,
       "MoveSpeed": 1.0,
       "JumpPower": 5.0
     }
