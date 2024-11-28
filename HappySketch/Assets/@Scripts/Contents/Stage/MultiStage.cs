@@ -40,6 +40,11 @@ public abstract class MultiStage : BaseStage
         player.SetInfo((int)StageType);
     }
 
+    public override void EndStage(ETeamType winnerTeam)
+    {
+        
+    }
+
     public virtual void ConnectEvents(Action<ETeamType> onEndGameCallBack)
     {
 

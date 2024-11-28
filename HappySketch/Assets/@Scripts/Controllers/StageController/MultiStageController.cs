@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -10,7 +11,7 @@ public class MultiStageController : BaseStageController
     [SerializeField, ReadOnly] MultiStage rightStage = null;
 
     const int STAGE_DISTANCE = 5000;
-
+    
     public override bool Init()
     {
         if (base.Init() == false)
@@ -37,6 +38,13 @@ public class MultiStageController : BaseStageController
         rightStage.SetInfo(rightPlayer);
     }
 
+    public override void EndStage(ETeamType winnerTeam)
+    {
+        base.EndStage(winnerTeam);
+
+
+    }
+
     public override void StartStage()
     {
         leftStage.StartStage();
@@ -44,7 +52,7 @@ public class MultiStageController : BaseStageController
     }
 
     public override void ConnectEvents()
-    {
+    {  
         leftStage.ConnectEvents(EndStage);
         rightStage.ConnectEvents(EndStage);
     }

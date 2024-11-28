@@ -6,10 +6,6 @@ using static Define;
 
 public class SharkAvoidanceStage : MultiStage
 {
-    // 임시 테스트 코드
-    [SerializeField] float StartMonsterSpawnDelay = 5f;
-    [SerializeField] float EndMonsterSpawnDelay = 7f;
-
     enum EStageSection
     {
         None,
@@ -125,10 +121,7 @@ public class SharkAvoidanceStage : MultiStage
                     break;
             }
 
-            if (EndMonsterSpawnDelay < StartMonsterSpawnDelay)
-                EndMonsterSpawnDelay = StartMonsterSpawnDelay;
-
-            float delayTime = UnityEngine.Random.Range(StartMonsterSpawnDelay, EndMonsterSpawnDelay);
+            float delayTime = UnityEngine.Random.Range(4, 5);
             yield return new WaitForSeconds(delayTime);
         }
 
@@ -169,15 +162,15 @@ public class SharkAvoidanceStage : MultiStage
         lineLength *= 0.6f;
 
         float blockLength = lineLength / 6;
-        float basicPointZ = playerStartPoint.transform.position.z + blockLength * 2;
+        float basicPointZ = playerStartPoint.transform.position.z + blockLength * 1.5f;
 
-        for(int i = 0; i < 6; i++)
+        for(int i = 0; i < 4; i++)
         {
             int spawnLine = UnityEngine.Random.Range(0, 4) * 2;
             Vector3 itemSpawnPoint = new Vector3(
                 spawnPointList[spawnLine].transform.position.x,
                 0,
-                basicPointZ + (i * blockLength));
+                basicPointZ + (i * blockLength * 1.5f));
 
             ObjectCreator.SpawnItem<BoosterItem>(EItemType.BoosterItem, itemSpawnPoint);
         }
@@ -185,12 +178,16 @@ public class SharkAvoidanceStage : MultiStage
 
     private void SpawnMonster(int spawnCount)
     {
-        switch(spawnCount)
+        Vector3 spawnPointVec = player.transform.position;
+        spawnPointVec.z += 100f;
+
+        switch (spawnCount)
         {
             case 1:
                 {
                     int spawnPointNum = UnityEngine.Random.Range(0, 4) * 2;
-                    ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum].transform.position);
+                    spawnPointVec.x = spawnPointList[spawnPointNum].transform.position.x;
+                    ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointVec);
                 }
                 break;
             case 2:
@@ -199,7 +196,8 @@ public class SharkAvoidanceStage : MultiStage
                     if(isBigShark)
                     {
                         int spawnPointNum = UnityEngine.Random.Range(0, 3) * 2 + 1;
-                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointList[spawnPointNum].transform.position);
+                        spawnPointVec.x = spawnPointList[spawnPointNum].transform.position.x;
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointVec);
                     }
                     else
                     {
@@ -208,8 +206,10 @@ public class SharkAvoidanceStage : MultiStage
                         if(spawnPointNum2 >= spawnPointList.Count)
                             spawnPointNum2 -= spawnPointList.Count + 1;
 
-                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum1].transform.position);
-                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum2].transform.position);
+                        spawnPointVec.x = spawnPointList[spawnPointNum1].transform.position.x;
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointVec);
+                        spawnPointVec.x = spawnPointList[spawnPointNum2].transform.position.x;
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointVec);
                     }
                 }
                 break;
@@ -223,8 +223,10 @@ public class SharkAvoidanceStage : MultiStage
                         if (spawnPointNum2 >= spawnPointList.Count)
                             spawnPointNum2 -= spawnPointList.Count + 1;
 
-                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointList[spawnPointNum1].transform.position);
-                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum2].transform.position);
+                        spawnPointVec.x = spawnPointList[spawnPointNum1].transform.position.x;
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointVec);
+                        spawnPointVec.x = spawnPointList[spawnPointNum1].transform.position.x;
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointVec);
                     }
                     else
                     {
@@ -236,7 +238,8 @@ public class SharkAvoidanceStage : MultiStage
                             if (spawnPointNum >= spawnPointList.Count)
                                 spawnPointNum -= spawnPointList.Count + 1;
 
-                            ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum].transform.position);
+                            spawnPointVec.x = spawnPointList[spawnPointNum].transform.position.x;
+                            ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointVec);
                         }
                     }
                 }
