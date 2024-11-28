@@ -36,20 +36,16 @@ public class SharkAvoidanceModel : ModelBase
     private Ratio rightRatio = new Ratio();
     private Ratio progressRatio = new Ratio();
 
-    private float leftCurrRatio;
-    private float rightCurrRatio;
-
     private Coroutine[] coroutines = new Coroutine[(int)CoroutineType.Last];
 
-    public event UnityAction<float> progressEvent;
-    public event UnityAction<float> leftRatioEvent;
-    public event UnityAction<float> rightRatioEvent;
+    public event UnityAction<float> onLeftRatioChanged;
+    public event UnityAction<float> onRightRatioChanged;
 
     private const float PROGRESS_TIME = 3f;
 
     public SharkAvoidanceModel() : base()
     {
-
+        
     }
 
     public void SetLeftItemCount(int itemCount)
@@ -66,17 +62,22 @@ public class SharkAvoidanceModel : ModelBase
     {
         leftRatio.ratio = ratio;
 
-        if(coroutines[(int)CoroutineType.Left] == null)
-            coroutines[(int)CoroutineType.Left] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(leftRatio, leftRatioEvent, CoroutineType.Left));
+        if (coroutines[(int)CoroutineType.Left] != null)
+            CoroutineHelper.StopCoroutine(coroutines[(int)CoroutineType.Left]);
+
+        coroutines[(int)CoroutineType.Left] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(leftRatio, onLeftRatioChanged, CoroutineType.Left));
     }
 
     public void SetRightRatio(float ratio)
     {
         rightRatio.ratio = ratio;
 
-        if (coroutines[(int)CoroutineType.Right] == null)
-            coroutines[(int)CoroutineType.Right] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(rightRatio, rightRatioEvent, CoroutineType.Right));
+        if (coroutines[(int)CoroutineType.Right] != null)
+            CoroutineHelper.StopCoroutine(coroutines[(int)CoroutineType.Right]);
+
+        coroutines[(int)CoroutineType.Right] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(rightRatio, onRightRatioChanged, CoroutineType.Right));
     }
+
     private IEnumerator SetProgressCoroutine(Ratio ratio, UnityAction<float> action, CoroutineType coroutineType)
     {
         float elapsed = 0f;
@@ -95,5 +96,14 @@ public class SharkAvoidanceModel : ModelBase
         action?.Invoke(ratio.ratio);
 
         coroutines[(int)coroutineType] = null;
+    }
+
+    public void Clear()
+    {
+        foreach(Coroutine coroutine in coroutines)
+        {
+            if (coroutine != null)
+                CoroutineHelper.StopCoroutine(coroutine);
+        }
     }
 }
