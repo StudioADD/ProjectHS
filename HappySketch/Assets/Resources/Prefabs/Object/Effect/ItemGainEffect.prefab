@@ -9720,7 +9720,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2534209590926565114}
-  - component: {fileID: 3794560849352943257}
+  - component: {fileID: 1007320228820045875}
   m_Layer: 0
   m_Name: ItemGainEffect
   m_TagString: Untagged
@@ -9744,7 +9744,7 @@ Transform:
   - {fileID: 8169935608285484659}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3794560849352943257
+--- !u!114 &1007320228820045875
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9753,7 +9753,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4177780339709550915}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2453ab2bbe8e0154c9b23c511cf88c5e, type: 3}
+  m_Script: {fileID: 11500000, guid: 78791a1d2349f0f4cabbe02af5b365db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   particleList:

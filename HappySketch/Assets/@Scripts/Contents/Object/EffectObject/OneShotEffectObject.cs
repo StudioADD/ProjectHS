@@ -20,9 +20,12 @@ public class OneShotEffectObject : EffectObject
     public override void SetInfo()
     {
         base.SetInfo();
-        StartCoroutine(CoWaitEndEffect());
+
+        if(coWaitEndEffect == null)
+            coWaitEndEffect = StartCoroutine(CoWaitEndEffect());
     }
 
+    Coroutine coWaitEndEffect = null;
     IEnumerator CoWaitEndEffect()
     {
         yield return new WaitForSeconds(maxDuration);

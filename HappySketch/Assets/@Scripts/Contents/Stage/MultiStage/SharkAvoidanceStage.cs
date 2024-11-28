@@ -6,10 +6,6 @@ using static Define;
 
 public class SharkAvoidanceStage : MultiStage
 {
-    // 임시 테스트 코드
-    [SerializeField] float StartMonsterSpawnDelay = 5f;
-    [SerializeField] float EndMonsterSpawnDelay = 7f;
-
     enum EStageSection
     {
         None,
@@ -55,6 +51,7 @@ public class SharkAvoidanceStage : MultiStage
         base.SetInfo(player);
 
         sharkAvoidanceParam = new SharkAvoidanceParam(TeamType, 0, 0);
+        SpawnItems();
     }
 
     public override void StartStage()
@@ -64,12 +61,17 @@ public class SharkAvoidanceStage : MultiStage
         if(coSpawnMonster != null)
             StopCoroutine(coSpawnMonster);
 
+        if (coReceiveStageParam != null)
+            StopCoroutine(coReceiveStageParam);
+
         coSpawnMonster = StartCoroutine(CoSpawnMonster());
         coReceiveStageParam = StartCoroutine(CoReceiveStageParam());
     }
 
     public override void ConnectEvents(Action<Define.ETeamType> onEndGameCallBack)
     {
+        player.ConnectSharkAvoidanceStage(OnAddBoosterItem, OnUseBoosterItem);
+
         if (finishLineObject != null)
         {
             finishLineObject.OnArriveFinishLine -= onEndGameCallBack;
@@ -79,6 +81,29 @@ public class SharkAvoidanceStage : MultiStage
             Debug.LogWarning($"FinishLineObject is Null!!");
     }
 
+    public void OnAddBoosterItem()
+    {
+        sharkAvoidanceParam.BoosterCount++;
+
+        if (sharkAvoidanceParam.BoosterCount > 3)
+            sharkAvoidanceParam.BoosterCount = 3;
+
+        OnReceiveStageParamCallBack(sharkAvoidanceParam);
+    }
+
+    public bool OnUseBoosterItem()
+    {
+        if(sharkAvoidanceParam.BoosterCount == 3)
+        {
+            sharkAvoidanceParam.BoosterCount = 0;
+            OnReceiveStageParamCallBack(sharkAvoidanceParam);
+            return true;
+        }
+
+        OnReceiveStageParamCallBack(sharkAvoidanceParam);
+        return false;
+    }
+
     Coroutine coSpawnMonster = null;
     private IEnumerator CoSpawnMonster()
     {
@@ -86,12 +111,6 @@ public class SharkAvoidanceStage : MultiStage
         {
             EStageSection stageSection = CheckStageSection();
             
-            // 테스트(임시)
-            sharkAvoidanceParam.BoosterCount++;
-            if (sharkAvoidanceParam.BoosterCount == 4)
-                sharkAvoidanceParam.BoosterCount = 0;
-            OnReceiveStageParamCallBack(sharkAvoidanceParam);
-
             switch (stageSection)
             {
                 case EStageSection.Level1:
@@ -102,12 +121,8 @@ public class SharkAvoidanceStage : MultiStage
                     break;
             }
 
-            if (EndMonsterSpawnDelay < StartMonsterSpawnDelay)
-                EndMonsterSpawnDelay = StartMonsterSpawnDelay;
-
-            float delayTime = UnityEngine.Random.Range(StartMonsterSpawnDelay, EndMonsterSpawnDelay);
-            //Debug.Log($"{delayTime}초 뒤에 몬스터 생성");
-            yield return new WaitForSeconds(delayTime); // 임시
+            float delayTime = UnityEngine.Random.Range(4, 5);
+            yield return new WaitForSeconds(delayTime);
         }
 
         coSpawnMonster = null;
@@ -133,22 +148,46 @@ public class SharkAvoidanceStage : MultiStage
     {
         int goalPercent = (int)(sharkAvoidanceParam.CurrDisRatio * 100); // 0 ~ 100
 
-        if (goalPercent < 1) // 테스트
-            return EStageSection.Level1; // EStageSection.None;
+        if (goalPercent < 1)
+            return EStageSection.None;
         else if (goalPercent < 50)
             return EStageSection.Level1;
         else
             return EStageSection.Level2;
     }
 
+    private void SpawnItems()
+    {
+        float lineLength = Mathf.Abs(finishLineObject.transform.position.z) + Mathf.Abs(playerStartPoint.transform.position.z);
+        lineLength *= 0.6f;
+
+        float blockLength = lineLength / 6;
+        float basicPointZ = playerStartPoint.transform.position.z + blockLength * 1.5f;
+
+        for(int i = 0; i < 4; i++)
+        {
+            int spawnLine = UnityEngine.Random.Range(0, 4) * 2;
+            Vector3 itemSpawnPoint = new Vector3(
+                spawnPointList[spawnLine].transform.position.x,
+                0,
+                basicPointZ + (i * blockLength * 1.5f));
+
+            ObjectCreator.SpawnItem<BoosterItem>(EItemType.BoosterItem, itemSpawnPoint);
+        }
+    }
+
     private void SpawnMonster(int spawnCount)
     {
-        switch(spawnCount)
+        Vector3 spawnPointVec = player.transform.position;
+        spawnPointVec.z += 100f;
+
+        switch (spawnCount)
         {
             case 1:
                 {
                     int spawnPointNum = UnityEngine.Random.Range(0, 4) * 2;
-                    ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum].transform.position);
+                    spawnPointVec.x = spawnPointList[spawnPointNum].transform.position.x;
+                    ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointVec);
                 }
                 break;
             case 2:
@@ -157,7 +196,8 @@ public class SharkAvoidanceStage : MultiStage
                     if(isBigShark)
                     {
                         int spawnPointNum = UnityEngine.Random.Range(0, 3) * 2 + 1;
-                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointList[spawnPointNum].transform.position);
+                        spawnPointVec.x = spawnPointList[spawnPointNum].transform.position.x;
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointVec);
                     }
                     else
                     {
@@ -166,8 +206,10 @@ public class SharkAvoidanceStage : MultiStage
                         if(spawnPointNum2 >= spawnPointList.Count)
                             spawnPointNum2 -= spawnPointList.Count + 1;
 
-                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum1].transform.position);
-                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum2].transform.position);
+                        spawnPointVec.x = spawnPointList[spawnPointNum1].transform.position.x;
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointVec);
+                        spawnPointVec.x = spawnPointList[spawnPointNum2].transform.position.x;
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointVec);
                     }
                 }
                 break;
@@ -181,8 +223,10 @@ public class SharkAvoidanceStage : MultiStage
                         if (spawnPointNum2 >= spawnPointList.Count)
                             spawnPointNum2 -= spawnPointList.Count + 1;
 
-                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointList[spawnPointNum1].transform.position);
-                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum2].transform.position);
+                        spawnPointVec.x = spawnPointList[spawnPointNum1].transform.position.x;
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointVec);
+                        spawnPointVec.x = spawnPointList[spawnPointNum1].transform.position.x;
+                        ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointVec);
                     }
                     else
                     {
@@ -194,7 +238,8 @@ public class SharkAvoidanceStage : MultiStage
                             if (spawnPointNum >= spawnPointList.Count)
                                 spawnPointNum -= spawnPointList.Count + 1;
 
-                            ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointList[spawnPointNum].transform.position);
+                            spawnPointVec.x = spawnPointList[spawnPointNum].transform.position.x;
+                            ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointVec);
                         }
                     }
                 }

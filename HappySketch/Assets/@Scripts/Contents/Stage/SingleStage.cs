@@ -40,6 +40,11 @@ public abstract class SingleStage : BaseStage
         rightPlayer.SetInfo((int)StageType);
     }
 
+    public override void EndStage(ETeamType winnerTeam)
+    {
+        // 각 플레이어에게 게임이 끝났음을 알려야 함
+    }
+
     public abstract void ConnectEvents(Action<ETeamType> onEndGameCallBack);
 
     public abstract Vector3 GetStartPoint(ETeamType teamType);

@@ -35,4 +35,5 @@ public abstract class BaseStage : InitBase
     }
 
     public abstract void StartStage();
+    public abstract void EndStage(ETeamType winnerTeam);
 }
