@@ -39,6 +39,11 @@ public class UI_GameScene : UI_BaseScene
         SetStageUI();
     }
 
+    public void EndState()
+    {
+
+    }
+
     private void SetStageUI()
     {
         if(currStageType == EStageType.None)

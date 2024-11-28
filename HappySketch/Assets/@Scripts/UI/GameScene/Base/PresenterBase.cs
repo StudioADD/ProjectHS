@@ -22,4 +22,10 @@ public abstract class PresenterBase
     public abstract void OnStageInfoUpdate(StageParam param);
 
     public abstract void ConnectStageEvents(BaseStage stage);
+
+    // 일단 virtual로, 모든 Presenter에 구현 해야 하면 abstract로
+    public virtual void EndStage()
+    {
+
+    }
 }
