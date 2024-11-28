@@ -27,4 +27,4 @@ public class UI_WinLoseController : MonoBehaviour
                 break;
         }
     }
-}
+}  
