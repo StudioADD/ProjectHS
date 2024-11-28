@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,22 +9,20 @@ using static Define;
 
 public class UI_WinLose : UI_BaseObject
 {
-    [SerializeField, ReadOnly] private Sprite winSprite;
-    [SerializeField, ReadOnly] private Sprite loseSprite;
-
-    [SerializeField, ReadOnly] private UI_ImageEffect leftImage;
-    [SerializeField, ReadOnly] private UI_ImageEffect rightImage;
+    [SerializeField, ReadOnly] private Image winImage;
+    [SerializeField, ReadOnly] private Image loseImage;
+    [SerializeField, ReadOnly] private Image goalImage;
+    [SerializeField, ReadOnly] private Image[] winCount = new Image[3];
 
     [SerializeField, ReadOnly] private Image backgroundImage;
-
     [SerializeField, ReadOnly] private UI_TextMeshProEffect goalText;
 
     private void Reset()
     {
         backgroundImage = GetComponentInChildren<Image>();
 
-        leftImage = Util.FindChild<UI_ImageEffect>(gameObject, "Img_Left");
-        rightImage = Util.FindChild<UI_ImageEffect>(gameObject, "Img_Right");
+        //leftImage = Util.FindChild<UI_ImageEffect>(gameObject, "Img_Left");
+        //rightImage = Util.FindChild<UI_ImageEffect>(gameObject, "Img_Right");
 
         goalText = Util.FindChild<UI_TextMeshProEffect>(gameObject, "Txt_Goal");
     }
@@ -33,8 +32,8 @@ public class UI_WinLose : UI_BaseObject
         if (base.Init() == false)
             return false;
 
-        winSprite = Managers.Resource.Load<Sprite>($"{LoadPath.UI_TEXTURE_PATH}/ActionText_Victory");
-        loseSprite = Managers.Resource.Load<Sprite>($"{LoadPath.UI_TEXTURE_PATH}/ActionText_Defeat");
+        //winSprite = Managers.Resource.Load<Sprite>($"{LoadPath.UI_TEXTURE_PATH}/ActionText_Victory");
+        //loseSprite = Managers.Resource.Load<Sprite>($"{LoadPath.UI_TEXTURE_PATH}/ActionText_Defeat");
 
         return true;
     }
@@ -47,8 +46,8 @@ public class UI_WinLose : UI_BaseObject
         {
             bool isLeftWin = winLoseParam.WinTeam == ETeamType.Left;
 
-            leftImage.SetSprite(isLeftWin ? winSprite : loseSprite);
-            rightImage.SetSprite(!isLeftWin ? winSprite : loseSprite);
+            //leftImage.SetSprite(isLeftWin ? winSprite : loseSprite);
+            //rightImage.SetSprite(!isLeftWin ? winSprite : loseSprite);
 
             goalText.SetPosition(isLeftWin ? new Vector3(-480f, 0f) : new Vector3(480f, 0f));
             goalText.gameObject.SetActive(true);
@@ -70,7 +69,17 @@ public class UI_WinLose : UI_BaseObject
             yield return null;
         }
 
-        leftImage.OpenImageEffectUI();
-        rightImage.OpenImageEffectUI();
+        //leftImage.OpenImageEffectUI();
+        //rightImage.OpenImageEffectUI();
+    }
+
+    public void Win()
+    {
+
+    }
+
+    public void Lose()
+    {
+
     }
 }

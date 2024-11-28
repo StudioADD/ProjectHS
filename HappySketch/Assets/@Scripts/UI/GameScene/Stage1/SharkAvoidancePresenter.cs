@@ -9,22 +9,22 @@ public class SharkAvoidancePresenter : PresenterBase
     {
         if(model is SharkAvoidanceModel sharkModel)
         {
-            sharkModel.onLeftRatioChanged -= SetLeftRatio;
-            sharkModel.onLeftRatioChanged += SetLeftRatio;
+            sharkModel.OnLeftRatioChanged -= SetLeftRatio;
+            sharkModel.OnLeftRatioChanged += SetLeftRatio;
 
-            sharkModel.onRightRatioChanged -= SetRightRatio;
-            sharkModel.onRightRatioChanged += SetRightRatio;
+            sharkModel.OnRightRatioChanged -= SetRightRatio;
+            sharkModel.OnRightRatioChanged += SetRightRatio;
 
             switch(teamType)
             {
                 case ETeamType.Left:
-                    sharkModel.onLeftRatioChanged -= SetProgressRatio;
-                    sharkModel.onLeftRatioChanged += SetProgressRatio;
+                    sharkModel.OnLeftRatioChanged -= SetProgressRatio;
+                    sharkModel.OnLeftRatioChanged += SetProgressRatio;
                     break;
 
                 case ETeamType.Right:
-                    sharkModel.onRightRatioChanged -= SetProgressRatio;
-                    sharkModel.onRightRatioChanged += SetProgressRatio;
+                    sharkModel.OnRightRatioChanged -= SetProgressRatio;
+                    sharkModel.OnRightRatioChanged += SetProgressRatio;
                     break;
             }
         }

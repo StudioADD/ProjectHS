@@ -39,9 +39,10 @@ public class UI_GameScene : UI_BaseScene
         SetStageUI();
     }
 
-    public void EndState()
+    // 누가 이겼는지?
+    public void EndStage(ETeamType teamType, Action onEnd)
     {
-
+        
     }
 
     private void SetStageUI()

@@ -49,7 +49,7 @@ public class SharkAvoidanceView : ViewBase
         leftImgWidth = leftImage.GetComponent<RectTransform>().rect.width;
         rightImgWidth = rightImage.GetComponent<RectTransform>().rect.width;
 
-        DeActivateBoosterImage();
+        DeactivateBoosterImage();
         SetActiveActiveItemsImage(false);
         SetActiveInActiveItemsImage(false);
         UpdateLeftRatio(0f);
@@ -63,7 +63,7 @@ public class SharkAvoidanceView : ViewBase
     {
         if (count == 0)
         {
-            DeActivateBoosterImage();
+            DeactivateBoosterImage();
             SetActiveInActiveItemsImage(false);
             SetActiveActiveItemsImage(false);
         }
@@ -107,7 +107,7 @@ public class SharkAvoidanceView : ViewBase
         inactiveBoosterImage.gameObject.SetActive(false);
     }
 
-    private void DeActivateBoosterImage()
+    private void DeactivateBoosterImage()
     {
         foreach(Image image in activeBoosterImage)
         {
@@ -131,10 +131,5 @@ public class SharkAvoidanceView : ViewBase
         {
             image.gameObject.SetActive(isActive);
         }
-    }
-
-    public float GetProgressRatio()
-    {
-        return progressing.fillAmount;
     }
 }

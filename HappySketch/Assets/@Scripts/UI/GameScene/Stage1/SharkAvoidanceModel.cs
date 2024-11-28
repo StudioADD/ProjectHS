@@ -38,8 +38,8 @@ public class SharkAvoidanceModel : ModelBase
 
     private Coroutine[] coroutines = new Coroutine[(int)CoroutineType.Last];
 
-    public event UnityAction<float> onLeftRatioChanged;
-    public event UnityAction<float> onRightRatioChanged;
+    public event UnityAction<float> OnLeftRatioChanged;
+    public event UnityAction<float> OnRightRatioChanged;
 
     private const float PROGRESS_TIME = 3f;
 
@@ -65,7 +65,7 @@ public class SharkAvoidanceModel : ModelBase
         if (coroutines[(int)CoroutineType.Left] != null)
             CoroutineHelper.StopCoroutine(coroutines[(int)CoroutineType.Left]);
 
-        coroutines[(int)CoroutineType.Left] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(leftRatio, onLeftRatioChanged, CoroutineType.Left));
+        coroutines[(int)CoroutineType.Left] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(leftRatio, OnLeftRatioChanged, CoroutineType.Left));
     }
 
     public void SetRightRatio(float ratio)
@@ -75,10 +75,10 @@ public class SharkAvoidanceModel : ModelBase
         if (coroutines[(int)CoroutineType.Right] != null)
             CoroutineHelper.StopCoroutine(coroutines[(int)CoroutineType.Right]);
 
-        coroutines[(int)CoroutineType.Right] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(rightRatio, onRightRatioChanged, CoroutineType.Right));
+        coroutines[(int)CoroutineType.Right] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(rightRatio, OnRightRatioChanged, CoroutineType.Right));
     }
 
-    private IEnumerator SetProgressCoroutine(Ratio ratio, UnityAction<float> action, CoroutineType coroutineType)
+    private IEnumerator SetProgressCoroutine(Ratio ratio, UnityAction<float> onRatioChanged, CoroutineType coroutineType)
     {
         float elapsed = 0f;
 
@@ -88,12 +88,12 @@ public class SharkAvoidanceModel : ModelBase
 
             ratio.currRatio = Mathf.Lerp(ratio.currRatio, ratio.ratio, elapsed / PROGRESS_TIME);
 
-            action?.Invoke(ratio.currRatio);
+            onRatioChanged?.Invoke(ratio.currRatio);
 
             yield return null;
         }
 
-        action?.Invoke(ratio.ratio);
+        onRatioChanged?.Invoke(ratio.ratio);
 
         coroutines[(int)coroutineType] = null;
     }
