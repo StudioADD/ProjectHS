@@ -7,7 +7,7 @@ public class GameMgr
 {
     public bool IsGamePlay { get; private set; } = false;
 
-    int[] winnerCounts = new int[2];
+    int[] winnerCounts = new int[2]; // Left, Right
     bool[] playedStages = new bool[(int)EStageType.Max - 1];
 
     int currStageId = 0;
@@ -26,6 +26,11 @@ public class GameMgr
 
         for (int i = 0; i < playedStages.Length; i++)
             playedStages[i] = false;
+    }
+
+    public int GetWinnerTeamCount(ETeamType teamType)
+    {
+        return winnerCounts[(int)teamType];
     }
 
     public void SetStageId(int stageId = -1)

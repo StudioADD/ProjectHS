@@ -29,7 +29,19 @@ public class CollectingCandyStage : MultiStage
 
     }
 
-    public void OnGetCandyItem()
+    public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
+    {
+        player.ConnectCollectingCandyStage(OnCollectCandyItem, OnChangeScoreBuff);
+
+
+    }
+
+    public void OnCollectCandyItem(ECandyItemType candyItemType)
+    {
+           
+    }
+
+    public void OnChangeScoreBuff(bool isScoreBuff)
     {
 
     }

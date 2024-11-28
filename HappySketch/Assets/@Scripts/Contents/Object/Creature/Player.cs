@@ -195,7 +195,7 @@ public class Player : Creature
     public override void SetInfo(int templateID = 0)
     {
         stageType = (EStageType)templateID;
-        // data = Managers.Data.PlayerDict[(int)stageType];
+         // data = Managers.Data.PlayerDict[(int)stageType];
         switch (stageType)
         {
             case EStageType.CollectingCandy:
