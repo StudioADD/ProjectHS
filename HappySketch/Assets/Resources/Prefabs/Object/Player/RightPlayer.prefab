@@ -1154,8 +1154,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2145681493531139962}
   - {fileID: 7654409421986662426}
@@ -1229,7 +1229,7 @@ MonoBehaviour:
     JumpPower: 0
   inputTime: 0
   moveDistance: 5
-  hitTime: -1
+  hitTimer: -1
   _teamType: 1
   items: []
   trackNum: 2

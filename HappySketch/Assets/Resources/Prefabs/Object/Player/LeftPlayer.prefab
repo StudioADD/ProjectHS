@@ -4416,7 +4416,7 @@ MonoBehaviour:
     JumpPower: 0
   inputTime: 0
   moveDistance: 5
-  hitTime: -1
+  hitTimer: -1
   _teamType: 0
   items: []
   trackNum: 2
