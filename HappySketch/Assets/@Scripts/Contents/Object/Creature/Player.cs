@@ -236,12 +236,10 @@ public class Player : Creature
         }
     }
     #region SharkAvoidanceStage Event
-    Action onMoveEvent; // 앞으로 이동이 끝나면 보내주면 됨
     Action onAddBoosterItem;
     Func<bool> onUseBoosterItem;
-    public void ConnectSharkAvoidanceStage(Action onMoveEvent, Action onAddBoosterItem, Func<bool> onUseBoosterItem)
+    public void ConnectSharkAvoidanceStage( Action onAddBoosterItem, Func<bool> onUseBoosterItem)
     {
-        this.onMoveEvent = onMoveEvent;
         this.onAddBoosterItem = onAddBoosterItem;
         this.onUseBoosterItem = onUseBoosterItem;
     }
