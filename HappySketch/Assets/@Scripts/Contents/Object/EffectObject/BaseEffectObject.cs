@@ -14,7 +14,6 @@ public enum EEffectType
 
 public abstract class BaseEffectObject : BaseObject
 {
-   
 
     public override bool Init()
     {
