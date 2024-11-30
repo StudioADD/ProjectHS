@@ -61,10 +61,10 @@ public class Player : Creature
     private float inputCooldown = 0.5f;
 
     [SerializeField, ReadOnly]
-    private GameObject StunEffet = null;
+    private PlayerEffectObject StunEffet = null;
 
     [SerializeField, ReadOnly]
-    private GameObject BoosterEffet = null;
+    private PlayerEffectObject BoosterEffet = null;
 
 
     private float boosterTimer = -1f; // 부스터 현재시간
@@ -200,7 +200,7 @@ public class Player : Creature
     public override void SetInfo(int templateID = 0)
     {
         stageType = (EStageType)templateID;
-        //data = Managers.Data.PlayerDict[(int)stageType];
+        data = Managers.Data.PlayerDict[(int)stageType];
         moveSpeed = data.MoveSpeed;
         PlayerState = EPlayerState.Idle;
         targetPosition = beforePosition = transform.position;
@@ -240,8 +240,11 @@ public class Player : Creature
     Func<bool> onUseBoosterItem;
     public void ConnectSharkAvoidanceStage( Action onAddBoosterItem, Func<bool> onUseBoosterItem)
     {
-        this.onAddBoosterItem = onAddBoosterItem;
-        this.onUseBoosterItem = onUseBoosterItem;
+        this.onAddBoosterItem -= onAddBoosterItem;
+        this.onUseBoosterItem -= onUseBoosterItem;
+
+        this.onAddBoosterItem += onAddBoosterItem;
+        this.onUseBoosterItem += onUseBoosterItem;
     }
     #endregion
 
@@ -274,10 +277,15 @@ public class Player : Creature
     #region SharkAvoidance Effet
     private void SetSharkAvoidanceEffet()
     {
-        StunEffet = Managers.Resource.Instantiate(PrefabPath.OBJECT_PLAYER_PATH + "/Stun", this.transform, new Vector3(0, 3f, 0));
-        StunEffet.SetActive(false);
+        StunEffet = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/StunEffect").GetComponent<PlayerEffectObject>();
+        StunEffet.transform.parent = this.transform;
+        StunEffet.transform.localPosition = new Vector3(0, 1.5f, 0);
+        StunEffet.SetFalse();
 
-
+        BoosterEffet = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/UseBoosterEffect").GetComponent<PlayerEffectObject>();
+        BoosterEffet.transform.parent = this.transform;
+        BoosterEffet.transform.localPosition = new Vector3(0, 0, 0);
+        BoosterEffet.SetFalse();
     }
 
     #endregion
@@ -413,6 +421,8 @@ public class Player : Creature
         {
             return;
         }
+        Debug.LogWarning(onUseBoosterItem());
+
         if (onUseBoosterItem())
         {
             boosterTimer = 0;
@@ -549,6 +559,9 @@ public class Player : Creature
     }
     public void OnHit(float hitTime = 3f)
     {
+        StunEffet.SetDuration(hitTime);
+        StunEffet.SetTrue();
+        
         this.hitTime = hitTime;
         switch (stageType)
         {
@@ -582,11 +595,8 @@ public class Player : Creature
     {
         isInputRock = true;
         hitTimer = 0;
-        StunEffet.SetActive(true);
-        foreach (ParticleSystem particle in StunEffet.GetComponentsInChildren<ParticleSystem>())
-        {
-            //particle.main.duration = hitTime;
-        }
+
+
         if (targetPosition.x < beforePosition.x)
             trackNum++;
         else if (targetPosition.x > beforePosition.x)
@@ -709,7 +719,7 @@ public class Player : Creature
 
     protected virtual void GoBackStateExit()
     {
-        StunEffet.SetActive(false);
+        StunEffet.SetFalse();
         isInputRock = false;
     }
 
@@ -1221,6 +1231,10 @@ public class Player : Creature
                 animator.speed /= 2;
             }
         }
+    }
+    public void GetBooster()
+    {
+        onAddBoosterItem();
     }
 
 

@@ -30,7 +30,7 @@ public class BoosterItem : BaseItem
         if(other.TryGetComponent(out Player player))
         {
             // 부스터 아이템 카운트 줘야 함
-
+            player.GetBooster();
             OnDestroyEffect();
         }
     }

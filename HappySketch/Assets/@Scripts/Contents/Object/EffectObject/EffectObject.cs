@@ -6,6 +6,8 @@ using static UnityEngine.ParticleSystem;
 public enum EEffectType
 {
     ItemGainEffect = 0,
+    StunEffect = 1,
+    UseBoosterEffect = 2,
 }
 
 public class EffectObject : BaseObject
