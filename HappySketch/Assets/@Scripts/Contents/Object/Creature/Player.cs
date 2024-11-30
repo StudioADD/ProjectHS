@@ -421,13 +421,14 @@ public class Player : Creature
         {
             return;
         }
-        Debug.LogWarning(onUseBoosterItem());
 
         if (onUseBoosterItem())
         {
+            BoosterEffet.SetTrue();
             boosterTimer = 0;
             inputCooldown = 0.25f;
             moveSpeed *= 2;
+            animator.speed = 2;
         }
 
     }
@@ -548,6 +549,7 @@ public class Player : Creature
     //test
     private void hittest()
     {
+        onAddBoosterItem();
         //if (boosterTimer == -1)
         //{
         //    boosterTimer = 0;
@@ -555,10 +557,12 @@ public class Player : Creature
         //    moveSpeed *= 2; animator.speed *= 2;
         //}
 
-        OnHit();
+        //OnHit();
     }
     public void OnHit(float hitTime = 3f)
     {
+        if (boosterTimer > 0)
+            return;
         StunEffet.SetDuration(hitTime);
         StunEffet.SetTrue();
         
@@ -1228,7 +1232,8 @@ public class Player : Creature
                 boosterTimer = -1;
                 moveSpeed = data.MoveSpeed;
                 inputCooldown = 0.5f;
-                animator.speed /= 2;
+                animator.speed = 1;
+                BoosterEffet.SetFalse();
             }
         }
     }
