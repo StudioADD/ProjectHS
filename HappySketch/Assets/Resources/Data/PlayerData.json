@@ -1,9 +1,9 @@
-﻿{
+{
   "Players": [
     {
       "DataId": 1,
       "MoveSpeed": 10.0,
-      "JumpPower": 0.0
+      "JumpPower": 5.0
     },
     {
       "DataId": 2,

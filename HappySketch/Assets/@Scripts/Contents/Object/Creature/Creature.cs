@@ -77,15 +77,14 @@ public abstract class Creature : BaseObject
 
     }
     #region Rigid
+    protected Vector3 GetRigidVelocity()
+    {
+        return rigid.velocity;
+    }
+
     protected void SetRigidVelocity(Vector3 velocity)
     {
         rigid.velocity = velocity;
-    }
-
-    protected void SetRigidVelocity(Vector2 velocity)
-    {
-        Vector3 veloctiy = new Vector3(velocity.x, rigid.velocity.y, velocity.y);
-        rigid.velocity = veloctiy;
     }
 
     protected void InitRigidVelocityX()

@@ -56,4 +56,10 @@ public static class Define
         Left,
         Right,
     }
+    public enum EDirection
+    {
+        Left,
+        Right,
+    }
+
 }

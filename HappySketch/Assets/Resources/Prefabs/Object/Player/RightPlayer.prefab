@@ -1229,9 +1229,11 @@ MonoBehaviour:
     JumpPower: 0
   inputTime: 0
   moveDistance: 5
+  moveSpeed: 5
+  StunEffet: {fileID: 0}
+  BoosterEffet: {fileID: 0}
   hitTimer: -1
   _teamType: 1
-  items: []
   trackNum: 2
   IsJump: 0
   isInputRock: 0
