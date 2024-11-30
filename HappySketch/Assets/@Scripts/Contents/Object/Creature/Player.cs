@@ -951,49 +951,39 @@ public class Player : Creature
     protected virtual void JumpStateEnter()
     {
         beforePosition = transform.position;
-        targetPosition = transform.position + Vector3.forward * data.MoveSpeed; // 추후 이동거리로 뺄것
+        targetPosition = transform.position + Vector3.forward * data.MoveSpeed*2; // 추후 이동거리로 뺄것
         if (stageType == EStageType.CrossingBridge)
         {
             //targetPosition 받아올것
         }
-
-        //        // 목표 위치로의 벡터 계산
-        //        Vector3 direction = targetPosition - transform.position;
-
-        //        // 목표까지의 수평 거리와 목표 높이를 계산
-        //        float distance = direction.magnitude;
-
-
-        //        // 최종적으로 물리적인 점프를 위한 속도 계산
-        //        Vector3 velocity = direction.normalized * distance*1000 + Vector3.up * data.JumpPower;
-
-        //#if DEBUG
-        //        Debug.LogWarning(velocity);
-        //#endif
-        //        SetRigidVelocity(velocity);
-
-        
-
     }
 
     protected virtual void UpdateJumpState()
     {
-        float x0 = beforePosition.z;
-        float x1 = targetPosition.z;
-        float distance = x1 - x0;
-        float nextZ = Mathf.MoveTowards(transform.position.z, x1, moveSpeed * Time.deltaTime);
-        float baseY = Mathf.Lerp(beforePosition.y, targetPosition.y, (nextZ - x0) / distance);
-        Vector3 nextPosition = new Vector3(transform.position.x, baseY, nextZ);
-        Debug.LogWarning(nextPosition);
+        // 이동 거리와 속도 관련 변수
+        float z0 = beforePosition.z; // 시작 위치 z
+        float z1 = targetPosition.z; // 목표 위치 z
+        float distance = z1 - z0;    // 총 이동 거리
+        float progress = Mathf.Clamp01((transform.position.z - z0) / distance); // 이동 비율 (0 ~ 1)
+
+        // Z 방향 이동 (선형 보간)
+        float nextZ = Mathf.MoveTowards(transform.position.z, z1, moveSpeed * Time.deltaTime);
+
+        // 포물선 Y 높이 계산
+        float peakHeight = Mathf.Max(beforePosition.y, targetPosition.y) + data.JumpPower; // 최고점 계산
+        float nextY = Mathf.Lerp(beforePosition.y, targetPosition.y, progress)            // 기본 보간 높이
+                    + Mathf.Sin(progress * Mathf.PI) * (peakHeight - Mathf.Lerp(beforePosition.y, targetPosition.y, 0.5f)); // 포물선 추가
+
+        // 새로운 위치 계산
+        Vector3 nextPosition = new Vector3(transform.position.x, nextY, nextZ);
+
+        // 위치 적용
         transform.position = nextPosition;
-        if(transform.position == targetPosition)
+        if (transform.position == targetPosition)
         {
             PlayerState = EPlayerState.Landing;
         }
-        if (GetRigidVelocity().y == 0)
-        {
-            PlayerState = EPlayerState.Landing;
-        }
+   
 
     }
 
