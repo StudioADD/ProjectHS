@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerEffectObject : EffectObject
+public class PlayerEffectObject : ParticleEffectObject
 {
  
     public override void SetInfo()

@@ -21,7 +21,7 @@ public class BoosterItem : BaseItem
 
     private void OnDestroyEffect()
     {
-        ObjectCreator.SpawnEffect<EffectObject>(EEffectType.ItemGainEffect, this.transform.position);
+        ObjectCreator.SpawnEffect<BaseEffectObject>(EEffectType.ItemBurstEffect, this.transform.position);
         Managers.Resource.Destroy(gameObject);
     }
 

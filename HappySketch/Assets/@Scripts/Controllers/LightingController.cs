@@ -21,6 +21,10 @@ public static class LightingController
                 {
                     string path = $"{LoadPath.MATERIALS_PATH}/{StageSkyBoxName.SHARKAVOIDANCE_NAME}";
                     RenderSettings.skybox = Managers.Resource.Load<Material>(path);
+
+                    RenderSettings.ambientIntensity = 1f;
+                    RenderSettings.reflectionIntensity = 1f;
+                    
                     RenderSettings.fog = true;
                     RenderSettings.fogColor = Util.HexColor("#1697DD");
                     RenderSettings.fogMode = FogMode.ExponentialSquared;
@@ -31,6 +35,10 @@ public static class LightingController
                 {
                     string path = $"{LoadPath.MATERIALS_PATH}/{StageSkyBoxName.COLLECTINGCANDY_NAME}";
                     RenderSettings.skybox = Managers.Resource.Load<Material>(path);
+
+                    RenderSettings.ambientIntensity = 1f;
+                    RenderSettings.reflectionIntensity = 1f;
+
                     RenderSettings.fog = false;
                     break;
                 }
@@ -38,6 +46,10 @@ public static class LightingController
                 {
                     string path = $"{LoadPath.MATERIALS_PATH}/{StageSkyBoxName.CROSSINGBRIDGE_NAME}";
                     RenderSettings.skybox = Managers.Resource.Load<Material>(path);
+
+                    RenderSettings.ambientIntensity = 1f;
+                    RenderSettings.reflectionIntensity = 1f;
+
                     RenderSettings.fog = false;
                     break;
                 }

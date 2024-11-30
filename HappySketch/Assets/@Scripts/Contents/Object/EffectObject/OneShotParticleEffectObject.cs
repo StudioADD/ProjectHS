@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OneShotEffectObject : EffectObject
+public class OneShotParticleEffectObject : ParticleEffectObject
 {
     [SerializeField, ReadOnly] float maxDuration = 0;
 

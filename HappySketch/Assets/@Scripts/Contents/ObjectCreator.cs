@@ -75,10 +75,10 @@ public static class ObjectCreator
         return item as T;
     }
 
-    public static T SpawnEffect<T>(EEffectType effectType, Vector3 spawnPosition) where T : EffectObject
+    public static T SpawnEffect<T>(EEffectType effectType, Vector3 spawnPosition) where T : BaseEffectObject
     {
         string name = Util.EnumToString(effectType);
-        EffectObject effect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/{name}").GetComponent<EffectObject>();
+        BaseEffectObject effect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/{name}").GetComponent<BaseEffectObject>();
 
         if (effect == null)
         {
