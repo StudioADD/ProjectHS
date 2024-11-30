@@ -5274,8 +5274,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1448815337}
+  - component: {fileID: 1448815338}
   m_Layer: 0
-  m_Name: PlatformGroup
+  m_Name: PlatformGroupController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5308,6 +5309,31 @@ Transform:
   - {fileID: 1669097619}
   m_Father: {fileID: 2059885188}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1448815338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448815336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43401eb9e2495334fb450c1aa988f736, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  platformGroupList:
+  - {fileID: 1039643970}
+  - {fileID: 58529611}
+  - {fileID: 1944819511}
+  - {fileID: 426864973}
+  - {fileID: 949650261}
+  - {fileID: 937707629}
+  - {fileID: 746420148}
+  - {fileID: 1266867557}
+  - {fileID: 107524980}
+  - {fileID: 1755059993}
+  - {fileID: 1894141674}
+  - {fileID: 1669097620}
 --- !u!1 &1449003177
 GameObject:
   m_ObjectHideFlags: 0

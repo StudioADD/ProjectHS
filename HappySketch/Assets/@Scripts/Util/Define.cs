@@ -62,4 +62,5 @@ public static class Define
         Right,
     }
 
+    public static readonly string STRING_EFFECT = "Effect";
 }

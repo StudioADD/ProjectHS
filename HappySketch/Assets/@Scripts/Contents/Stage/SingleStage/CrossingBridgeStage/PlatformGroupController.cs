@@ -5,10 +5,10 @@ using static Define;
 
 namespace CrossingBridge
 {
-    public class PlatformController : InitBase
+    public class PlatformGroupController : InitBase
     {
         [field: SerializeField, ReadOnly]
-        List<PlatformGroup> platformGroupList = new List<PlatformGroup>();
+        List<BasePlatformGroup> platformGroupList = new List<BasePlatformGroup>();
         readonly float offSetPosY = 3.0f;
 
         private void Reset()
@@ -16,7 +16,7 @@ namespace CrossingBridge
             Transform[] allChildren = GetComponentsInChildren<Transform>();
             foreach (Transform child in allChildren)
             {
-                if(child.TryGetComponent(out PlatformGroup platformGroup))
+                if(child.TryGetComponent(out BasePlatformGroup platformGroup))
                     platformGroupList.Add(platformGroup);
             }
         }
@@ -37,7 +37,7 @@ namespace CrossingBridge
             }
         }
 
-        public void OnLandPlayerCallBack(int platformId, ETeamType teamType, bool isLandable)
+        public void OnLandPlayerCallBack(int platformId, ETeamType teamType, EDirection dir)
         {
 
         }

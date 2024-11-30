@@ -7,7 +7,7 @@ using CrossingBridge;
 
 public class CrossingBridgeStage : SingleStage
 {
-    [SerializeField, ReadOnly] PlatformGroup platformGroup;
+    [SerializeField, ReadOnly] PlatformGroupController platformGroupController;
 
     // 팀에 따라 좌우로 벌어져있는 정도 ( Left = -f, Right = f )
     // 플랫폼 좌우 1,2 스타트, 세이브, 앤드 포인트는 Offset 값
@@ -16,18 +16,15 @@ public class CrossingBridgeStage : SingleStage
     [SerializeField, ReadOnly]
     protected FinishLineObject finishLineObject;
 
-    [SerializeField, ReadOnly] int currLeftPlayerId = 0;
-    [SerializeField, ReadOnly] int currRightPlayerId = 0;
-
-    [SerializeField, ReadOnly] bool isLeftSavePoint = false;
-    [SerializeField, ReadOnly] bool isRightSavePoint = false;
+    [SerializeField, ReadOnly] int leftPlayerPosNum = 0;
+    [SerializeField, ReadOnly] int rightPlayerPosNum = 0;
 
     protected override void Reset()
     {
         base.Reset();
 
         finishLineObject = Util.FindChild<FinishLineObject>(gameObject, "FinishLineObject", false);
-        platformGroup = Util.FindChild< PlatformGroup>(gameObject);
+        platformGroupController = Util.FindChild<PlatformGroupController>(gameObject);
     }
 
     public override bool Init()
@@ -56,6 +53,9 @@ public class CrossingBridgeStage : SingleStage
 
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
     {
+        leftPlayer.ConnectCrossingBridgeStage(GetJumpTargetPos, GetSpawnPoint, OnUseGoggleItem, OnChangeTarget);
+        rightPlayer.ConnectCrossingBridgeStage(GetJumpTargetPos, GetSpawnPoint, OnUseGoggleItem, OnChangeTarget);
+
         if (finishLineObject != null)
         {
             finishLineObject.OnArriveFinishLine -= onEndGameCallBack;
@@ -65,11 +65,32 @@ public class CrossingBridgeStage : SingleStage
             Debug.LogWarning($"FinishLineObject is Null!!");
     }
 
-    public Vector3 GetJumpTargetPos(int id, bool isLeft)
+    public Vector3 GetJumpTargetPos(ETeamType teamType)
+    {
+        if (teamType == ETeamType.Left)
+            leftPlayerPosNum++;
+        else
+            rightPlayerPosNum++;
+
+        return Vector3.zero;
+    }
+
+    public Vector3 GetSpawnPoint(ETeamType teamType)
     {
 
 
         return Vector3.zero;
+    }
+
+    public bool OnUseGoggleItem(ETeamType teamType)
+    {
+
+        return false;
+    }
+
+    public void OnChangeTarget(ETeamType teamType, EDirection dir)
+    {
+
     }
 
     public override Vector3 GetStartPoint(ETeamType teamType)
