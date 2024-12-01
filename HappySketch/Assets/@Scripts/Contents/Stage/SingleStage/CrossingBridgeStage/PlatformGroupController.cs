@@ -8,11 +8,9 @@ namespace CrossingBridge
 {
     public enum EPlatformType
     {
-        StartPoint = 0,
+        Normal = 0,
         SavePoint = 7,
         EndPoint = 14,
-
-        Normal = 16,
     }
 
     public class PlatformGroupController : InitBase
@@ -51,7 +49,7 @@ namespace CrossingBridge
             if (0 > id || id >= platformGroupList.Count)
             {
 #if DEBUG
-                Debug.LogWarning($"범위 벗어남! ID : {id}");
+                Debug.LogWarning($"범위 벗어남! 벗어난 ID : {id}");
 #endif
                 return Vector3.zero;
             }

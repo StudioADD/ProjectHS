@@ -278,6 +278,15 @@ public class Player : Creature
         this.onUseGoggleItem = onUseGoggleItem;
         this.onChangeTarget = onChangeTarget;
     }
+
+    public void OnDropDetect()
+    {
+        Debug.Log("임시 테스트 - 확인했다면 지워주자");
+        // 낙하위치에 도달함. getSpawnPoint를 호출해서 스폰위치를 받아와 세팅하기 바람
+
+        // 만약, 다른 이벤트 처리 방식을 원한다면 수정해도 됨
+        // 스테이지3의 DropDetectObject 참조
+    }
     #endregion
 
     #region SharkAvoidance Effet

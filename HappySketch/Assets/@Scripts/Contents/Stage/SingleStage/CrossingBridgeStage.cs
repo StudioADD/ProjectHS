@@ -125,14 +125,17 @@ public class CrossingBridgeStage : SingleStage
     {
         if (teamType == ETeamType.Left)
         {
+            Vector3 offSetVec = new Vector3(offSetPosX * -1, offSetPosY, 0);
             if (leftPlayerPosNum >= (int)EPlatformType.SavePoint)
-                return playerSavePoint.position + new Vector3(offSetPosX * -1, offSetPosY, 0);
-
+                return playerSavePoint.position + offSetVec;
+            return playerStartPoint.position + offSetVec;
         }
         else if (teamType == ETeamType.Right)
         {
+            Vector3 offSetVec = new Vector3(offSetPosX, offSetPosY, 0);
             if (rightPlayerPosNum >= (int)EPlatformType.SavePoint)
-                return playerSavePoint.position + new Vector3(offSetPosX, offSetPosY, 0);
+                return playerSavePoint.position + offSetVec;
+            return playerStartPoint.position + offSetVec;
 
         }
 #if DEBUG
