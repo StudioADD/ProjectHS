@@ -556,7 +556,7 @@ public class Player : Creature
     //test
     private void hittest()
     {
-        onAddBoosterItem();
+        onAddBoosterItem?.Invoke();
         //if (boosterTimer == -1)
         //{
         //    boosterTimer = 0;
