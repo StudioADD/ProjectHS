@@ -1,8 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
-public class PlatformPointObjectGroup : BasePlatformGroup
+namespace CrossingBridge
 {
-    // 구현 예정 ( 스타트, 세이브, 앤드 포인트 오브젝트가 이에 속할 것 )
+    public class PlatformPointObjectGroup : BasePlatformGroup
+    {
+        [SerializeField, ReadOnly] PlatformElement platformElement;
+
+        private void Reset()
+        {
+            platformElement = Util.FindChild<PlatformElement>(gameObject);
+        }
+
+        public override void SetInfo(Action<int, Define.ETeamType> onLandPlayer, int platformId)
+        {
+            base.SetInfo(onLandPlayer, platformId);
+
+            platformElement.SetInfo(OnLandPlayerCallBack);
+        }
+
+        public override Vector3 GetPlatformPosition(ETeamType teamType, EDirection dir = EDirection.Left)
+        {
+#if DEBUG
+            Debug.LogError("호출되지 않아야 할 메서드가 호출됨");
+#endif
+            return platformElement.transform.position;
+        }
+    }
 }
+    

@@ -6,31 +6,20 @@ using static Define;
 
 namespace CrossingBridge
 {
-    public class DynamicPlatform : InitBase
+    public class PlatformElement : InitBase
     {
-        public event Action<ETeamType, EDirection> OnLandPlayer = null;
-        [SerializeField, ReadOnly] EDirection dir;
-        [field: SerializeField, ReadOnly] public bool IsLandable { get; protected set; }
+        Action<ETeamType> onLandPlayer = null;
 
-        Animation anim;
-        
-        public void SetInfo(Action<ETeamType, EDirection> onLandPlayer, EDirection dir, bool isLandable)
+        public void SetInfo(Action<ETeamType> onLandPlayer)
         {
-            OnLandPlayer = onLandPlayer;
-            this.dir = dir;
-            IsLandable = isLandable;
+            this.onLandPlayer = onLandPlayer;
         }
 
-        private void OnCollisionEnter(Collision collision)
+        protected virtual void OnCollisionEnter(Collision collision)
         {
-            if(collision.transform.TryGetComponent(out Player player))
+            if (collision.transform.TryGetComponent(out Player player))
             {
-                OnLandPlayer?.Invoke(player.TeamType, dir);
-                
-                if(IsLandable == false)
-                {
-                    anim.Play(STRING_EFFECT);
-                }
+                onLandPlayer?.Invoke(player.TeamType);
             }
         }
     }

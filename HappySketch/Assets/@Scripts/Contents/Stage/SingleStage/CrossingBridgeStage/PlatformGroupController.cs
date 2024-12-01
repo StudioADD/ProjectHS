@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,11 +6,20 @@ using static Define;
 
 namespace CrossingBridge
 {
+    public enum EPlatformType
+    {
+        StartPoint = 0,
+        SavePoint = 7,
+        EndPoint = 14,
+
+        Normal = 16,
+    }
+
     public class PlatformGroupController : InitBase
     {
         [field: SerializeField, ReadOnly]
         List<BasePlatformGroup> platformGroupList = new List<BasePlatformGroup>();
-        readonly float offSetPosY = 3.0f;
+        readonly float offSetPosY = 1f;
 
         private void Reset()
         {
@@ -29,29 +39,25 @@ namespace CrossingBridge
             return true;
         }
 
-        public void SetInfo()
+        public void SetInfo(Action<int, ETeamType> onLandPlayer)
         {
             for(int i = 0; i < platformGroupList.Count; i++)
             {
-                platformGroupList[i].SetInfo(OnLandPlayerCallBack, i);
+                platformGroupList[i].SetInfo(onLandPlayer, i);
             }
         }
 
-        public void OnLandPlayerCallBack(int platformId, ETeamType teamType, EDirection dir)
-        {
-
-        }
-
-        public Vector3 GetPlatformPos(int id)
+        public Vector3 GetPlatformPos(int id, ETeamType teamType, EDirection dir = EDirection.Left)
         {
             if (0 > id || id >= platformGroupList.Count)
             {
+#if DEBUG
                 Debug.LogWarning($"범위 벗어남! ID : {id}");
+#endif
                 return Vector3.zero;
             }
 
-            return platformGroupList[id].transform.position + new Vector3(0, offSetPosY, 0);
+            return platformGroupList[id].GetPlatformPosition(teamType, dir) + new Vector3(0, offSetPosY, 0);
         }
     }
-
 }
