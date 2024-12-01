@@ -26,7 +26,10 @@ public class CollectingCandyStage : MultiStage
     {
         base.StartStage();
 
+        if (coSpawnCandyItem != null)
+            StopCoroutine(coSpawnCandyItem);
 
+        coSpawnCandyItem = StartCoroutine(CoSpawnCandyItem());
     }
 
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
@@ -44,5 +47,17 @@ public class CollectingCandyStage : MultiStage
     public void OnChangeScoreBuff(bool isScoreBuff)
     {
 
+    }
+
+    Coroutine coSpawnCandyItem = null;
+    private IEnumerator CoSpawnCandyItem()
+    {
+        while(Managers.Game.IsGamePlay)
+        {
+
+            yield return new WaitForSeconds(5f); // 임시
+        }
+
+        coSpawnCandyItem = null;
     }
 }

@@ -5,10 +5,14 @@ using UnityEngine;
 
 public class Shark : BaseMonster
 {
+    Animator anim;
+
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
+
+        anim = GetComponent<Animator>();
 
         return true;
     }
@@ -38,11 +42,9 @@ public class Shark : BaseMonster
     {
         if(other.TryGetComponent(out Player player))
         {
-            player.OnHit();
-        }
-        else if(other.CompareTag(Util.EnumToString(Define.ETag.Player)))
-        {
+            anim.Play((player.IsBoosterState) ? Define.STRING_Hit : Define.STRING_ATTACK);
 
+            player.OnHit();
         }
     }
 }

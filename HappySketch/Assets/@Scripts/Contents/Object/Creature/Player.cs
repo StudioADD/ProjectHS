@@ -430,6 +430,7 @@ public class Player : Creature
 
         if (onUseBoosterItem())
         {
+            IsBoosterState = true; // 부스터 효과 끝나면 false로 만들어줘야 함
             BoosterEffet.SetTrue();
             boosterTimer = 0;
             inputCooldown = 0.25f;
@@ -1225,6 +1226,8 @@ public class Player : Creature
 
     #region Booster
 
+    public bool IsBoosterState { get; private set; }
+
     private void boosterTimeUpdate()
     {
         if (boosterTimer >= 0)
@@ -1242,7 +1245,7 @@ public class Player : Creature
     }
     public void GetBooster()
     {
-        onAddBoosterItem();
+        onAddBoosterItem?.Invoke();
     }
 
 

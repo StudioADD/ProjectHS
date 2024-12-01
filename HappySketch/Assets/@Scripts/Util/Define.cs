@@ -63,4 +63,6 @@ public static class Define
     }
 
     public static readonly string STRING_EFFECT = "Effect";
+    public static readonly string STRING_ATTACK = "Attack";
+    public static readonly string STRING_Hit = "Hit";
 }
