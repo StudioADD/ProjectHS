@@ -162,9 +162,9 @@ GameObject:
   - component: {fileID: 8102944524101584185}
   - component: {fileID: 8504498310553219242}
   - component: {fileID: 6391921144947769588}
-  - component: {fileID: 8226705607212489330}
+  - component: {fileID: 1793616167952279591}
   m_Layer: 5
-  m_Name: UI_WinLose
+  m_Name: UI_WinLoseController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -182,8 +182,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6692671305443624697}
   - {fileID: 1331707520263394942}
+  - {fileID: 6692671305443624697}
   - {fileID: 2779023238007298723}
   - {fileID: 8405080436826733804}
   - {fileID: 5120891857262266139}
@@ -257,7 +257,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &8226705607212489330
+--- !u!114 &1793616167952279591
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -266,11 +266,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1902279508253767178}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76296fb7714011f43900cbcd8f2ee92d, type: 3}
+  m_Script: {fileID: 11500000, guid: 47d2e7ff809668b499f18261215b4505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   leftWinLose: {fileID: 3094235788398839071}
   rightWinLose: {fileID: 7523588151364370369}
+  backGround: {fileID: 7218532024630395013}
 --- !u!1 &2355271503660758725
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,12 +325,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce4db50515bee124081e24e66718fba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  winSprite: {fileID: 0}
-  loseSprite: {fileID: 0}
-  leftImage: {fileID: 0}
-  rightImage: {fileID: 0}
-  backgroundImage: {fileID: 0}
-  goalText: {fileID: 0}
+  winImage: {fileID: 3130901378267506756}
+  loseImage: {fileID: 7866748527073115740}
+  goalImage: {fileID: 3536804349446522116}
+  winCount:
+  - {fileID: 3700773565238626120}
+  - {fileID: 1339504078696757954}
+  - {fileID: 8039094305695127203}
 --- !u!1 &3950834764013809133
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,7 +343,6 @@ GameObject:
   - component: {fileID: 2779023238007298723}
   - component: {fileID: 3225374422395594050}
   - component: {fileID: 7218532024630395013}
-  - component: {fileID: 1633039347925296635}
   m_Layer: 5
   m_Name: Img_Background
   m_TagString: Untagged
@@ -389,7 +390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.41960785}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -406,27 +407,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!95 &1633039347925296635
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3950834764013809133}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4700030171334812338
 GameObject:
   m_ObjectHideFlags: 0
@@ -589,7 +569,7 @@ GameObject:
   - component: {fileID: 8185215423775682361}
   - component: {fileID: 6585939981173833584}
   m_Layer: 5
-  m_Name: Img_Goal_Right
+  m_Name: Img_Goal_Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1155,12 +1135,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce4db50515bee124081e24e66718fba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  winSprite: {fileID: 0}
-  loseSprite: {fileID: 0}
-  leftImage: {fileID: 0}
-  rightImage: {fileID: 0}
-  backgroundImage: {fileID: 0}
-  goalText: {fileID: 0}
+  winImage: {fileID: 8996026332896357764}
+  loseImage: {fileID: 4785713047371977287}
+  goalImage: {fileID: 6585939981173833584}
+  winCount:
+  - {fileID: 3711576856057411907}
+  - {fileID: 1684505925694269308}
+  - {fileID: 7122522734150305482}
 --- !u!1 &8652784503778152515
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,7 +1154,7 @@ GameObject:
   - component: {fileID: 1282878454928840922}
   - component: {fileID: 3536804349446522116}
   m_Layer: 5
-  m_Name: Img_Goal_Left
+  m_Name: Img_Goal_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,11 +39,28 @@ public class UIGameStartCounterParam : UIParam
 
 public class UIWinLoseParam : UIParam
 {
+    public struct WinCount
+    {
+        private ETeamType teamType;
+        private int winCount;
+
+        public WinCount(ETeamType teamType, int winCount)
+        {
+            this.teamType = teamType;
+            this.winCount = winCount;
+        }
+    }
+
     public ETeamType WinTeam { get; private set; }
 
-    public UIWinLoseParam(ETeamType winTeam)
+    public WinCount LeftWinCount { get; private set; }
+    public WinCount RightWinCount { get; private set; }
+
+    public UIWinLoseParam(ETeamType winTeam, WinCount leftWinCount, WinCount rightWinCount)
     {
         WinTeam = winTeam;
+        LeftWinCount = leftWinCount;
+        RightWinCount = rightWinCount;
     }
 }
 #endregion

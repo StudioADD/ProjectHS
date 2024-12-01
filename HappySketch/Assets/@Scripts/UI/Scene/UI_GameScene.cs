@@ -13,6 +13,8 @@ public class UI_GameScene : UI_BaseScene
     private PresenterBase currPresentLeft;
     private PresenterBase currPresentRight;
 
+    private UI_WinLoseController winLoseController;
+
     private EStageType currStageType = EStageType.None;
 
     private void Reset()
@@ -31,7 +33,6 @@ public class UI_GameScene : UI_BaseScene
     public void SetInfo(EStageType stageType)
     {
         currStageType = stageType;
-        
     }
 
     public void StartStage()
@@ -39,10 +40,20 @@ public class UI_GameScene : UI_BaseScene
         SetStageUI();
     }
 
-    // 누가 이겼는지?
-    public void EndStage(ETeamType teamType, Action onEnd)
+    private void Update()
     {
-        
+        // Test용 코드!
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            EndStage(ETeamType.Left, 2, 1, () => Debug.Log("OnEnd!!!!"));
+        }
+    }
+
+    // 누가 이겼는지?
+    public void EndStage(ETeamType winTeam, int leftWinCount, int rightWinCount, Action onEnd)
+    {
+        UI_WinLoseController winLoseController = Managers.UI.SpawnObjectUI<UI_WinLoseController>();
+        winLoseController.EndStage(winTeam, leftWinCount, rightWinCount, onEnd);
     }
 
     private void SetStageUI()
