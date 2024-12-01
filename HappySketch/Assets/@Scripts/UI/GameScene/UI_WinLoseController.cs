@@ -41,7 +41,7 @@ public class UI_WinLoseController : UI_BaseObject
         StartCoroutine(FadeOutCoroutine(FADE_TIME, teamType, leftWinCount, rightWinCount, onEnd));
     }
 
-    private void Handle(ETeamType teamType, int leftWinCount, int rightWinCount, Action onEnd)
+    private void WinLose(ETeamType teamType, int leftWinCount, int rightWinCount, Action onEnd)
     {
         switch (teamType)
         {
@@ -76,7 +76,7 @@ public class UI_WinLoseController : UI_BaseObject
 
         backGround.color = targetColor;
 
-        Handle(teamType, leftWinCount, rightWinCount, onEnd);
+        WinLose(teamType, leftWinCount, rightWinCount, onEnd);
 
         yield return new WaitForSeconds(fadeTime * 2f);
 
