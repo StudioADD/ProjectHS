@@ -262,18 +262,21 @@ public class Player : Creature
     #endregion
 
     #region CrossingBridgeStage Event
-    /// <summary>
-    /// IsLeft, TargetPos
-    /// </summary>
-    Func<ETeamType, EDirection, Vector3> getJumpTargetPos;
-    Func<ETeamType,bool> onUseGoggleItem;
-    Func<ETeamType,Vector3> getSpawnPoint;
-    
-    public void ConnectCrossingBridgeStage(Func<ETeamType,EDirection, Vector3> getJumpTargetPos, Func<ETeamType, bool> onUseGoggleItem, Func<ETeamType,Vector3> getSpawnPoint)
+    Func<ETeamType, Vector3> getJumpTargetPos;
+    Func<ETeamType, Vector3> getSpawnPoint;
+    Func<ETeamType, bool> onUseGoggleItem;
+    Action<ETeamType, EDirection> onChangeTarget;
+
+    public void ConnectCrossingBridgeStage(
+        Func<ETeamType, Vector3> getJumpTargetPos,
+        Func<ETeamType, Vector3> getSpawnPoint,
+        Func<ETeamType, bool> onUseGoggleItem,
+        Action<ETeamType, EDirection> onChangeTarget)
     {
         this.getJumpTargetPos = getJumpTargetPos;
-        this.onUseGoggleItem = onUseGoggleItem;
         this.getSpawnPoint = getSpawnPoint;
+        this.onUseGoggleItem = onUseGoggleItem;
+        this.onChangeTarget = onChangeTarget;
     }
     #endregion
 
