@@ -15,6 +15,16 @@ public abstract class SingleStage : BaseStage
     public event Action<StageParam> OnLeftReceiveStageParam;
     public event Action<StageParam> OnRightReceiveStageParam;
 
+    protected void OnLeftReceiveStageParamCallBack(StageParam stageParam)
+    {
+        OnLeftReceiveStageParam?.Invoke(stageParam);
+    }
+
+    protected void OnRightReceiveStageParamCallBack(StageParam stageParam)
+    {
+        OnRightReceiveStageParam?.Invoke(stageParam);
+    }
+
     public override bool Init()
     {
         if (base.Init() == false)

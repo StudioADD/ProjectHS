@@ -21,9 +21,7 @@ public class CrossingBridgeStage : SingleStage
     [field: SerializeField, ReadOnly] CrossingBridgeParam leftStageParam = null;
     [field: SerializeField, ReadOnly] CrossingBridgeParam rightStageParam = null;
 
-    // 팀에 따라 좌우로 벌어져있는 정도 ( Left = -f, Right = f )
-    // 플랫폼 좌우 1,2 스타트, 세이브, 앤드 포인트는 Offset 값
-    readonly float TeamOffSetPosX = 3.0f;
+    readonly float offSetPosX = 3f;
     readonly float offSetPosY = 1f;
 
     Action<ETeamType> onEndGameCallBack;
@@ -85,7 +83,7 @@ public class CrossingBridgeStage : SingleStage
             {
                 isLeftPlayerSaved = true;
                 leftStageParam.isHaveGoggle = true;
-                // 이벤트 뿌려주기
+                OnLeftReceiveStageParamCallBack(leftStageParam);
             }
         }
         else if(teamType == ETeamType.Right)
@@ -96,7 +94,7 @@ public class CrossingBridgeStage : SingleStage
             {
                 isRightPlayerSaved = true;
                 rightStageParam.isHaveGoggle = true;
-                // 이벤트 뿌려주기
+                OnRightReceiveStageParamCallBack(rightStageParam);
             }
         }
     }
@@ -112,12 +110,12 @@ public class CrossingBridgeStage : SingleStage
         if(jumpTargetPosNum == (int)EPlatformType.SavePoint)
         {
             return playerSavePoint.position + new Vector3(
-                (dir == EDirection.Left) ? TeamOffSetPosX * -1f : TeamOffSetPosX, offSetPosY, 0);
+                (dir == EDirection.Left) ? offSetPosX * -1f : offSetPosX, offSetPosY, 0);
         }
         else if (jumpTargetPosNum == (int)EPlatformType.EndPoint)
         {
             return playerEndPoint.position + new Vector3(
-                (dir == EDirection.Left) ? TeamOffSetPosX * -1f : TeamOffSetPosX, offSetPosY, 0);
+                (dir == EDirection.Left) ? offSetPosX * -1f : offSetPosX, offSetPosY, 0);
         }
 
         return platformGroupController.GetPlatformPos(jumpTargetPosNum, teamType, dir) + new Vector3(0, offSetPosY, 0);
@@ -128,13 +126,13 @@ public class CrossingBridgeStage : SingleStage
         if (teamType == ETeamType.Left)
         {
             if (leftPlayerPosNum >= (int)EPlatformType.SavePoint)
-                return playerSavePoint.position + new Vector3(TeamOffSetPosX * -1, offSetPosY, 0);
+                return playerSavePoint.position + new Vector3(offSetPosX * -1, offSetPosY, 0);
 
         }
         else if (teamType == ETeamType.Right)
         {
             if (rightPlayerPosNum >= (int)EPlatformType.SavePoint)
-                return playerSavePoint.position + new Vector3(TeamOffSetPosX, offSetPosY, 0);
+                return playerSavePoint.position + new Vector3(offSetPosX, offSetPosY, 0);
 
         }
 #if DEBUG
@@ -166,18 +164,18 @@ public class CrossingBridgeStage : SingleStage
         if (teamType == ETeamType.Left)
         {
             leftStageParam.LookAtDir = EDirection.Left;
-
+            OnLeftReceiveStageParamCallBack(leftStageParam);
         }
         else if (teamType == ETeamType.Right) 
         {
             rightStageParam.LookAtDir= EDirection.Right;
-
+            OnRightReceiveStageParamCallBack(rightStageParam);
         }
     }
 
     public override Vector3 GetStartPoint(ETeamType teamType)
     {
-        Vector3 offsetVec = new Vector3((teamType == ETeamType.Left) ? -TeamOffSetPosX : TeamOffSetPosX, 0, 0);
+        Vector3 offsetVec = new Vector3((teamType == ETeamType.Left) ? -offSetPosX : offSetPosX, 0, 0);
         return playerStartPoint.transform.position + offsetVec;
     }
 }
