@@ -24,7 +24,7 @@ public class CrossingBridgeStage : SingleStage
     readonly float offSetPosX = 3f;
     readonly float offSetPosY = 1f;
 
-    Action<ETeamType> onEndGameCallBack;
+    Action<ETeamType> onEndGameCallBack = null;
 
     protected override void Reset()
     {
