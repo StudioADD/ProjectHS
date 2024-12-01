@@ -15,9 +15,6 @@ public abstract class SingleStage : BaseStage
     public event Action<StageParam> OnLeftReceiveStageParam;
     public event Action<StageParam> OnRightReceiveStageParam;
 
-    protected StageParam leftStageParam = null; // 임시
-    protected StageParam rightStageParam = null; // 임시
-
     public override bool Init()
     {
         if (base.Init() == false)

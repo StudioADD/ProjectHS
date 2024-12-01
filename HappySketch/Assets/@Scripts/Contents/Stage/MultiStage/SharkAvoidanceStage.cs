@@ -20,7 +20,7 @@ public class SharkAvoidanceStage : MultiStage
     List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
 
     [field: SerializeField, ReadOnly] 
-    SharkAvoidanceParam sharkAvoidanceParam = null;
+    SharkAvoidanceParam stageParam = null;
 
     protected override void Reset()
     {
@@ -50,7 +50,7 @@ public class SharkAvoidanceStage : MultiStage
     {
         base.SetInfo(player);
 
-        sharkAvoidanceParam = new SharkAvoidanceParam(TeamType, 0, 0);
+        stageParam = new SharkAvoidanceParam(TeamType, 0, 0);
         SpawnItems();
     }
 
@@ -83,24 +83,24 @@ public class SharkAvoidanceStage : MultiStage
 
     public void OnAddBoosterItem()
     {
-        sharkAvoidanceParam.BoosterCount++;
+        stageParam.BoosterCount++;
 
-        if (sharkAvoidanceParam.BoosterCount > 3)
-            sharkAvoidanceParam.BoosterCount = 3;
+        if (stageParam.BoosterCount > 3)
+            stageParam.BoosterCount = 3;
 
-        OnReceiveStageParamCallBack(sharkAvoidanceParam);
+        OnReceiveStageParamCallBack(stageParam);
     }
 
     public bool OnUseBoosterItem()
     {
-        if(sharkAvoidanceParam.BoosterCount == 3)
+        if(stageParam.BoosterCount == 3)
         {
-            sharkAvoidanceParam.BoosterCount = 0;
-            OnReceiveStageParamCallBack(sharkAvoidanceParam);
+            stageParam.BoosterCount = 0;
+            OnReceiveStageParamCallBack(stageParam);
             return true;
         }
 
-        OnReceiveStageParamCallBack(sharkAvoidanceParam);
+        OnReceiveStageParamCallBack(stageParam);
         return false;
     }
 
@@ -135,9 +135,9 @@ public class SharkAvoidanceStage : MultiStage
 
             float stageLength = Mathf.Abs(finishLineObject.transform.position.z - playerStartPoint.position.z);
             float goalLength = Mathf.Abs(finishLineObject.transform.position.z - player.transform.position.z);
-            sharkAvoidanceParam.CurrDisRatio = Mathf.Abs(goalLength / stageLength - 1);
+            stageParam.CurrDisRatio = Mathf.Abs(goalLength / stageLength - 1);
 
-            OnReceiveStageParamCallBack(sharkAvoidanceParam);
+            OnReceiveStageParamCallBack(stageParam);
             yield return new WaitForSeconds(0.5f);
         }
 
@@ -146,7 +146,7 @@ public class SharkAvoidanceStage : MultiStage
 
     private EStageSection CheckStageSection()
     {
-        int goalPercent = (int)(sharkAvoidanceParam.CurrDisRatio * 100); // 0 ~ 100
+        int goalPercent = (int)(stageParam.CurrDisRatio * 100); // 0 ~ 100
 
         if (goalPercent < 1)
             return EStageSection.None;

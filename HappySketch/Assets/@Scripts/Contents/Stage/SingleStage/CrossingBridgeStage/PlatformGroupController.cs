@@ -19,7 +19,6 @@ namespace CrossingBridge
     {
         [field: SerializeField, ReadOnly]
         List<BasePlatformGroup> platformGroupList = new List<BasePlatformGroup>();
-        readonly float offSetPosY = 1f;
 
         private void Reset()
         {
@@ -57,7 +56,7 @@ namespace CrossingBridge
                 return Vector3.zero;
             }
 
-            return platformGroupList[id].GetPlatformPosition(teamType, dir) + new Vector3(0, offSetPosY, 0);
+            return platformGroupList[id].GetPlatformPosition(teamType, dir);
         }
     }
 }

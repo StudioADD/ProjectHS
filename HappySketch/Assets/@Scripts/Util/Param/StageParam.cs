@@ -46,11 +46,13 @@ public class CollectingCandyParam : StageParam
 [Serializable]
 public class CrossingBridgeParam : StageParam
 {
+    public EDirection LookAtDir;
     public bool isHaveGoggle;
 
-    public CrossingBridgeParam(ETeamType teamType, bool isHaveGoggle)
+    public CrossingBridgeParam(ETeamType teamType, EDirection lookAtDir, bool isHaveGoggle)
         : base(teamType)
     {
+        this.LookAtDir = lookAtDir;
         this.isHaveGoggle = isHaveGoggle;
     }
 }
