@@ -269,13 +269,13 @@ public class Player : Creature
     #region CrossingBridgeStage Event
     Func<ETeamType, Vector3> getJumpTargetPos;
     Func<ETeamType, Vector3> getSpawnPoint;
-    Func<ETeamType, bool> onUseGoggleItem;
+    Action<ETeamType> onUseGoggleItem;
     Action<ETeamType, EDirection> onChangeTarget;
 
     public void ConnectCrossingBridgeStage(
         Func<ETeamType, Vector3> getJumpTargetPos,
         Func<ETeamType, Vector3> getSpawnPoint,
-        Func<ETeamType, bool> onUseGoggleItem,
+        Action<ETeamType> onUseGoggleItem,
         Action<ETeamType, EDirection> onChangeTarget)
     {
         this.getJumpTargetPos = getJumpTargetPos;
@@ -537,6 +537,15 @@ public class Player : Creature
             onChangeTarget?.Invoke(TeamType, EDirection.Left);
         }
 
+
+    }
+
+    protected void OnUseGoggleItem()
+    {
+        if (onUseGoggleItem != null)
+        {
+            onUseGoggleItem.Invoke(TeamType);
+        }
 
     }
 

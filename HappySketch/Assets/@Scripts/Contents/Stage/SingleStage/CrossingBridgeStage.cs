@@ -156,22 +156,17 @@ public class CrossingBridgeStage : SingleStage
         return Vector3.zero;
     }
 
-    public bool OnUseGoggleItem(ETeamType teamType)
+    public void OnUseGoggleItem(ETeamType teamType)
     {
         if (teamType == ETeamType.Left && leftStageParam.isHaveGoggle)
         {
             leftStageParam.isHaveGoggle = false;
-
-            return true;
         }
         else if (teamType == ETeamType.Right && rightStageParam.isHaveGoggle)
         {
             rightStageParam.isHaveGoggle = false;
-
-            return true;
         }
 
-        return false;
     }
 
     public void OnChangeTarget(ETeamType teamType, EDirection dir)
