@@ -27,7 +27,7 @@ public abstract class BasePlatformGroup : InitBase
         this.platformId = platformId;
     }
 
-    public abstract Vector3 GetPlatformPosition(ETeamType teamType, EDirection dir = EDirection.Left);
+    public abstract Vector3 GetPlatformPosition(ETeamType teamType, EDirection jumpDir = EDirection.Left);
     
     public void OnLandPlayerCallBack(ETeamType teamType)
     {

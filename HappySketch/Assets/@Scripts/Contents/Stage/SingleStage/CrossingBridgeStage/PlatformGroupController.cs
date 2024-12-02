@@ -46,7 +46,7 @@ namespace CrossingBridge
             }
         }
 
-        public Vector3 GetPlatformPos(int id, ETeamType teamType, EDirection dir = EDirection.Left)
+        public Vector3 GetPlatformPos(int id, ETeamType teamType, EDirection jumpDir = EDirection.Left)
         {
             if (0 > id || id >= platformGroupList.Count)
             {
@@ -56,7 +56,7 @@ namespace CrossingBridge
                 return Vector3.zero;
             }
 
-            return platformGroupList[id].GetPlatformPosition(teamType, dir);
+            return platformGroupList[id].GetPlatformPosition(teamType, jumpDir);
         }
     }
 }

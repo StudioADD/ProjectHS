@@ -32,13 +32,13 @@ namespace CrossingBridge
             rightPlatform.SetInfo(OnLandPlayerCallBack, EDirection.Right, !isLandable);
         }
 
-        public override Vector3 GetPlatformPosition(ETeamType teamType, EDirection dir)
+        public override Vector3 GetPlatformPosition(ETeamType teamType, EDirection jumpDir)
         {
             Vector3 offsetVec = new Vector3((teamType == ETeamType.Left) ? -1 : 1, 0, 0);
 
-            if (teamType == ETeamType.Left)
+            if (jumpDir == EDirection.Left)
                 return leftPlatformTr.position + offsetVec;
-            else if (teamType == ETeamType.Right)
+            else if (jumpDir == EDirection.Right)
                 return rightPlatformTr.position + offsetVec;
 
 #if DEBUG
