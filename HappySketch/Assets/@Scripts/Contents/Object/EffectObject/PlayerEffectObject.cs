@@ -16,14 +16,14 @@ public class PlayerEffectObject : ParticleEffectObject
     {
         foreach (ParticleSystem item in particleList)
         {
-            item?.Play();
+            item.Play();
         }
     }
     public void StopEffect()
     {
         foreach (ParticleSystem item in particleList)
         {
-            item?.Stop();
+            item.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
     }
