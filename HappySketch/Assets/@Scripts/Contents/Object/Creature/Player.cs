@@ -967,7 +967,6 @@ public class Player : Creature
 
     protected virtual void JumpUpStateEnter()
     {
-        beforePosition = transform.position;
         targetPosition = transform.position + Vector3.forward * data.MoveSpeed * 2; // 추후 이동거리로 뺄것
         if (stageType == EStageType.CrossingBridge)
         {
@@ -978,7 +977,6 @@ public class Player : Creature
         }
 
         this.transform.forward = (targetPosition - this.transform.position).normalized;
-
     }
 
     protected virtual void UpdateJumpUpState()
@@ -1008,7 +1006,7 @@ public class Player : Creature
 
     protected virtual void JumpStateEnter()
     {
-
+        beforePosition = transform.position;
     }
 
     protected virtual void UpdateJumpState()
@@ -1036,11 +1034,12 @@ public class Player : Creature
         // 새로운 위치 계산
         Vector3 nextPosition = new Vector3(nextX, nextY, nextZ);
 
+        float dirY = nextY - transform.position.y;
+
         // 위치 적용
         transform.position = nextPosition;
 
-
-        if (transform.position.y - targetPosition.y < 0.1f)
+        if (dirY <0 && transform.position.y - targetPosition.y < 0.1f ) 
         {
             if (IsRaycastHitToLayer("Ground"))
                 PlayerState = EPlayerState.Landing;
