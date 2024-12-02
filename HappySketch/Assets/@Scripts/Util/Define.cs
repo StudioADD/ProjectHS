@@ -31,6 +31,7 @@ public static class Define
         Player = 6,
         Monster = 7,
         Item = 8,
+        Ground = 9,
     }
 
     /// <summary>
