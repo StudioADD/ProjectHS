@@ -61,7 +61,10 @@ public static class Define
     {
         None = 0,
 
-
+        // 전부 임시로 깔아둠
+        SharkAvoidance,
+        CollectingCandy,
+        CrossingBridge,
 
         Max,
     }
@@ -76,11 +79,14 @@ public static class Define
         None = 0,
 
         EndStage,
-        EndGame, 
+        EndGame,
 
-        // UI
+        // UI_OutGame
         UI_StartGame,
+
+        // UI_InGamePublic
         
+
         // Stage1 - SharkAvoidanceStage
         UseBooster,
 

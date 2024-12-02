@@ -27,6 +27,8 @@ public class GameScene : BaseScene
 
     public void SetStageInfo(EStageType stageType)
     {
+        Managers.Sound.PlayBgm(Util.ParseEnum<EBgmSoundType>(Util.EnumToString(stageType)));
+
         // StageController
         Type type = Type.GetType($"{stageType}Stage");
         GameObject stageControllerObj = new GameObject("StageController");

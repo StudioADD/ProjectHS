@@ -8,7 +8,7 @@ public class GameMgr
     public bool IsGamePlay { get; private set; } = false;
 
     int[] winnerCounts = new int[2]; // Left, Right
-    bool[] playedStages = new bool[(int)EStageType.Max - 1];
+    bool[] playedStages = new bool[(int)EStageType.Max];
 
     int currStageId = 0;
 

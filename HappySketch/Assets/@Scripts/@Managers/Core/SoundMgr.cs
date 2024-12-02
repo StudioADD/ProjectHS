@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using static Define;
 
@@ -16,10 +17,7 @@ public class SoundMgr
     AudioSource[] audioSources = new AudioSource[(int)ESoundType.MASTER]; // BGM, SFX
     Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>(); // 키 : 파일경로
 
-    Coroutine fadeOutInBGMCoroutine;
-    Coroutine bgmStopCoroutine;
-
-    readonly float fadeSoundTime = 0.75f;
+    readonly float FADETIME = 0.5f;
 
     public void Init()
     {
@@ -48,19 +46,19 @@ public class SoundMgr
 
     public void PlayBgm(EBgmSoundType bgmType)
     {
-        if (fadeOutInBGMCoroutine != null)
-            CoroutineHelper.StopCoroutine(fadeOutInBGMCoroutine);
+        if (coFadeOutInBGM != null)
+            CoroutineHelper.StopCoroutine(coFadeOutInBGM);
 
         // BGM 사운드 구현부는 코루틴 안에서 수행
-        fadeOutInBGMCoroutine = CoroutineHelper.StartCoroutine(IFadeOutIn_BGM(bgmType));
+        coFadeOutInBGM = CoroutineHelper.StartCoroutine(CoFadeOutInBGM(bgmType));
     }
 
     public void StopBgm()
     {
-        if (bgmStopCoroutine != null)
-            CoroutineHelper.StopCoroutine(bgmStopCoroutine);
+        if (coStopBGM != null)
+            CoroutineHelper.StopCoroutine(coStopBGM);
 
-        bgmStopCoroutine = CoroutineHelper.StartCoroutine(IStop_BGM());
+        coStopBGM = CoroutineHelper.StartCoroutine(CoStopBGM());
     }
 
     public void PlaySfx(ESfxSoundType sfxType)
@@ -72,6 +70,33 @@ public class SoundMgr
             return;
 
         audioSources[(int)ESoundType.SFX].PlayOneShot(audioClip);
+    }
+
+    // BGM 배속 실행 넣자~
+    public void ChangeBGMSpeed(float speed, float time)
+    {
+        if (coChangeBGMSpeed != null)
+            CoroutineHelper.StopCoroutine(coChangeBGMSpeed);
+
+        CoroutineHelper.StartCoroutine(CoChangeBGMSpeed(speed, time));
+    }
+
+    Coroutine coChangeBGMSpeed = null;
+    private IEnumerator CoChangeBGMSpeed(float speed, float time)
+    {
+        audioSources[(int)ESoundType.BGM].pitch = speed;
+        float currTime = 0;
+
+        while(currTime < FADETIME)
+        {
+            currTime += Time.deltaTime / FADETIME;
+        }
+
+        yield return new WaitForSeconds(time - FADETIME * 2);
+
+        audioSources[(int)ESoundType.BGM].pitch = 1f;
+
+        coChangeBGMSpeed = null;
     }
 
     private void SetBgmAudioSource(float currVolume)
@@ -96,9 +121,10 @@ public class SoundMgr
         return audioClip;
     }
 
-    private IEnumerator IStop_BGM()
+    Coroutine coStopBGM = null;
+    private IEnumerator CoStopBGM()
     {
-        yield return new WaitUntil(() => fadeOutInBGMCoroutine == null);
+        yield return new WaitUntil(() => coFadeOutInBGM == null);
 
         float time = 0f;
         float currVolume = audioSources[(int)ESoundType.BGM].volume;
@@ -109,7 +135,7 @@ public class SoundMgr
             // FadeOut
             while (volume > 0f)
             {
-                time += Time.deltaTime / fadeSoundTime;
+                time += Time.deltaTime / FADETIME;
                 volume = Mathf.Lerp(currVolume, 0, time);
                 SetBgmAudioSource(volume);
 
@@ -121,12 +147,13 @@ public class SoundMgr
         SetBgmAudioSource(currVolume);
         audioSources[(int)ESoundType.BGM].Stop();
 
-        bgmStopCoroutine = null;
+        coStopBGM = null;
     }
 
-    private IEnumerator IFadeOutIn_BGM(EBgmSoundType bgmType)
+    Coroutine coFadeOutInBGM = null;
+    private IEnumerator CoFadeOutInBGM(EBgmSoundType bgmType)
     {
-        yield return new WaitUntil(() => bgmStopCoroutine == null);
+        yield return new WaitUntil(() => coStopBGM == null);
 
         float time = 0f;
         float _currBgmVolume = 1f;
@@ -142,7 +169,7 @@ public class SoundMgr
             // FadeOut
             while (volume > 0)
             {
-                time += Time.deltaTime / fadeSoundTime;
+                time += Time.deltaTime / FADETIME;
                 volume = Mathf.Lerp(currVolume, 0, time);
                 SetBgmAudioSource(volume);
 
@@ -164,7 +191,7 @@ public class SoundMgr
             // FadeIn
             while (currVolume < _currBgmVolume)
             {
-                time += Time.deltaTime / fadeSoundTime;
+                time += Time.deltaTime / FADETIME;
                 currVolume = Mathf.Lerp(0, _currBgmVolume, time);
                 SetBgmAudioSource(currVolume);
 
@@ -181,6 +208,6 @@ public class SoundMgr
             audioSources[(int)ESoundType.BGM].Stop();
         }
 
-        fadeOutInBGMCoroutine = null;
+        coFadeOutInBGM = null;
     }
 }
