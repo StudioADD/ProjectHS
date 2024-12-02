@@ -78,7 +78,7 @@ public class UI_WinLoseController : UI_BaseObject
 
         WinLose(teamType, leftWinCount, rightWinCount, onEnd);
 
-        yield return new WaitForSeconds(fadeTime * 2f);
+        yield return new WaitForSeconds(fadeTime);
 
         onEnd?.Invoke();
 

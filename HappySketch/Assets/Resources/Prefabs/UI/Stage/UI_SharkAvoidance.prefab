@@ -1713,11 +1713,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressing: {fileID: 5949815876531055866}
-  leftImage: {fileID: 2571885558555209772}
-  rightImage: {fileID: 1295366528145623662}
-  activeBoosterImage:
-  - {fileID: 1651333765852990571}
-  - {fileID: 8501971326058546659}
+  leftProgressingImage: {fileID: 2571885558555209772}
+  rightProgressingImage: {fileID: 1295366528145623662}
+  activeBoosterImage: {fileID: 8501971326058546659}
+  activeBoosterEffect: {fileID: 1651333765852990571}
   inactiveBoosterImage: {fileID: 1790918454230288891}
   activeItems:
   - {fileID: 3609926293479185757}

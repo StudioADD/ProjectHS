@@ -20,11 +20,17 @@ public class SharkAvoidancePresenter : PresenterBase
                 case ETeamType.Left:
                     sharkModel.OnLeftRatioChanged -= SetProgressRatio;
                     sharkModel.OnLeftRatioChanged += SetProgressRatio;
+
+                    sharkModel.OnLeftItemRatioChanged -= SetItemRatio;
+                    sharkModel.OnLeftItemRatioChanged += SetItemRatio;
                     break;
 
                 case ETeamType.Right:
                     sharkModel.OnRightRatioChanged -= SetProgressRatio;
                     sharkModel.OnRightRatioChanged += SetProgressRatio;
+
+                    sharkModel.OnRightItemRatioChanged -= SetItemRatio;
+                    sharkModel.OnRightItemRatioChanged += SetItemRatio;
                     break;
             }
         }
@@ -48,30 +54,24 @@ public class SharkAvoidancePresenter : PresenterBase
         }
     }
 
-    /// <summary>
-    /// 아이템 수를 설정하는 함수
-    /// </summary>
-    /// <param name="count"> 아이템 수: 0 ~ 3 </param>
-    private void SetItemCount(int count)
+    private void SetItemCount(int itemCount)
     {
         if (model is SharkAvoidanceModel sharkModel)
         {
             switch(teamType)
             {
                 case ETeamType.Left:
-                    sharkModel.SetLeftItemCount(count);
+                    sharkModel.SetLeftItemCount(itemCount);
                     break;
 
                 case ETeamType.Right:
-                    sharkModel.SetRightItemCount(count);
+                    sharkModel.SetRightItemCount(itemCount);
                     break;
             }
         }
 
-        // ItemCount에도 에니메이션 구현할 거면
-        // Model 쪽으로 빼는 것도 고려해야 함!
         if (view is SharkAvoidanceView sharkView)
-            sharkView.UpdateItemCount(count);
+            sharkView.UpdateItemCount(itemCount);
     }
 
     /// <summary>
@@ -114,6 +114,12 @@ public class SharkAvoidancePresenter : PresenterBase
     {
         if (view is SharkAvoidanceView sharkView)
             sharkView.UpdateRightRatio(ratio);
+    }
+
+    private void SetItemRatio(float ratio)
+    {
+        if (view is SharkAvoidanceView sharkView)
+            sharkView.UpdateItemRatio(ratio);
     }
 
     public override void EndStage()

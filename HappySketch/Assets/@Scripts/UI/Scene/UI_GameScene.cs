@@ -43,7 +43,7 @@ public class UI_GameScene : UI_BaseScene
     private void Update()
     {
         // Test용 코드!
-        if(Input.GetKeyDown(KeyCode.H))
+        if(Input.GetKeyDown(KeyCode.G))
         {
             EndStage(ETeamType.Left, 2, 1, () => Debug.Log("OnEnd!!!!"));
         }

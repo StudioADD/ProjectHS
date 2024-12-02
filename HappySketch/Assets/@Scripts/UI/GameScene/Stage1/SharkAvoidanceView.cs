@@ -8,21 +8,27 @@ using static Define;
 
 public class SharkAvoidanceView : ViewBase
 {
+    // Progress
     [SerializeField]
     private Image progressing;
 
     [SerializeField]
-    private Image leftImage;
+    private Image leftProgressingImage;
 
     [SerializeField]
-    private Image rightImage;
+    private Image rightProgressingImage;
+
+    // Booster
+    [SerializeField]
+    private Image activeBoosterImage;
 
     [SerializeField]
-    private Image[] activeBoosterImage;
+    private Image activeBoosterEffect;
 
     [SerializeField]
     private Image inactiveBoosterImage;
 
+    // Item
     [SerializeField]
     private Image[] activeItems;
 
@@ -41,20 +47,20 @@ public class SharkAvoidanceView : ViewBase
         if (base.Init() == false)
             return false;
 
-        leftRectTransfrom = leftImage.GetComponent<RectTransform>();
-        rightRectTransfrom = rightImage.GetComponent<RectTransform>();
+        leftRectTransfrom = leftProgressingImage.GetComponent<RectTransform>();
+        rightRectTransfrom = rightProgressingImage.GetComponent<RectTransform>();
 
         progressingWidth = progressing.GetComponent<RectTransform>().rect.width;
 
-        leftImgWidth = leftImage.GetComponent<RectTransform>().rect.width;
-        rightImgWidth = rightImage.GetComponent<RectTransform>().rect.width;
+        leftImgWidth = leftProgressingImage.GetComponent<RectTransform>().rect.width;
+        rightImgWidth = rightProgressingImage.GetComponent<RectTransform>().rect.width;
 
-        DeactivateBoosterImage();
         SetActiveActiveItemsImage(false);
         SetActiveInActiveItemsImage(false);
         UpdateLeftRatio(0f);
         UpdateRightRatio(0f);
         UpdateProgressingBarRatio(0f);
+        UpdateItemCount(0);
 
         return true;
     }
@@ -63,23 +69,31 @@ public class SharkAvoidanceView : ViewBase
     {
         if (count == 0)
         {
-            DeactivateBoosterImage();
+            activeBoosterEffect.gameObject.SetActive(false);
             SetActiveInActiveItemsImage(false);
             SetActiveActiveItemsImage(false);
         }
         else if (count == 3)
         {
-            ActivateBoosterImage();
+            activeBoosterEffect.gameObject.SetActive(true);
             SetActiveInActiveItemsImage(false);
             SetActiveActiveItemsImage(true);
         }
         else
         {
+            // 노란색 아이템 활성화
             for (int i = 0; i < count; ++i)
             {
                 inactiveItems[i].gameObject.SetActive(true);
             }
         }
+    }
+
+    public void UpdateItemRatio(float ratio)
+    {
+        ratio = Mathf.Clamp01(ratio);
+
+        activeBoosterImage.fillAmount = ratio;
     }
 
     public void UpdateLeftRatio(float ratio)
@@ -95,26 +109,6 @@ public class SharkAvoidanceView : ViewBase
     public void UpdateProgressingBarRatio(float ratio)
     {
         progressing.fillAmount = ratio;
-    }
-
-    private void ActivateBoosterImage()
-    {
-        foreach(Image image in activeBoosterImage)
-        {
-            image.gameObject.SetActive(true);
-        }
-
-        inactiveBoosterImage.gameObject.SetActive(false);
-    }
-
-    private void DeactivateBoosterImage()
-    {
-        foreach(Image image in activeBoosterImage)
-        {
-            image.gameObject.SetActive(false);
-        }
-
-        inactiveBoosterImage.gameObject.SetActive(true);
     }
 
     private void SetActiveInActiveItemsImage(bool isActive)

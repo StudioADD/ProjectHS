@@ -14,6 +14,8 @@ public class SharkAvoidanceModel : ModelBase
         Left,
         Right,
         Bar,
+        LeftItem,
+        RightItem,
         Last
     }
 
@@ -36,10 +38,15 @@ public class SharkAvoidanceModel : ModelBase
     private Ratio rightRatio = new Ratio();
     private Ratio progressRatio = new Ratio();
 
+    private Ratio leftItemRatio = new Ratio();
+    private Ratio rightItemRatio = new Ratio();
+
     private Coroutine[] coroutines = new Coroutine[(int)CoroutineType.Last];
 
     public event UnityAction<float> OnLeftRatioChanged;
     public event UnityAction<float> OnRightRatioChanged;
+    public event UnityAction<float> OnLeftItemRatioChanged;
+    public event UnityAction<float> OnRightItemRatioChanged;
 
     private const float PROGRESS_TIME = 3f;
 
@@ -51,11 +58,27 @@ public class SharkAvoidanceModel : ModelBase
     public void SetLeftItemCount(int itemCount)
     {
         leftItemCount = itemCount;
+
+        float ratio = itemCount / 3f;
+        leftItemRatio.ratio = ratio;
+
+        if (coroutines[(int)CoroutineType.LeftItem] != null)
+            CoroutineHelper.StopCoroutine(coroutines[(int)CoroutineType.LeftItem]);
+
+        coroutines[(int)CoroutineType.LeftItem] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(leftItemRatio, OnLeftItemRatioChanged, CoroutineType.LeftItem));
     }
 
     public void SetRightItemCount(int itemCount)
     {
         rightItemCount = itemCount;
+
+        float ratio = itemCount / 3f;
+        rightItemRatio.ratio = ratio;
+
+        if (coroutines[(int)CoroutineType.RightItem] != null)
+            CoroutineHelper.StopCoroutine(coroutines[(int)CoroutineType.RightItem]);
+
+        coroutines[(int)CoroutineType.RightItem] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(rightItemRatio, OnRightItemRatioChanged, CoroutineType.RightItem));
     }
 
     public void SetLeftRatio(float ratio)
