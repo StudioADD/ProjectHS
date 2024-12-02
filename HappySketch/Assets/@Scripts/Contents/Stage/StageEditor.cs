@@ -88,9 +88,11 @@ public class StageEditor : InitBase
         {
             case MultiStage multiStage:
                 multiStage.SetInfo(player);
+                multiStage.ConnectEvents(null);
                 break;
             case SingleStage singleStage:
                 singleStage.SetInfo(player, player);
+                singleStage.ConnectEvents(null);
                 break;
         }
 

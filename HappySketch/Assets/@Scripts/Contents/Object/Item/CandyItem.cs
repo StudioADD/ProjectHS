@@ -7,6 +7,8 @@ public enum ECandyItemType
     RedCandy,
     GreenCandy,
     BlueCandy,
+    BoomCandy,
+    StarCandy,
     Max
 }
 

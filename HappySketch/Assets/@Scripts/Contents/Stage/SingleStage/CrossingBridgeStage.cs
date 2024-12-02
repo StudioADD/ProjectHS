@@ -55,8 +55,11 @@ public class CrossingBridgeStage : SingleStage
     public override void StartStage()
     {
         base.StartStage();
+    }
 
-
+    public override void EndStage(ETeamType winnerTeam)
+    {
+        base.EndStage(winnerTeam);
     }
 
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)

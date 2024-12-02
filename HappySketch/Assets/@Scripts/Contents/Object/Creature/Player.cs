@@ -257,11 +257,11 @@ public class Player : Creature
     #endregion
 
     #region CollectingCandyStage Event
-    Action<ECandyItemType> onCollectCandyItem;
+    Action<List<ECandyItemType>> onCollectCandyItems;
     Action<bool> onChangeScoreBuff;
-    public void ConnectCollectingCandyStage(Action<ECandyItemType> onCollectCandyItem, Action<bool> onChangeScoreBuff)
+    public void ConnectCollectingCandyStage(Action<List<ECandyItemType>> onCollectCandyItems, Action<bool> onChangeScoreBuff)
     {
-        this.onCollectCandyItem = onCollectCandyItem;
+        this.onCollectCandyItems = onCollectCandyItems;
         this.onChangeScoreBuff = onChangeScoreBuff;
     }
     #endregion
@@ -1461,7 +1461,7 @@ public class Player : Creature
         UnConnectInputActions();
         onAddBoosterItem = null;
         onUseBoosterItem = null;
-        onCollectCandyItem = null;
+        onCollectCandyItems = null;
         onChangeScoreBuff = null;
         getJumpTargetPos = null;
         getSpawnPoint = null;

@@ -13,14 +13,10 @@ public class SharkAvoidanceStage : MultiStage
         Level2
     }
 
-    [SerializeField, ReadOnly]
-    protected FinishLineObject finishLineObject;
+    [SerializeField, ReadOnly] protected FinishLineObject finishLineObject;
 
-    [field: SerializeField, ReadOnly]
-    List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
-
-    [field: SerializeField, ReadOnly] 
-    SharkAvoidanceParam stageParam = null;
+    [field: SerializeField, ReadOnly] List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
+    [field: SerializeField, ReadOnly]  SharkAvoidanceParam stageParam = null;
 
     protected override void Reset()
     {
@@ -66,6 +62,17 @@ public class SharkAvoidanceStage : MultiStage
 
         coSpawnMonster = StartCoroutine(CoSpawnMonster());
         coReceiveStageParam = StartCoroutine(CoReceiveStageParam());
+    }
+
+    public override void EndStage(ETeamType winnerTeam)
+    {
+        base.EndStage(winnerTeam);
+
+        if (coSpawnMonster != null)
+            StopCoroutine(coSpawnMonster);
+
+        if (coReceiveStageParam != null)
+            StopCoroutine(coReceiveStageParam);
     }
 
     public override void ConnectEvents(Action<Define.ETeamType> onEndGameCallBack)
@@ -132,7 +139,6 @@ public class SharkAvoidanceStage : MultiStage
     {
         while(Managers.Game.IsGamePlay)
         {
-
             float stageLength = Mathf.Abs(finishLineObject.transform.position.z - playerStartPoint.position.z);
             float goalLength = Mathf.Abs(finishLineObject.transform.position.z - player.transform.position.z);
             stageParam.CurrDisRatio = Mathf.Abs(goalLength / stageLength - 1);
