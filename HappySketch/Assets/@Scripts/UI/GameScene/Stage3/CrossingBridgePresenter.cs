@@ -7,7 +7,11 @@ public class CrossingBridgePresenter : PresenterBase
 {
     public CrossingBridgePresenter(ViewBase view, ModelBase model, ETeamType teamType) : base(view, model, teamType)
     {
-
+        if(model is CrossingBridgeModel crossingBridgeModel)
+        {
+            crossingBridgeModel.OnColorChangedEvent -= SetColor;
+            crossingBridgeModel.OnColorChangedEvent += SetColor;
+        }
     }
 
     public override void ConnectStageEvents(BaseStage stage)
@@ -43,9 +47,35 @@ public class CrossingBridgePresenter : PresenterBase
 
     public void SetIsActive(bool isActive)
     {
+        if(model is CrossingBridgeModel crossingBridgeModel)
+        {
+            if(view is CrossingBridgeView crossingBridgeView)
+            {
+                Color targetColor = Color.white;
+
+                if(!isActive)
+                {
+                    targetColor.a = 0.5f;
+                }
+
+                crossingBridgeModel.SetColor(crossingBridgeView.GetColor(), targetColor);
+            }
+        }
+    }
+
+    private void SetColor(Color color)
+    {
         if(view is CrossingBridgeView crossingBridgeView)
         {
-            crossingBridgeView.SetActiveGoogleImage(isActive);
+            crossingBridgeView.SetColor(color);
+        }
+    }
+
+    public override void Clear()
+    {
+        if (model is CrossingBridgeModel crossingBridgeModel)
+        {
+            crossingBridgeModel.OnColorChangedEvent -= SetColor;
         }
     }
 }
