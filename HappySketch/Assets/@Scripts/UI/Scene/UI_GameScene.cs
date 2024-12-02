@@ -44,6 +44,9 @@ public class UI_GameScene : UI_BaseScene
     {
         UI_WinLoseController winLoseController = Managers.UI.SpawnObjectUI<UI_WinLoseController>();
         winLoseController.EndStage(winTeam, leftWinCount, rightWinCount, onEnd);
+
+        currPresentLeft.Clear();
+        currPresentRight.Clear();
     }
 
     private void SetStageUI()

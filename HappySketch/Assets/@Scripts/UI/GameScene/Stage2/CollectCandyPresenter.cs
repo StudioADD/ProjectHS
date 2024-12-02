@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using static Define;
 
 public class CollectCandyPresenter : PresenterBase
 {
+    private int score = 0;
+
     public CollectCandyPresenter(ViewBase view, ModelBase model, ETeamType teamType) : base(view, model, teamType)
     {
         // 여기서 모델의 이벤트 등록이 필요하다
@@ -12,8 +15,12 @@ public class CollectCandyPresenter : PresenterBase
 
         if(model is CollectCandyModel candyModel)
         {
-            candyModel.TimeChangedEvent += SetTime;
+            candyModel.OnTimeChangedEvent -= SetTime;
+            candyModel.OnTimeChangedEvent += SetTime;
             candyModel.StartTimer();
+
+            candyModel.OnScoreChangedEvent -= SetScoreView;
+            candyModel.OnScoreChangedEvent += SetScoreView;
         }
 
         view.SetPresenter(this);
@@ -27,6 +34,7 @@ public class CollectCandyPresenter : PresenterBase
             multiStage.OnReceiveStageParam += OnStageInfoUpdate;
         }
     }
+    
 
     public override void OnStageInfoUpdate(StageParam param)
     {
@@ -55,7 +63,15 @@ public class CollectCandyPresenter : PresenterBase
 
     public void SetScore(int score)
     {
-        if (view is CollectCandyView candyView)
+        if (model is CollectCandyModel candyModel)
+        {
+            candyModel.SetScore(score);
+        }
+    }
+
+    public void SetScoreView(int score)
+    {
+        if(view is CollectCandyView candyView)
         {
             candyView.UpdateScore(score);
         }
@@ -69,6 +85,17 @@ public class CollectCandyPresenter : PresenterBase
             {
                 candyView.UpdateTime(candyModel.GetFormattedTime());
             }
+        }
+    }
+
+    public override void Clear()
+    {
+        base.Clear();
+
+        if (model is CollectCandyModel candyModel)
+        {
+            candyModel.OnTimeChangedEvent -= SetTime;
+            candyModel.OnScoreChangedEvent -= SetScoreView;
         }
     }
 }

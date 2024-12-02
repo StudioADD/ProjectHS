@@ -116,12 +116,13 @@ public class SharkAvoidanceModel : ModelBase
             yield return null;
         }
 
+        ratio.currRatio = ratio.ratio;
         onRatioChanged?.Invoke(ratio.ratio);
 
         coroutines[(int)coroutineType] = null;
     }
 
-    public void Clear()
+    public override void Clear()
     {
         foreach(Coroutine coroutine in coroutines)
         {
