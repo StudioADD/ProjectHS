@@ -6,6 +6,12 @@ using static Define;
 
 public class CollectingCandyStage : MultiStage
 {
+    private void OnDisable()
+    {
+        if (coSpawnCandyItem != null)
+            StopCoroutine(coSpawnCandyItem);
+    }
+
     public override bool Init()
     {
         if (base.Init() == false)

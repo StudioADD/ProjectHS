@@ -25,6 +25,12 @@ public class UI_WinLoseController : UI_BaseObject
         backGround = Util.FindChild<Image>(gameObject, "Img_Background");
     }
 
+    private void OnDisable()
+    {
+        if(fadeOutCoroutine != null)
+            StopCoroutine(fadeOutCoroutine);
+    }
+
     public void EndStage(ETeamType teamType, int leftWinCount, int rightWinCount, Action onEnd)
     {
         switch(teamType)
@@ -38,7 +44,7 @@ public class UI_WinLoseController : UI_BaseObject
                 break;
         }
 
-        StartCoroutine(FadeOutCoroutine(FADE_TIME, teamType, leftWinCount, rightWinCount, onEnd));
+        fadeOutCoroutine = StartCoroutine(FadeOutCoroutine(FADE_TIME, teamType, leftWinCount, rightWinCount, onEnd));
     }
 
     private void WinLose(ETeamType teamType, int leftWinCount, int rightWinCount, Action onEnd)
@@ -57,6 +63,7 @@ public class UI_WinLoseController : UI_BaseObject
         }
     }
 
+    Coroutine fadeOutCoroutine = null;
     private IEnumerator FadeOutCoroutine(float fadeTime, ETeamType teamType, int leftWinCount, int rightWinCount, Action onEnd)
     {
         float elapsed = 0f;
@@ -82,6 +89,7 @@ public class UI_WinLoseController : UI_BaseObject
 
         onEnd?.Invoke();
 
+        fadeOutCoroutine = null;
         Managers.Resource.Destroy(gameObject);
     }
 }  

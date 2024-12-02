@@ -25,8 +25,7 @@ public abstract class BaseStageController : InitBase
 
     public virtual void EndStage(ETeamType winnerTeam)
     {
-
-        // Managers.Game.EndStage(winnerTeam);
+        Managers.Game.EndStage(winnerTeam);
     }
 
     protected void SetPlayerPosition(Player leftPlayer, Player rightPlayer)

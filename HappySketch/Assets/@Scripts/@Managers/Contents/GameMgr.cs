@@ -10,6 +10,7 @@ public class GameMgr
     int[] winnerCounts = new int[2]; // Left, Right
     bool[] playedStages = new bool[(int)EStageType.Max];
 
+    ETeamType winnerTeam;
     int currStageId = 0;
 
     public void Init()
@@ -83,8 +84,17 @@ public class GameMgr
     public void EndStage(ETeamType winnerTeam)
     {
         IsGamePlay = false;
+        Managers.Sound.StopBgm();
         winnerCounts[(int)winnerTeam] += 1;
 
+        if(Managers.UI.SceneUI is UI_GameScene uiGameScene)
+        {
+            uiGameScene.EndStage(winnerTeam, winnerCounts[(int)ETeamType.Left], winnerCounts[(int)ETeamType.Right], EndStageCallBack);
+        }
+    }
+
+    public void EndStageCallBack()
+    {
         if (winnerCounts[(int)winnerTeam] >= ((int)EStageType.Max / 2))
         {
             EndGame(winnerTeam);

@@ -8,11 +8,17 @@ namespace CrossingBridge
 {
     public class PlatformGroup : BasePlatformGroup
     {
+        [SerializeField, ReadOnly] Transform leftPlatformTr;
+        [SerializeField, ReadOnly] Transform rightPlatformTr;
+
         [SerializeField, ReadOnly] DynamicPlatform leftPlatform;
         [SerializeField, ReadOnly] DynamicPlatform rightPlatform;
 
         private void Reset()
         {
+            leftPlatformTr = Util.FindChild<Transform>(gameObject, "LeftPlatformPoint", true);
+            rightPlatformTr = Util.FindChild<Transform>(gameObject, "RightPlatformPoint", true);
+
             leftPlatform = Util.FindChild<DynamicPlatform>(gameObject, "LeftPlatformElement", true);
             rightPlatform = Util.FindChild<DynamicPlatform>(gameObject, "RightPlatformElement", true);
         }
@@ -31,9 +37,9 @@ namespace CrossingBridge
             Vector3 offsetVec = new Vector3((teamType == ETeamType.Left) ? -1 : 1, 0, 0);
 
             if (dir == EDirection.Left)
-                return leftPlatform.transform.position + offsetVec;
+                return leftPlatformTr.position + offsetVec;
             else if (dir == EDirection.Right)
-                return rightPlatform.transform.position + offsetVec;
+                return rightPlatformTr.position + offsetVec;
 
 #if DEBUG
             Debug.LogError("없는 타입");

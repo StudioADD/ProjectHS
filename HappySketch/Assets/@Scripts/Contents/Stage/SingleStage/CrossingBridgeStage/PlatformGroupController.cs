@@ -8,9 +8,11 @@ namespace CrossingBridge
 {
     public enum EPlatformType
     {
-        Normal = 0,
+        StartPoint = 0,
         SavePoint = 7,
         EndPoint = 14,
+
+        Normal = 16
     }
 
     public class PlatformGroupController : InitBase

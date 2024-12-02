@@ -17,7 +17,7 @@ public class SoundMgr
     AudioSource[] audioSources = new AudioSource[(int)ESoundType.MASTER]; // BGM, SFX
     Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>(); // 키 : 파일경로
 
-    readonly float FADETIME = 0.5f;
+    readonly float FADETIME = 1f;
 
     public void Init()
     {
@@ -82,20 +82,30 @@ public class SoundMgr
     }
 
     Coroutine coChangeBGMSpeed = null;
-    private IEnumerator CoChangeBGMSpeed(float speed, float time)
+    private IEnumerator CoChangeBGMSpeed(float pitch, float time)
     {
-        audioSources[(int)ESoundType.BGM].pitch = speed;
-        float currTime = 0;
+        float currPitch = 1f;
+        audioSources[(int)ESoundType.BGM].pitch = currPitch;
 
-        while(currTime < FADETIME)
+        float currTime = 0;
+        while (currTime < FADETIME)
         {
             currTime += Time.deltaTime / FADETIME;
+            currPitch = Mathf.Lerp(currPitch, pitch, currTime);
+            audioSources[(int)ESoundType.BGM].pitch = currPitch;
         }
+        audioSources[(int)ESoundType.BGM].pitch = pitch;
 
         yield return new WaitForSeconds(time - FADETIME * 2);
 
+        currTime = 0;
+        while(currTime < FADETIME)
+        {
+            currTime += Time.deltaTime / FADETIME;
+            currPitch = Mathf.Lerp(currPitch, 1f, currTime);
+            audioSources[(int)ESoundType.BGM].pitch = currPitch;
+        }
         audioSources[(int)ESoundType.BGM].pitch = 1f;
-
         coChangeBGMSpeed = null;
     }
 

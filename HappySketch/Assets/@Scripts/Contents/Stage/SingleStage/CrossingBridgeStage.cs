@@ -75,7 +75,16 @@ public class CrossingBridgeStage : SingleStage
             return;
         }
 
-        if(teamType == ETeamType.Left)
+        if (platformId == (int)EPlatformType.StartPoint)
+        {
+            if(teamType == ETeamType.Left)
+                leftPlayerPosNum = 0;
+            else if (teamType == ETeamType.Right)
+                rightPlayerPosNum = 0;
+            return;
+        }
+
+        if (teamType == ETeamType.Left)
         {
             leftPlayerPosNum = platformId;
 
@@ -102,7 +111,7 @@ public class CrossingBridgeStage : SingleStage
     public Vector3 GetJumpTargetPos(ETeamType teamType)
     {
         EDirection dir = (teamType == ETeamType.Left) ? leftStageParam.LookAtDir : rightStageParam.LookAtDir;
-        return GetPlatformPosition(leftPlayerPosNum + 1, teamType, dir);
+        return GetPlatformPosition(((teamType == ETeamType.Left) ? leftPlayerPosNum : rightPlayerPosNum) + 1, teamType, dir);
     }
 
     private Vector3 GetPlatformPosition(int jumpTargetPosNum, ETeamType teamType, EDirection dir)

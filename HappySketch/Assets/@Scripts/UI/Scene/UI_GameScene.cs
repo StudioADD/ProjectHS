@@ -40,16 +40,6 @@ public class UI_GameScene : UI_BaseScene
         SetStageUI();
     }
 
-    private void Update()
-    {
-        // Test용 코드!
-        if(Input.GetKeyDown(KeyCode.G))
-        {
-            EndStage(ETeamType.Left, 2, 1, () => Debug.Log("OnEnd!!!!"));
-        }
-    }
-
-    // 누가 이겼는지?
     public void EndStage(ETeamType winTeam, int leftWinCount, int rightWinCount, Action onEnd)
     {
         UI_WinLoseController winLoseController = Managers.UI.SpawnObjectUI<UI_WinLoseController>();
