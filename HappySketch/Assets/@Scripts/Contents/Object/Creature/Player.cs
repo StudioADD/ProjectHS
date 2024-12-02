@@ -61,11 +61,13 @@ public class Player : Creature
     private float inputCooldown = 0.5f;
 
     [SerializeField, ReadOnly]
-    private PlayerEffectObject StunEffet = null;
+    private PlayerEffectObject StunEffect = null;
 
     [SerializeField, ReadOnly]
-    private PlayerEffectObject BoosterEffet = null;
+    private PlayerEffectObject BoosterEffect = null;
 
+    [SerializeField, ReadOnly]
+    private PlayerEffectObject CandyBuffEffect = null;
 
     private float boosterTimer = -1f; // 부스터 현재시간
 
@@ -213,7 +215,7 @@ public class Player : Creature
                 //임시 스테이지 endpoint로
                 targetPosition = transform.position;
                 targetPosition.z += 1000;
-
+                SetCollectingCandyEffet();
                 break; // 추후 스테이지2 나오면  바꿔야함
             case EStageType.SharkAvoidance:
                 SetSharkAvoidanceEffet();
@@ -281,29 +283,40 @@ public class Player : Creature
 
     public void OnDropDetect()
     {
-        Debug.Log("임시 테스트 - 확인했다면 지워주자");
-        // 낙하위치에 도달함. getSpawnPoint를 호출해서 스폰위치를 받아와 세팅하기 바람
 
-        // 만약, 다른 이벤트 처리 방식을 원한다면 수정해도 됨
-        // 스테이지3의 DropDetectObject 참조
+        if (getSpawnPoint != null)
+            transform.position = getSpawnPoint.Invoke(TeamType);
+
     }
     #endregion
 
     #region SharkAvoidance Effet
     private void SetSharkAvoidanceEffet()
     {
-        StunEffet = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/StunEffect").GetComponent<PlayerEffectObject>();
-        StunEffet.transform.parent = this.transform;
-        StunEffet.transform.localPosition = new Vector3(0, 1.5f, 0);
-        StunEffet.SetFalse();
+        StunEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/StunEffect").GetComponent<PlayerEffectObject>();
+        StunEffect.transform.parent = this.transform;
+        StunEffect.transform.localPosition = new Vector3(0, 1.5f, 0);
+        StunEffect.StopEffect();
 
-        BoosterEffet = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/UseBoosterEffect").GetComponent<PlayerEffectObject>();
-        BoosterEffet.transform.parent = this.transform;
-        BoosterEffet.transform.localPosition = new Vector3(0, 0, 0);
-        BoosterEffet.SetFalse();
+        BoosterEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/UseBoosterEffect").GetComponent<PlayerEffectObject>();
+        BoosterEffect.transform.parent = this.transform;
+        BoosterEffect.transform.localPosition = new Vector3(0, 0, 0);
+        BoosterEffect.StopEffect();
     }
 
     #endregion
+
+    #region SetCollectingCandy Effet
+    private void SetCollectingCandyEffet()
+    {
+        CandyBuffEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/CandyBuffEffect").GetComponent<PlayerEffectObject>();
+        CandyBuffEffect.transform.parent = this.transform;
+        CandyBuffEffect.transform.localPosition = new Vector3(0, 0.75f, 0);
+        CandyBuffEffect.StopEffect();
+    }
+
+    #endregion
+
     #region Input
 
     #region inputControll
@@ -341,6 +354,7 @@ public class Player : Creature
     private void ConnectInputActions(bool isConnect)
     {
         UnConnectInputActions();
+        Managers.Input.OnNum1KeyEntered += hittest;
         switch (stageType)
         {
 
@@ -365,7 +379,7 @@ public class Player : Creature
         Managers.Input.OnEndKeyEntered -= OnJumpKey;
 
         Managers.Input.OnNum1KeyEntered -= hittest;
-        Managers.Input.OnNum1KeyEntered += hittest;
+
     }
 
     #region SharkAvoidance
@@ -437,10 +451,11 @@ public class Player : Creature
             return;
         }
 
-        if (onUseBoosterItem())
+        IsBoosterState = onUseBoosterItem.Invoke();
+
+        if (IsBoosterState)
         {
-            IsBoosterState = true; // 부스터 효과 끝나면 false로 만들어줘야 함
-            BoosterEffet.SetTrue();
+            BoosterEffect.PlayEffect();
             boosterTimer = 0;
             inputCooldown = 0.25f;
             moveSpeed *= 2;
@@ -495,13 +510,13 @@ public class Player : Creature
         {
             if (TeamType == ETeamType.Left)
             {
-                Managers.Input.OnArrowKeyEntered += OnArrowKeyStage3;
+                Managers.Input.OnWASDKeyEntered += OnArrowKeyStage3;
                 Managers.Input.OnSpaceKeyEntered += OnJumpKey;
             }
             else
             {
-                Managers.Input.OnWASDKeyEntered += OnArrowKeyStage3;
-                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+                Managers.Input.OnArrowKeyEntered += OnArrowKeyStage3;
+                Managers.Input.OnEndKeyEntered += OnJumpKey;
             }
         }
 
@@ -512,13 +527,11 @@ public class Player : Creature
 
         if (value.x > 0)
         {
-            // 오른쪽 점프 위치 
-            //targetPostion = 우 
+            onChangeTarget?.Invoke(TeamType, EDirection.Right);
         }
         else if (value.x < 0)
         {
-            // 왼쪽 점프 위치 
-            //targetPostion = 좌
+            onChangeTarget?.Invoke(TeamType, EDirection.Left);
         }
 
 
@@ -565,22 +578,36 @@ public class Player : Creature
     //test
     private void hittest()
     {
-        onAddBoosterItem?.Invoke();
+        //onAddBoosterItem?.Invoke();
         //if (boosterTimer == -1)
         //{
         //    boosterTimer = 0;
         //    inputCooldown = 0.25f;
         //    moveSpeed *= 2; animator.speed *= 2;
         //}
+        switch (stageType)
+        {
+            case EStageType.SharkAvoidance:
+                float test = TeamType == ETeamType.Left ? 3 : 2;
+                OnHit(test);
+                break;
+            case EStageType.CollectingCandy:
+                _isCandyBuff = true;
+                break;
+        }
 
-        //OnHit();
+
     }
     public void OnHit(float hitTime = 3f)
     {
         if (boosterTimer > 0)
             return;
-        StunEffet.SetDuration(hitTime);
-        StunEffet.SetTrue();
+        if (!StunEffect.GetIsPlay())
+        {
+            float speed = hitTime < 3f ? 1.7f : 1.2f;
+            StunEffect?.SetDuration(hitTime, speed);
+        }
+
 
         this.hitTime = hitTime;
         switch (stageType)
@@ -615,7 +642,7 @@ public class Player : Creature
     {
         isInputRock = true;
         hitTimer = 0;
-
+        StunEffect.PlayEffect();
 
         if (targetPosition.x < beforePosition.x)
             trackNum++;
@@ -687,7 +714,7 @@ public class Player : Creature
     protected virtual void UpdateDizzState()
     {
         hitTimer += Time.deltaTime;
-        if (hitTimer >= 2.5f) //히트시간 조절
+        if (hitTimer >= hitTime - 0.5f) //히트시간 조절
         {
             if (stageType == EStageType.CollectingCandy) // 추후 변경
                 PlayerState = EPlayerState.Run;
@@ -739,7 +766,7 @@ public class Player : Creature
 
     protected virtual void GoBackStateExit()
     {
-        StunEffet.SetFalse();
+        StunEffect.StopEffect();
         isInputRock = false;
     }
 
@@ -931,8 +958,17 @@ public class Player : Creature
 
     protected virtual void JumpUpStateEnter()
     {
+        beforePosition = transform.position;
+        targetPosition = transform.position + Vector3.forward * data.MoveSpeed * 2; // 추후 이동거리로 뺄것
+        if (stageType == EStageType.CrossingBridge)
+        {
+            if (getJumpTargetPos != null)
+            {
+                targetPosition = getJumpTargetPos.Invoke(TeamType);
+            }
+        }
 
-
+        this.transform.forward = (targetPosition - this.transform.position).normalized;
 
     }
 
@@ -963,23 +999,24 @@ public class Player : Creature
 
     protected virtual void JumpStateEnter()
     {
-        beforePosition = transform.position;
-        targetPosition = transform.position + Vector3.forward * data.MoveSpeed*2; // 추후 이동거리로 뺄것
-        if (stageType == EStageType.CrossingBridge)
-        {
-            //targetPosition 받아올것
-        }
+
     }
 
     protected virtual void UpdateJumpState()
     {
+
         // 이동 거리와 속도 관련 변수
+        float x0 = beforePosition.x;
+        float x1 = targetPosition.x; // 목표 위치 x
         float z0 = beforePosition.z; // 시작 위치 z
         float z1 = targetPosition.z; // 목표 위치 z
-        float distance = z1 - z0;    // 총 이동 거리
-        float progress = Mathf.Clamp01((transform.position.z - z0) / distance); // 이동 비율 (0 ~ 1)
+        float distanceX = x1 - x0;
+        float distanceZ = z1 - z0;    // 총 이동 거리
+        float progress = Mathf.Clamp01((transform.position.z - z0) / distanceZ); // 이동 비율 (0 ~ 1)
 
-        // Z 방향 이동 (선형 보간)
+
+        // 방향 이동 (선형 보간)
+        float nextX = x0 + distanceX * progress;
         float nextZ = Mathf.MoveTowards(transform.position.z, z1, moveSpeed * Time.deltaTime);
 
         // 포물선 Y 높이 계산
@@ -988,15 +1025,22 @@ public class Player : Creature
                     + Mathf.Sin(progress * Mathf.PI) * (peakHeight - Mathf.Lerp(beforePosition.y, targetPosition.y, 0.5f)); // 포물선 추가
 
         // 새로운 위치 계산
-        Vector3 nextPosition = new Vector3(transform.position.x, nextY, nextZ);
+        Vector3 nextPosition = new Vector3(nextX, nextY, nextZ);
 
         // 위치 적용
         transform.position = nextPosition;
+
+
+        if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
+        {
+            PlayerState = EPlayerState.Landing;
+        }
+
         if (transform.position == targetPosition)
         {
             PlayerState = EPlayerState.Landing;
         }
-   
+
 
     }
 
@@ -1037,6 +1081,7 @@ public class Player : Creature
     protected virtual void LandingStateExit()
     {
         //targetPosition = Vector3.zero;
+        transform.forward = new Vector3(0, 0, 1);
         IsJump = false;
     }
     #endregion
@@ -1244,11 +1289,12 @@ public class Player : Creature
             boosterTimer += Time.deltaTime;
             if (boosterTimer >= 3)
             {
+                IsBoosterState = false;
                 boosterTimer = -1;
                 moveSpeed = data.MoveSpeed;
                 inputCooldown = 0.5f;
                 animator.speed = 1;
-                BoosterEffet.SetFalse();
+                BoosterEffect.StopEffect();
             }
         }
     }
@@ -1258,6 +1304,38 @@ public class Player : Creature
     }
 
 
+
+
+    #endregion
+
+    #region CandyBuff
+    private bool IsCandyBuff = false;
+    public bool _isCandyBuff
+    {
+        get { return IsCandyBuff; }
+        set
+        {
+            if (IsCandyBuff == value)
+                return;
+            IsCandyBuff = value;
+            if (IsCandyBuff && !CandyBuffEffect.GetIsPlay())
+            {
+                StartCoroutine(CoCandyBuffEffect());
+            }
+        }
+    }
+    protected IEnumerator CoCandyBuffEffect()
+    {
+        float time = 0f;
+        CandyBuffEffect?.PlayEffect();
+        while (time <= 5f)
+        {
+            time += Time.deltaTime;
+            yield return null;
+        }
+        _isCandyBuff = false;
+        CandyBuffEffect?.StopEffect();
+    }
 
     #endregion
 
@@ -1310,6 +1388,14 @@ public class Player : Creature
     private void OnDisable()
     {
         UnConnectInputActions();
+        onAddBoosterItem = null;
+        onUseBoosterItem = null;
+        onCollectCandyItem = null;
+        onChangeScoreBuff = null;
+        getJumpTargetPos = null;
+        getSpawnPoint = null;
+        onUseGoggleItem = null;
+        onChangeTarget = null;
     }
 
 

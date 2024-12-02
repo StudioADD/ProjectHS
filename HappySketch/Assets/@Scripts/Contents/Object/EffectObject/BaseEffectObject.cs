@@ -10,6 +10,7 @@ public enum EEffectType
 
     StunEffect,
     UseBoosterEffect,
+    CandyBuffEffect,
 }
 
 public abstract class BaseEffectObject : BaseObject

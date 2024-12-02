@@ -4,28 +4,49 @@ using UnityEngine;
 
 public class PlayerEffectObject : ParticleEffectObject
 {
- 
+    ParticleSystem particle;
+
     public override void SetInfo()
     {
         base.SetInfo();
+        particle = GetComponent<ParticleSystem>();
     }
 
-    public void SetFalse()
+    public void PlayEffect()
     {
-        this.gameObject.SetActive(false);
+        foreach (ParticleSystem item in particleList)
+        {
+            item?.Play();
+        }
     }
-
-    public void SetTrue()
+    public void StopEffect()
     {
-        this.gameObject.SetActive(true);
+        foreach (ParticleSystem item in particleList)
+        {
+            item?.Stop();
+        }
+
     }
 
-    public void SetDuration(float Duration)
+    public bool GetIsPlay()
+    {
+        foreach (ParticleSystem item in particleList)
+        {
+            if (item.isPlaying)
+                return true;
+        }
+        return false;
+    }
+
+    public void SetDuration(float duration, float speed)
     {
         foreach (ParticleSystem item in particleList)
         {
             var main = item.main;
-            main.duration = Duration;
+            main.duration = duration;
+
+            main.simulationSpeed = speed;
         }
+
     }
 }

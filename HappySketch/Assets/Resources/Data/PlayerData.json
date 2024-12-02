@@ -12,7 +12,7 @@
     },
     {
       "DataId": 3,
-      "MoveSpeed": 1.0,
+      "MoveSpeed": 20.0,
       "JumpPower": 5.0
     }
   ]
