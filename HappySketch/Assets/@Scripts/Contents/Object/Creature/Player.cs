@@ -15,6 +15,7 @@ using static UnityEngine.GraphicsBuffer;
 using Data;
 using System.Data.Common;
 using UnityEditor.Profiling.Memory.Experimental;
+using UnityEditor;
 
 
 public enum EPlayerState
@@ -28,6 +29,8 @@ public enum EPlayerState
     JumpUp,
     Jump,
     Landing,
+
+    Fall, // 추락
 
     Run,
     Hit,
@@ -128,6 +131,7 @@ public class Player : Creature
                 case EPlayerState.JumpUp: isChangeState = JumpUpStateCondition(); break;
                 case EPlayerState.Jump: isChangeState = JumpStateCondition(); break;
                 case EPlayerState.Landing: isChangeState = LandingStateCondition(); break;
+                case EPlayerState.Fall: isChangeState = FallStateCondition(); break;
                 case EPlayerState.Hit: isChangeState = HitStateCondition(); break;
                 case EPlayerState.Dizz: isChangeState = DizzStateCondition(); break;
                 case EPlayerState.GoBack: isChangeState = GoBackStateCondition(); break;
@@ -149,6 +153,7 @@ public class Player : Creature
                 case EPlayerState.JumpUp: JumpUpStateExit(); break;
                 case EPlayerState.Jump: JumpStateExit(); break;
                 case EPlayerState.Landing: LandingStateExit(); break;
+                case EPlayerState.Fall: FallStateExit(); break;
                 case EPlayerState.Hit: HitStateExit(); break;
                 case EPlayerState.Dizz: DizzStateExit(); break;
                 case EPlayerState.GoBack: GoBackStateExit(); break;
@@ -171,6 +176,7 @@ public class Player : Creature
                 case EPlayerState.JumpUp: JumpUpStateEnter(); break;
                 case EPlayerState.Jump: JumpStateEnter(); break;
                 case EPlayerState.Landing: LandingStateEnter(); break;
+                case EPlayerState.Fall: FallStateEnter(); break;
                 case EPlayerState.Hit: HitStateEnter(); break;
                 case EPlayerState.Dizz: DizzStateEnter(); break;
                 case EPlayerState.GoBack: GoBackStateEnter(); break;
@@ -558,11 +564,15 @@ public class Player : Creature
 
     protected virtual void IdleStateEnter()
     {
-
+        beforePosition = transform.position;
     }
 
     protected virtual void UpdateIdleState()
     {
+        if (beforePosition.y - transform.position.y > 0.1f)
+        {
+            PlayerState = EPlayerState.Fall;
+        }
     }
 
     protected virtual void IdleStateExit()
@@ -591,6 +601,7 @@ public class Player : Creature
                 break;
             case EStageType.CollectingCandy:
                 _isCandyBuff = true;
+
                 break;
         }
 
@@ -1029,15 +1040,15 @@ public class Player : Creature
         transform.position = nextPosition;
 
 
-        if (Vector3.Distance(transform.position, targetPosition) <= 0.1f)
+        if (transform.position.y - targetPosition.y < 0.1f)
         {
-            PlayerState = EPlayerState.Landing;
+            if (IsRaycastHitToLayer("Ground"))
+                PlayerState = EPlayerState.Landing;
+            else
+                PlayerState = EPlayerState.Fall;
         }
 
-        if (transform.position == targetPosition)
-        {
-            PlayerState = EPlayerState.Landing;
-        }
+
 
 
     }
@@ -1062,7 +1073,10 @@ public class Player : Creature
 
     protected virtual void UpdateLandingState()
     {
+
+
         if (IsEndCurrentState(PlayerState))
+        {
             switch (stageType)
             {
 
@@ -1072,7 +1086,14 @@ public class Player : Creature
                 default:
                     PlayerState = EPlayerState.Idle; break;
             }
-
+        }
+        else
+        {
+            if (!IsRaycastHitToLayer("Ground"))
+            {
+                PlayerState = EPlayerState.Fall;
+            }
+        }
     }
 
 
@@ -1082,6 +1103,48 @@ public class Player : Creature
         transform.forward = new Vector3(0, 0, 1);
         IsJump = false;
     }
+    #endregion
+
+    #region Fall
+    protected virtual bool FallStateCondition()
+    {
+
+        return true;
+    }
+
+    protected virtual void FallStateEnter()
+    {
+        IsJump = true;
+    }
+
+    protected virtual void UpdateFallState()
+    {
+
+        if (IsRaycastHitToLayer("Ground"))
+            PlayerState = EPlayerState.Landing;
+
+
+    }
+
+
+    protected virtual void FallStateExit()
+    {
+        //targetPosition = Vector3.zero;
+        transform.forward = new Vector3(0, 0, 1);
+        IsJump = false;
+    }
+
+    protected virtual bool IsRaycastHitToLayer(string LayerName)
+    {
+        float distance = 3f;
+        int layerMask = 1 << LayerMask.NameToLayer("Ground");  // 특정 레이어만 충돌 체크함\
+        if (Physics.Raycast(transform.position + new Vector3(0, 2, 0), Vector3.down, distance, layerMask)) // 왜 더해줘야하는지 모르겠음
+        {
+            return true;
+        }
+        return false;
+    }
+
     #endregion
 
     #region Run
@@ -1191,7 +1254,7 @@ public class Player : Creature
         float timer = 0.0f;
         while (IsPlayerInputControll)
         {
-
+            Debug.DrawRay(transform.position, Vector3.down * 10f, Color.red);
             timer += Time.deltaTime;
             if (timer >= 1.0f)
             {
@@ -1214,6 +1277,7 @@ public class Player : Creature
                 case EPlayerState.JumpUp: UpdateJumpUpState(); break;
                 case EPlayerState.Jump: UpdateJumpState(); break;
                 case EPlayerState.Landing: UpdateLandingState(); break;
+                case EPlayerState.Fall: UpdateFallState(); break;
                 case EPlayerState.Hit: UpdateHitState(); break;
                 case EPlayerState.Dizz: UpdateDizzState(); break;
                 case EPlayerState.GoBack: UpdateGoBackState(); break;
@@ -1370,7 +1434,7 @@ public class Player : Creature
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.collider.CompareTag("Ground"))
+        if (collision.collider.CompareTag("Ground"))
         {
 
         }
@@ -1391,6 +1455,8 @@ public class Player : Creature
             //items.Remove(other.GetComponent<Candy>());
         }
     }
+
+
     private void OnDisable()
     {
         UnConnectInputActions();

@@ -44,7 +44,7 @@ public class Shark : BaseMonster
         {
             anim.Play((player.IsBoosterState) ? Define.STRING_Hit : Define.STRING_ATTACK);
 
-            player.OnHit();
+            player.OnHit(data.SternTime);
         }
     }
 }
