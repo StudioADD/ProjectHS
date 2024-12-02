@@ -206,8 +206,6 @@ public class Player : Creature
         moveSpeed = data.MoveSpeed;
         PlayerState = EPlayerState.Idle;
         targetPosition = beforePosition = transform.position;
-        rigid.constraints = RigidbodyConstraints.None;
-        rigid.constraints = RigidbodyConstraints.FreezeRotation;
         switch (stageType)
         {
             case EStageType.CollectingCandy:
@@ -219,7 +217,6 @@ public class Player : Creature
                 break; // 추후 스테이지2 나오면  바꿔야함
             case EStageType.SharkAvoidance:
                 SetSharkAvoidanceEffet();
-                rigid.constraints = RigidbodyConstraints.FreezePosition;
                 break;
             default:
 
@@ -391,7 +388,7 @@ public class Player : Creature
             if (TeamType == ETeamType.Left)
             {
                 Managers.Input.OnWASDKeyEntered += OnArrowKeySharkAvoidance;
-                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+                Managers.Input.OnSpaceKeyEntered += OnBoosterKeySharkAvoidance;
             }
             else
             {
@@ -588,8 +585,9 @@ public class Player : Creature
         switch (stageType)
         {
             case EStageType.SharkAvoidance:
-                float test = TeamType == ETeamType.Left ? 3 : 2;
-                OnHit(test);
+                onAddBoosterItem?.Invoke();
+                //float test = TeamType == ETeamType.Left ? 3 : 2;
+                //OnHit(test);
                 break;
             case EStageType.CollectingCandy:
                 _isCandyBuff = true;
@@ -1368,6 +1366,14 @@ public class Player : Creature
         //                onCollectCandyItem(item.CandyItemType);
         //        }
         //    }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.CompareTag("Ground"))
+        {
+
+        }
     }
 
 

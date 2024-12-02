@@ -4417,8 +4417,9 @@ MonoBehaviour:
   inputTime: 0
   moveDistance: 5
   moveSpeed: 5
-  StunEffet: {fileID: 0}
-  BoosterEffet: {fileID: 0}
+  StunEffect: {fileID: 0}
+  BoosterEffect: {fileID: 0}
+  CandyBuffEffect: {fileID: 0}
   hitTimer: -1
   _teamType: 0
   trackNum: 2
@@ -4453,7 +4454,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 122
   m_CollisionDetection: 0
 --- !u!65 &4036530166903516773
 BoxCollider:
