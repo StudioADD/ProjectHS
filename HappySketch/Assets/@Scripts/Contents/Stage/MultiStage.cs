@@ -16,6 +16,9 @@ public abstract class MultiStage : BaseStage
 
     protected void OnReceiveStageParamCallBack(StageParam stageParam)
     {
+        if (Managers.Game.IsGamePlay == false)
+            return;
+
         OnReceiveStageParam?.Invoke(stageParam);
     }
 
@@ -42,7 +45,7 @@ public abstract class MultiStage : BaseStage
 
     public override void EndStage(ETeamType winnerTeam)
     {
-        
+        // 플레이어에게 스테이지가 끝남을 전달해야 함
     }
 
     public virtual void ConnectEvents(Action<ETeamType> onEndGameCallBack)

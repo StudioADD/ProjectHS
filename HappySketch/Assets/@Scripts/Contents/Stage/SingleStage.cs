@@ -17,11 +17,17 @@ public abstract class SingleStage : BaseStage
 
     protected void OnLeftReceiveStageParamCallBack(StageParam stageParam)
     {
+        if (Managers.Game.IsGamePlay == false)
+            return;
+
         OnLeftReceiveStageParam?.Invoke(stageParam);
     }
 
     protected void OnRightReceiveStageParamCallBack(StageParam stageParam)
     {
+        if (Managers.Game.IsGamePlay == false)
+            return;
+
         OnRightReceiveStageParam?.Invoke(stageParam);
     }
 
@@ -49,7 +55,7 @@ public abstract class SingleStage : BaseStage
 
     public override void EndStage(ETeamType winnerTeam)
     {
-        // 각 플레이어에게 게임이 끝났음을 알려야 함
+        // 플레이어에게 스테이지가 끝남을 전달해야 함
     }
 
     public abstract void ConnectEvents(Action<ETeamType> onEndGameCallBack);

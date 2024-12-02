@@ -119,12 +119,12 @@ public class CrossingBridgeStage : SingleStage
         if(jumpTargetPosNum == (int)EPlatformType.SavePoint)
         {
             return playerSavePoint.position + new Vector3(
-                (dir == EDirection.Left) ? offSetPosX * -1f : offSetPosX, offSetPosY, 0);
+                (teamType == ETeamType.Left) ? offSetPosX * -1f : offSetPosX, offSetPosY, 0);
         }
         else if (jumpTargetPosNum == (int)EPlatformType.EndPoint)
         {
             return playerEndPoint.position + new Vector3(
-                (dir == EDirection.Left) ? offSetPosX * -1f : offSetPosX, offSetPosY, 0);
+                (teamType == ETeamType.Left) ? offSetPosX * -1f : offSetPosX, offSetPosY, 0);
         }
 
         return platformGroupController.GetPlatformPos(jumpTargetPosNum, teamType, dir) + new Vector3(0, offSetPosY, 0);
@@ -175,12 +175,12 @@ public class CrossingBridgeStage : SingleStage
     {
         if (teamType == ETeamType.Left)
         {
-            leftStageParam.LookAtDir = EDirection.Left;
+            leftStageParam.LookAtDir = dir;
             OnLeftReceiveStageParamCallBack(leftStageParam);
         }
         else if (teamType == ETeamType.Right) 
         {
-            rightStageParam.LookAtDir= EDirection.Right;
+            rightStageParam.LookAtDir = dir;
             OnRightReceiveStageParamCallBack(rightStageParam);
         }
     }

@@ -11,7 +11,7 @@ public class GameMgr
     bool[] playedStages = new bool[(int)EStageType.Max];
 
     ETeamType winnerTeam;
-    int currStageId = 0;
+    int currStageId = 2;
 
     public void Init()
     {

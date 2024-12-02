@@ -36,9 +36,9 @@ namespace CrossingBridge
         {
             Vector3 offsetVec = new Vector3((teamType == ETeamType.Left) ? -1 : 1, 0, 0);
 
-            if (dir == EDirection.Left)
+            if (teamType == ETeamType.Left)
                 return leftPlatformTr.position + offsetVec;
-            else if (dir == EDirection.Right)
+            else if (teamType == ETeamType.Right)
                 return rightPlatformTr.position + offsetVec;
 
 #if DEBUG
