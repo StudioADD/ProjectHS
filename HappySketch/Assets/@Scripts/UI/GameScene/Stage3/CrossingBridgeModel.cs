@@ -9,4 +9,9 @@ public class CrossingBridgeModel : ModelBase
     {
 
     }
+
+    public override void Clear()
+    {
+        throw new System.NotImplementedException();
+    }
 }

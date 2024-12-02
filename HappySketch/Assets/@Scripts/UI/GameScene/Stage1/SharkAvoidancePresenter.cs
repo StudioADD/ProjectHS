@@ -122,9 +122,27 @@ public class SharkAvoidancePresenter : PresenterBase
             sharkView.UpdateItemRatio(ratio);
     }
 
-    public override void EndStage()
+    public override void Clear()
     {
-        if (model is SharkAvoidanceModel sharkModel)
-            sharkModel.Clear();
+        base.Clear();
+
+        if(model is SharkAvoidanceModel sharkModel)
+        {
+            sharkModel.OnLeftRatioChanged -= SetLeftRatio;
+            sharkModel.OnRightRatioChanged -= SetRightRatio;
+
+            switch (teamType)
+            {
+                case ETeamType.Left:
+                    sharkModel.OnLeftRatioChanged -= SetProgressRatio;
+                    sharkModel.OnLeftItemRatioChanged -= SetItemRatio;
+                    break;
+
+                case ETeamType.Right:
+                    sharkModel.OnRightRatioChanged -= SetProgressRatio;
+                    sharkModel.OnRightItemRatioChanged -= SetItemRatio;
+                    break;
+            }
+        }
     }
 }
