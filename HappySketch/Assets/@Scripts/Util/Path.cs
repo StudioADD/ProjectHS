@@ -12,6 +12,10 @@ public static class DataPath
 /// </summary>
 public static class LoadPath
 {
+    // Sound
+    public const string SOUND_BGM_PATH = "Sounds/BGM";
+    public const string SOUND_SFX_PATH = "Sounds/SFX";
+
     //Materials
     public const string MATERIALS_PATH = "Materials";
 

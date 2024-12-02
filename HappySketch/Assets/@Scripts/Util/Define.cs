@@ -1,4 +1,5 @@
 //using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -49,6 +50,48 @@ public static class Define
         Booster,
         Item,
         DestroyObj,
+    }
+
+    /// <summary>
+    /// "Resources/Sounds/BGM/"
+    /// 경로 안에 같은 이름의 Audio Clip 파일이 있어야 함
+    /// </summary>
+    [Serializable]
+    public enum EBgmSoundType
+    {
+        None = 0,
+
+
+
+        Max,
+    }
+
+    /// <summary>
+    /// "Resources/Sounds/SFX/"
+    /// 경로 안에 같은 이름의 Audio Clip 파일이 있어야 함
+    /// </summary>
+    [Serializable]
+    public enum ESfxSoundType
+    {
+        None = 0,
+
+        EndStage,
+        EndGame, 
+
+        // UI
+        UI_StartGame,
+        
+        // Stage1 - SharkAvoidanceStage
+        UseBooster,
+
+        // Stage2 - CollectingCandyStage
+
+
+        // Stage3 - CrossingBridgeStage
+        SavePoint,
+
+
+        Max,
     }
 
     public enum ETeamType
