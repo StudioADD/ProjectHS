@@ -5,8 +5,11 @@ using UnityEngine.UI;
 
 public class CrossingBridgeView : ViewBase
 {
-    [SerializeField]
-    private Image[] images;
+    [SerializeField, ReadOnly]
+    private Image[] goggleImages;
+
+    [SerializeField, ReadOnly]
+    private Image arrowImage;
 
     public override bool Init()
     {
@@ -21,14 +24,20 @@ public class CrossingBridgeView : ViewBase
         return true;
     }
 
+    private void Reset()
+    {
+        goggleImages = Util.FindChild<Transform>(gameObject, "Goggle_icon").GetComponentsInChildren<Image>();
+        arrowImage = Util.FindChild<Image>(gameObject, "Img_Arrow");
+    }
+
     public void SetColor(Color color)
     {
-        foreach (Image image in images)
+        foreach (Image image in goggleImages)
             image.color = color;
     }
 
     public Color GetColor()
     {
-        return images[0].color;
+        return goggleImages[0].color;
     }
 }

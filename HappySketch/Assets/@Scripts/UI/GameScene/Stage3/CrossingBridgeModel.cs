@@ -18,7 +18,7 @@ public class CrossingBridgeModel : ModelBase
 
     public void SetColor(Color currColor, Color targetColor)
     {
-        if(colorCoroutine != null)
+        if (colorCoroutine != null)
             CoroutineHelper.StopCoroutine(colorCoroutine);
 
         colorCoroutine = CoroutineHelper.StartCoroutine(ColorCoroutine(currColor, targetColor, COLOR_TIME));
