@@ -57,6 +57,13 @@ public class CollectingCandyStage : MultiStage
         coSpawnCandyItem = StartCoroutine(CoSpawnCandyItem());
     }
 
+    public override void EndStage(ETeamType winnerTeam)
+    {
+        base.EndStage(winnerTeam);
+
+
+    }
+
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
     {
         base.ConnectEvents(onEndGameCallBack);
@@ -76,7 +83,7 @@ public class CollectingCandyStage : MultiStage
         if (stageParam.CurrScore < 0)
             stageParam.CurrScore = 0;
 
-
+        // UI에 이벤트 넘겨주기
     }
 
     private void CollectCandyItem(ECandyItemType candyItemType)
