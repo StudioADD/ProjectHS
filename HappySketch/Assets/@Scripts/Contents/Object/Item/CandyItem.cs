@@ -14,6 +14,8 @@ public enum ECandyItemType
 
 public class CandyItem : BaseItem
 {
+    public ECandyItemType CandyItemType { get; protected set; }
+
     Rigidbody rigid;
 
     public override bool Init()
@@ -32,7 +34,7 @@ public class CandyItem : BaseItem
         StartCoroutine(CoDestroyCheck());
     }
 
-    public void OnColliect()
+    public void Oncollected()
     {
         // 파괴되고, 이펙트 생성
     }
