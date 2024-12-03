@@ -34,7 +34,7 @@ public class CandyItem : BaseItem
         StartCoroutine(CoDestroyCheck());
     }
 
-    public void Oncollected()
+    public void OnCollected()
     {
         // 파괴되고, 이펙트 생성
     }
