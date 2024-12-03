@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Define;
+using CollectingCandy;
 
 public class CollectingCandyStage : MultiStage
 {
-    [field: SerializeField, ReadOnly] List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
+    [SerializeField, ReadOnly] ScoreCollector scoreCollector;
 
+    [field: SerializeField, ReadOnly] List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
     [field: SerializeField, ReadOnly] CollectingCandyParam stageParam = null;
 
     [SerializeField, ReadOnly] bool isScoreBuff;
@@ -45,6 +47,8 @@ public class CollectingCandyStage : MultiStage
         base.SetInfo(player);
 
         stageParam = new CollectingCandyParam(ETeamType.Left, new int[(int)ECandyItemType.Max], 0);
+
+        
     }
 
     public override void StartStage()

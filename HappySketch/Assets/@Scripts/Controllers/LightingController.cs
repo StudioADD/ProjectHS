@@ -48,7 +48,7 @@ public static class LightingController
                     RenderSettings.skybox = Managers.Resource.Load<Material>(path);
 
                     RenderSettings.ambientIntensity = 1f;
-                    RenderSettings.reflectionIntensity = 1f;
+                    RenderSettings.reflectionIntensity = 0.5f;
 
                     RenderSettings.fog = false;
                     break;
