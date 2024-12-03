@@ -33,12 +33,10 @@ namespace CrossingBridge
         {
             if(collision.transform.TryGetComponent(out Player player))
             {
-                onLandPlayer?.Invoke(player.TeamType);
-                
-                if(IsLandable == false)
-                {
-                    anim.Play(STRING_EFFECT);
-                }
+                if(IsLandable == true)
+                    onLandPlayer?.Invoke(player.TeamType);
+                else
+                    anim.SetTrigger(STRING_EFFECTTRIGGER);
             }
         }
     }

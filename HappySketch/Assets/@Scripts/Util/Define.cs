@@ -32,6 +32,7 @@ public static class Define
         Monster = 7,
         Item = 8,
         Ground = 9,
+        PostProcess = 10,
     }
 
     /// <summary>
@@ -112,7 +113,8 @@ public static class Define
         Right,
     }
 
-    public static readonly string STRING_EFFECT = "Effect";
     public static readonly string STRING_ATTACK = "Attack";
     public static readonly string STRING_Hit = "Hit";
+
+    public static readonly string STRING_EFFECTTRIGGER = "EffectTrigger";
 }
