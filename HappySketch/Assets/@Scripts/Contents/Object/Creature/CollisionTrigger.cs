@@ -31,4 +31,11 @@ public class CollisionTrigger : InitBase
         if(OnCollisionTriggerExit != null)
             OnCollisionTriggerExit.Invoke(other);
     }
+
+    public void SetActive(bool active)
+    {
+        this.gameObject.SetActive(active);
+    }
+
+
 }

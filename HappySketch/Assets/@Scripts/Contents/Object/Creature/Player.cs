@@ -135,8 +135,8 @@ public class Player : Creature
                 case EPlayerState.Hit: isChangeState = HitStateCondition(); break;
                 case EPlayerState.Dizz: isChangeState = DizzStateCondition(); break;
                 case EPlayerState.GoBack: isChangeState = GoBackStateCondition(); break;
-                case EPlayerState.LeftCollect: isChangeState = LeftCollectStateCondition(); break;
-                case EPlayerState.RightCollect: isChangeState = RightCollectStateCondition(); break;
+                case EPlayerState.LeftCollect:
+                case EPlayerState.RightCollect: isChangeState = CollectStateCondition(); break;
                 case EPlayerState.Run: isChangeState = RunStateCondition(); break;
             }
             if (isChangeState == false)
@@ -157,8 +157,8 @@ public class Player : Creature
                 case EPlayerState.Hit: HitStateExit(); break;
                 case EPlayerState.Dizz: DizzStateExit(); break;
                 case EPlayerState.GoBack: GoBackStateExit(); break;
-                case EPlayerState.LeftCollect: LeftCollectStateExit(); break;
-                case EPlayerState.RightCollect: RightCollectStateExit(); break;
+                case EPlayerState.LeftCollect:
+                case EPlayerState.RightCollect: CollectStateExit(); break;
                 case EPlayerState.Run: RunStateExit(); break;
 
             }
@@ -357,7 +357,7 @@ public class Player : Creature
     private void ConnectInputActions(bool isConnect)
     {
         UnConnectInputActions();
-        Managers.Input.OnNum1KeyEntered += hittest;
+        Managers.Input.OnNum1KeyEntered += test;
         switch (stageType)
         {
 
@@ -381,7 +381,7 @@ public class Player : Creature
         Managers.Input.OnWASDKeyEntered -= OnArrowKeyStage2;
         Managers.Input.OnEndKeyEntered -= OnJumpKey;
 
-        Managers.Input.OnNum1KeyEntered -= hittest;
+        Managers.Input.OnNum1KeyEntered -= test;
 
     }
 
@@ -592,7 +592,7 @@ public class Player : Creature
 
     #region Hit
     //test
-    private void hittest()
+    private void test()
     {
         //onAddBoosterItem?.Invoke();
         //if (boosterTimer == -1)
@@ -601,6 +601,7 @@ public class Player : Creature
         //    inputCooldown = 0.25f;
         //    moveSpeed *= 2; animator.speed *= 2;
         //}
+
         switch (stageType)
         {
             case EStageType.SharkAvoidance:
@@ -610,7 +611,7 @@ public class Player : Creature
                 break;
             case EStageType.CollectingCandy:
                 _isCandyBuff = true;
-
+                //candys.Add((ECandyItemType)UnityEngine.Random.Range(0, (int)ECandyItemType.Max));
                 break;
         }
 
@@ -1048,9 +1049,9 @@ public class Player : Creature
         // 위치 적용
         transform.position = nextPosition;
 
-        if (dirY <0 && transform.position.y - targetPosition.y < 0.1f ) 
+        if (dirY < 0 && transform.position.y - targetPosition.y < 0.1f)
         {
-            if (IsRaycastHitToLayer("Ground"))
+            if (IsRaycastHitToLayer(ELayer.Ground))
                 PlayerState = EPlayerState.Landing;
             else
                 PlayerState = EPlayerState.Fall;
@@ -1097,7 +1098,7 @@ public class Player : Creature
         }
         else
         {
-            if (!IsRaycastHitToLayer("Ground"))
+            if (!IsRaycastHitToLayer(ELayer.Ground))
             {
                 PlayerState = EPlayerState.Fall;
             }
@@ -1116,6 +1117,8 @@ public class Player : Creature
     #region Fall
     protected virtual bool FallStateCondition()
     {
+        if (stageType != EStageType.CrossingBridge)
+            return false;
 
         return true;
     }
@@ -1128,7 +1131,7 @@ public class Player : Creature
     protected virtual void UpdateFallState()
     {
 
-        if (IsRaycastHitToLayer("Ground"))
+        if (IsRaycastHitToLayer(ELayer.Ground))
             PlayerState = EPlayerState.Landing;
 
 
@@ -1142,10 +1145,10 @@ public class Player : Creature
         IsJump = false;
     }
 
-    protected virtual bool IsRaycastHitToLayer(string LayerName)
+    protected virtual bool IsRaycastHitToLayer(ELayer LayerName)
     {
         float distance = 3f;
-        int layerMask = 1 << LayerMask.NameToLayer("Ground");  // 특정 레이어만 충돌 체크함\
+        int layerMask = 1 << LayerMask.NameToLayer(Util.EnumToString(LayerName));  // 특정 레이어만 충돌 체크함\
         if (Physics.Raycast(transform.position + new Vector3(0, 2, 0), Vector3.down, distance, layerMask)) // 왜 더해줘야하는지 모르겠음
         {
             return true;
@@ -1194,63 +1197,60 @@ public class Player : Creature
 
     #endregion
 
-    #region Left Collect
-    protected virtual bool LeftCollectStateCondition()
+    #region Collect
+
+    protected virtual bool CollectStateCondition()
     {
         if (PlayerState != EPlayerState.Run)
             return false;
         return true;
     }
+
+
+    protected virtual void UpdateCollectState()
+    {
+
+
+        Running();
+        //수집 시 필요한거 
+        if (IsEndCurrentState(PlayerState))
+        {
+            PlayerState = EPlayerState.Run;
+        }
+
+    }
+
+    protected virtual void CollectStateExit()
+    {
+        CollectItem();
+        candys.Clear();
+        collisionTrigger.SetActive(false);
+    }
+    #region Left Collect
+
 
     protected virtual void LeftCollectStateEnter()
     {
-        CollectItem(true);
-    }
-
-    protected virtual void UpdateLeftCollectState()
-    {
-
-        Running();
-        //수집 시 필요한거 
-        if (IsEndCurrentState(PlayerState))
-        {
-            PlayerState = EPlayerState.Run;
-        }
+        isleft = true;
+        collisionTrigger.SetActive(true);
+        
 
     }
 
-    protected virtual void LeftCollectStateExit()
-    {
-    }
     #endregion
 
     #region Right Collect
-    protected virtual bool RightCollectStateCondition()
-    {
-        if (PlayerState != EPlayerState.Run)
-            return false;
-        return true;
-    }
 
     protected virtual void RightCollectStateEnter()
     {
-        CollectItem(false);
+        isleft = false;
+        collisionTrigger.SetActive(true);
+        
     }
 
-    protected virtual void UpdateRightCollectState()
-    {
-        Running();
-        //수집 시 필요한거 
-        if (IsEndCurrentState(PlayerState))
-        {
-            PlayerState = EPlayerState.Run;
-        }
 
-    }
+    #endregion
 
-    protected virtual void RightCollectStateExit()
-    {
-    }
     #endregion
 
     #endregion
@@ -1262,7 +1262,6 @@ public class Player : Creature
         float timer = 0.0f;
         while (IsPlayerInputControll)
         {
-            Debug.DrawRay(transform.position, Vector3.down * 10f, Color.red);
             timer += Time.deltaTime;
             if (timer >= 1.0f)
             {
@@ -1290,8 +1289,8 @@ public class Player : Creature
                 case EPlayerState.Dizz: UpdateDizzState(); break;
                 case EPlayerState.GoBack: UpdateGoBackState(); break;
                 case EPlayerState.Run: UpdateRunState(); break;
-                case EPlayerState.LeftCollect: UpdateLeftCollectState(); break;
-                case EPlayerState.RightCollect: UpdateRightCollectState(); break;
+                case EPlayerState.LeftCollect:
+                case EPlayerState.RightCollect: UpdateCollectState(); break;
             }
 
 
@@ -1388,6 +1387,7 @@ public class Player : Creature
             if (IsCandyBuff == value)
                 return;
             IsCandyBuff = value;
+            onChangeScoreBuff(IsCandyBuff);
             if (IsCandyBuff && !CandyBuffEffect.GetIsPlay())
             {
                 StartCoroutine(CoCandyBuffEffect());
@@ -1409,62 +1409,51 @@ public class Player : Creature
 
     #endregion
 
-    // 임시 hit
-    private void OnTriggerEnter(Collider other)
+
+    bool isleft = false;
+    protected void CollectItem()
     {
-
-        if (other.CompareTag("Monster"))
+        if (candys.Count > 0)
         {
-
-            PlayerState = EPlayerState.Hit;
-        }
-        else if (other.CompareTag("Booster"))
-        {
-            //부스터추가
-        }
-
-    }
-
-    protected void CollectItem(bool isLeft)
-    {
-        //if (items.Count > 0)
-        //    foreach (Candy item in items)
-        //    {
-        //        if (item != null)
-        //        {
-        //            if (isLeft && item.transform.position.x < this.transform.position.x)
-        //                onCollectCandyItem(item.CandyItemType);
-        //            else if (!isLeft && item.transform.position.x > this.transform.position.x)
-        //                onCollectCandyItem(item.CandyItemType);
-        //        }
-        //    }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.CompareTag("Ground"))
-        {
-
+            onCollectCandyItems?.Invoke(candys);
         }
     }
+
+    #region CollisionTrigger (stage2)
+    [SerializeField, ReadOnly]
+    List<ECandyItemType> candys = new List<ECandyItemType>();
 
 
     public override void OnCollisionTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Item"))
+        if (other.gameObject.layer == (int)ELayer.Item)
         {
-            //items.Remove(other.GetComponent<Candy>());
-        }
-    }
-    public override void OnCollisionTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Item"))
-        {
-            //items.Remove(other.GetComponent<Candy>());
+            Vector3 pos = other.transform.position;
+            CandyItem candy = other.gameObject.GetComponent<CandyItem>();
+            if (isleft == true && pos.x <= transform.position.x)
+            {
+                candys.Add(candy.CandyItemType);
+                candy.OnCollected();
+                if(candy.CandyItemType == ECandyItemType.StarCandy)
+                {
+                    IsCandyBuff = true;
+                }
+            }
+            else if (isleft == false && pos.x >= transform.position.x)
+            {
+                candys.Add(candy.CandyItemType);
+                candy.OnCollected();
+                if (candy.CandyItemType == ECandyItemType.StarCandy)
+                {
+                    IsCandyBuff = true;
+                }
+            }
+
         }
     }
 
 
+    #endregion
     private void OnDisable()
     {
         UnConnectInputActions();
