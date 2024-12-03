@@ -14,11 +14,6 @@ public class BoosterItem : BaseItem
         return true;
     }
 
-    public override void SetInfo(EItemType itemType)
-    {
-
-    }
-
     private void OnDestroyEffect()
     {
         ObjectCreator.SpawnEffect<BaseEffectObject>(EEffectType.ItemBurstEffect, this.transform.position);

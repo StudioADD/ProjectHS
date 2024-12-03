@@ -58,9 +58,9 @@ public static class ObjectCreator
         return monster as T;
     }
 
-    public static T SpawnItem<T>(EItemType itemType, Vector3 spawnPosition) where T : BaseItem
+    public static T SpawnItem<T>(ItemParam param, Vector3 spawnPosition) where T : BaseItem
     {
-        string name = Util.EnumToString(itemType);
+        string name = typeof(T).Name;
         BaseItem item = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_ITEM_PATH}/{name}").GetComponent<BaseItem>();
 
         if (item == null)
@@ -71,7 +71,7 @@ public static class ObjectCreator
 
         item.transform.parent = ItemRoot.transform.transform;
         item.transform.localPosition = spawnPosition;
-        item.SetInfo(itemType); // ItemParam 고려
+        item.SetInfo(param);
         return item as T;
     }
 

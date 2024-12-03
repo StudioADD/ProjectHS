@@ -28,15 +28,33 @@ public class CandyItem : BaseItem
         return true;
     }
 
-    public override void SetInfo(EItemType itemType)
+    public override void SetInfo(ItemParam param = null)
     {
-        rigid.velocity = new Vector3(0, 0, 5); // 임시
-        StartCoroutine(CoDestroyCheck());
+        base.SetInfo(param);
+
+        if(param is CandyItemParam candyItemParam)
+        {
+            itemType = EItemType.CandyItem;
+            CandyItemType = candyItemParam.CandyItemType;
+
+            rigid.velocity = new Vector3(0, 0, 5); // 임시
+            StartCoroutine(CoDestroyCheck());
+        }
+        else
+        {
+#if DEBUG
+            Debug.LogWarning("CandyItemParam is Null");
+#endif
+            Managers.Resource.Destroy(this.gameObject);
+        }
     }
 
     public void OnCollected()
     {
+        // 코루틴 멈추고
         // 파괴되고, 이펙트 생성
+
+
     }
 
     private IEnumerator CoDestroyCheck()

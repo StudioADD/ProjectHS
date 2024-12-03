@@ -178,7 +178,7 @@ public class SharkAvoidanceStage : MultiStage
                 0,
                 basicPointZ + (i * blockLength * 1.5f));
 
-            ObjectCreator.SpawnItem<BoosterItem>(EItemType.BoosterItem, itemSpawnPoint);
+            ObjectCreator.SpawnItem<BoosterItem>(null, itemSpawnPoint);
         }
     }
 

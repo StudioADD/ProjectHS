@@ -8,7 +8,7 @@ public enum EItemType
     BoosterItem,
 
     // CollectingCandyStage
-
+    CandyItem,
 
 
     Max
@@ -28,5 +28,5 @@ public abstract class BaseItem : BaseObject
         return true;
     }
 
-    public abstract void SetInfo(EItemType itemType);
+    public virtual void SetInfo(ItemParam param = null) { }
 }
