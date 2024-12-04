@@ -40,6 +40,8 @@ public enum EPlayerState
     LeftCollect, //수집
     RightCollect, //수집
 
+    Victorty, // 승리
+
     Dead
 }
 
@@ -110,7 +112,7 @@ public class Player : Creature
         protected set
         {
 
-            if (_playerState == EPlayerState.Dead)
+            if (_playerState == EPlayerState.Dead || value == EPlayerState.None)
             {
                 return;
             }
@@ -138,6 +140,7 @@ public class Player : Creature
                 case EPlayerState.LeftCollect:
                 case EPlayerState.RightCollect: isChangeState = CollectStateCondition(); break;
                 case EPlayerState.Run: isChangeState = RunStateCondition(); break;
+                case EPlayerState.Victorty: isChangeState = true; break;
             }
             if (isChangeState == false)
             {
@@ -202,6 +205,7 @@ public class Player : Creature
         SetScale();
         trackNum = 2;
         targetPosition = beforePosition = transform.position;
+        InitRigidVelocity();
         return true;
     }
 
@@ -214,15 +218,19 @@ public class Player : Creature
         targetPosition = beforePosition = transform.position;
         switch (stageType)
         {
+            case EStageType.SharkAvoidance:
+                SetSharkAvoidanceEffet();
+                break;
             case EStageType.CollectingCandy:
                 PlayerState = EPlayerState.Run;
                 //임시 스테이지 endpoint로
                 targetPosition = transform.position;
-                targetPosition.z += 1000;
+                targetPosition.z = 0;
+
                 SetCollectingCandyEffet();
                 break; // 추후 스테이지2 나오면  바꿔야함
-            case EStageType.SharkAvoidance:
-                SetSharkAvoidanceEffet();
+            case EStageType.CrossingBridge:
+
                 break;
             default:
 
@@ -231,6 +239,23 @@ public class Player : Creature
         }
         IsPlayerInputControll = true;
     }
+
+    public void OnEndGame(bool victory)
+    {
+        UnConnectInputActions();
+        UnConnectEvent();
+        if(victory)
+        {
+            PlayerState = EPlayerState.Victorty;
+        }
+        IsPlayerInputControll = false;
+        if (coPlayerStateController != null)
+        {
+            StopCoroutine(coPlayerStateController);
+            coPlayerStateController = null;
+        }
+    }
+
     public virtual void SetScale()
     {
         switch (stageType)
@@ -243,6 +268,9 @@ public class Player : Creature
                 break;
         }
     }
+
+    #region Event
+
     #region SharkAvoidanceStage Event
     Action onAddBoosterItem;
     Func<bool> onUseBoosterItem;
@@ -264,6 +292,38 @@ public class Player : Creature
         this.onCollectCandyItems = onCollectCandyItems;
         this.onChangeScoreBuff = onChangeScoreBuff;
     }
+
+    [SerializeField, ReadOnly]
+    List<ECandyItemType> candys = new List<ECandyItemType>();
+    public override void OnCollisionTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == (int)ELayer.Item)
+        {
+            Vector3 pos = other.transform.position;
+            CandyItem candy = other.gameObject.GetComponent<CandyItem>();
+            if (isleft == true && pos.x <= transform.position.x)
+            {
+                candys.Add(candy.CandyItemType);
+                candy.OnCollected();
+                if (candy.CandyItemType == ECandyItemType.StarCandy)
+                {
+                    IsCandyBuff = true;
+                }
+            }
+            else if (isleft == false && pos.x >= transform.position.x)
+            {
+                candys.Add(candy.CandyItemType);
+                candy.OnCollected();
+                if (candy.CandyItemType == ECandyItemType.StarCandy)
+                {
+                    IsCandyBuff = true;
+                }
+            }
+
+        }
+    }
+
+    
     #endregion
 
     #region CrossingBridgeStage Event
@@ -293,6 +353,21 @@ public class Player : Creature
     }
     #endregion
 
+    protected void UnConnectEvent()
+    {
+        onAddBoosterItem = null;
+        onUseBoosterItem = null;
+        onCollectCandyItems = null;
+        onChangeScoreBuff = null;
+        getJumpTargetPos = null;
+        getSpawnPoint = null;
+        onUseGoggleItem = null;
+        onChangeTarget = null;
+    }
+    #endregion
+
+    #region Effect
+
     #region SharkAvoidance Effet
     private void SetSharkAvoidanceEffet()
     {
@@ -318,6 +393,7 @@ public class Player : Creature
         CandyBuffEffect.StopEffect();
     }
 
+    #endregion
     #endregion
 
     #region Input
@@ -476,12 +552,10 @@ public class Player : Creature
             if (TeamType == ETeamType.Left)
             {
                 Managers.Input.OnArrowKeyEntered += OnArrowKeyStage2;
-                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
             }
             else
             {
                 Managers.Input.OnWASDKeyEntered += OnArrowKeyStage2;
-                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
             }
         }
 
@@ -502,6 +576,11 @@ public class Player : Creature
 
 
     }
+
+    
+
+
+
 
     #endregion
 
@@ -539,6 +618,15 @@ public class Player : Creature
 
 
     }
+    public void OnJumpKey()
+    {
+        if (isInputRock)
+        {
+            return;
+        }
+
+        PlayerState = EPlayerState.JumpUp;
+    }
 
     protected void OnUseGoggleItem()
     {
@@ -550,15 +638,7 @@ public class Player : Creature
     }
 
     #endregion
-    public void OnJumpKey()
-    {
-        if (isInputRock)
-        {
-            return;
-        }
-
-        PlayerState = EPlayerState.JumpUp;
-    }
+    
     #endregion
 
     #region PlayerState
@@ -1419,53 +1499,15 @@ public class Player : Creature
         }
     }
 
-    #region CollisionTrigger (stage2)
-    [SerializeField, ReadOnly]
-    List<ECandyItemType> candys = new List<ECandyItemType>();
+    
 
-
-    public override void OnCollisionTriggerEnter(Collider other)
-    {
-        if (other.gameObject.layer == (int)ELayer.Item)
-        {
-            Vector3 pos = other.transform.position;
-            CandyItem candy = other.gameObject.GetComponent<CandyItem>();
-            if (isleft == true && pos.x <= transform.position.x)
-            {
-                candys.Add(candy.CandyItemType);
-                candy.OnCollected();
-                if(candy.CandyItemType == ECandyItemType.StarCandy)
-                {
-                    IsCandyBuff = true;
-                }
-            }
-            else if (isleft == false && pos.x >= transform.position.x)
-            {
-                candys.Add(candy.CandyItemType);
-                candy.OnCollected();
-                if (candy.CandyItemType == ECandyItemType.StarCandy)
-                {
-                    IsCandyBuff = true;
-                }
-            }
-
-        }
-    }
-
-
-    #endregion
     private void OnDisable()
     {
         UnConnectInputActions();
-        onAddBoosterItem = null;
-        onUseBoosterItem = null;
-        onCollectCandyItems = null;
-        onChangeScoreBuff = null;
-        getJumpTargetPos = null;
-        getSpawnPoint = null;
-        onUseGoggleItem = null;
-        onChangeTarget = null;
+        UnConnectEvent();
     }
+
+
 
 
 }

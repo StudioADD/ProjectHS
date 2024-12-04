@@ -1239,10 +1239,10 @@ MonoBehaviour:
   IsJump: 0
   isInputRock: 0
   _playerState: 0
+  candys: 
   _isPlayerInputControll: 0
   targetPosition: {x: 0, y: 0, z: 0}
   beforePosition: {x: 0, y: 0, z: 0}
-  candys: 
 --- !u!54 &963195363637125822
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1251,7 +1251,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1995327641869337801}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 3
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1290,7 +1290,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.9, y: 1.5, z: 1}
-  m_Center: {x: 0, y: 0.7, z: 0}
+  m_Center: {x: 0, y: 0.75, z: 0}
 --- !u!1 &2004720187315061698
 GameObject:
   m_ObjectHideFlags: 0
@@ -4529,7 +4529,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2145681493531139962
 Transform:
   m_ObjectHideFlags: 0
