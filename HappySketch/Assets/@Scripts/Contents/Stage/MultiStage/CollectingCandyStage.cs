@@ -112,7 +112,7 @@ public class CollectingCandyStage : MultiStage
             isStarItem = starItemSpawnPoint == i;
 
             currPos += distance / 20;
-            SpawnCandyItemWave(currPos, isStarItem);
+            SpawnCandyItemWave(currPos, true);
         }
     }
 

@@ -97,6 +97,11 @@ public class GameScene : BaseScene
         onCondition?.Invoke();
     }
 
+    public Camera GetTeamCamera(ETeamType type)
+    {
+        return cameraGroupController.GetTeamCamera(type);
+    }
+
     public void  StartStage()
     {
         Managers.Game.StartStage();
