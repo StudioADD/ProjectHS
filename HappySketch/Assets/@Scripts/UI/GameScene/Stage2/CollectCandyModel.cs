@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
@@ -10,24 +11,24 @@ public class CollectCandyModel : ModelBase
 {
     private const float SCORE_COROUTINE_TIME = 1;
 
-    [SerializeField, ReadOnly]
     private int second = 0;
-
-    [SerializeField, ReadOnly]
     private int minute = 0;
 
     public event UnityAction OnTimeChangedEvent;
     private Coroutine timeCoroutine;
 
-    int score;
-    int currScore;
+    private int score;
+    private int currScore;
+
+    private int leftScore;
+    private int rightScore;
 
     public event UnityAction<int> OnScoreChangedEvent;
     private Coroutine scoreCoroutine;
 
     public CollectCandyModel() : base()
     {
-
+        
     }
 
     public string GetFormattedTime()
@@ -35,9 +36,12 @@ public class CollectCandyModel : ModelBase
         return string.Format("{0:D2}:{1:D2}", minute, second);
     }
 
-    public void StartTimer()
+    public void StartTimer(int minute, int second, Action onEndTimer = null)
     {
-        timeCoroutine = CoroutineHelper.StartCoroutine(TimeCoroutine());
+        this.minute = minute;
+        this.second = second;
+
+        timeCoroutine = CoroutineHelper.StartCoroutine(TimeCoroutine(onEndTimer));
     }
 
     public void SetScore(int score)
@@ -50,29 +54,36 @@ public class CollectCandyModel : ModelBase
         scoreCoroutine = CoroutineHelper.StartCoroutine(ScoreCoroutine(currScore));
     }
 
-    private void IncreaseTime()
+    private void DecreaseTime()
     {
-        ++second;
-        
-        if(second == 60)
+        --second;
+
+        if (second <= 0)
         {
-            second = 0;
-            ++minute;
+            second = 59;
+            --minute;
         }
 
         OnTimeChangedEvent?.Invoke();
     }
 
-    private IEnumerator TimeCoroutine()
+    private bool IsTimerEnd()
+    {
+        return minute == 0 && second == 0;
+    }
+
+    private IEnumerator TimeCoroutine(Action onEndTimer = null)
     {
         WaitForSeconds waitForOneSecond = new WaitForSeconds(1f);
 
-        while (true)
+        while (!IsTimerEnd())
         {
             yield return waitForOneSecond;
 
-            IncreaseTime();
+            DecreaseTime();
         }
+
+        onEndTimer?.Invoke();
     }
 
     private IEnumerator ScoreCoroutine(int currScore)

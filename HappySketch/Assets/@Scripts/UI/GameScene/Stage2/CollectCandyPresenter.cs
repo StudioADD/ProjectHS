@@ -17,7 +17,6 @@ public class CollectCandyPresenter : PresenterBase
         {
             candyModel.OnTimeChangedEvent -= SetTime;
             candyModel.OnTimeChangedEvent += SetTime;
-            candyModel.StartTimer();
 
             candyModel.OnScoreChangedEvent -= SetScoreView;
             candyModel.OnScoreChangedEvent += SetScoreView;

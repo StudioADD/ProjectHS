@@ -49,6 +49,11 @@ public class UI_GameScene : UI_BaseScene
         currPresentRight.Clear();
     }
 
+    public ModelBase GetStageUI()
+    {
+        return currPresentLeft.GetModel();
+    }  
+
     private void SetStageUI()
     {
         if(currStageType == EStageType.None)
@@ -85,8 +90,9 @@ public class UI_GameScene : UI_BaseScene
                 break;
 
             case EStageType.CollectingCandy:
-                currPresentLeft = new CollectCandyPresenter(leftView, new CollectCandyModel(), ETeamType.Left);
-                currPresentRight = new CollectCandyPresenter(rightView, new CollectCandyModel(), ETeamType.Right);
+                CollectCandyModel candyModel = new CollectCandyModel();
+                currPresentLeft = new CollectCandyPresenter(leftView, candyModel, ETeamType.Left);
+                currPresentRight = new CollectCandyPresenter(rightView, candyModel, ETeamType.Right);
                 break;
 
             case EStageType.CrossingBridge:
