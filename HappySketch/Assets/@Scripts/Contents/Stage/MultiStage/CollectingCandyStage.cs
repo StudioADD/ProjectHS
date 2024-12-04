@@ -8,6 +8,7 @@ using CollectingCandy;
 public class CollectingCandyStage : MultiStage
 {
     [SerializeField, ReadOnly] ScoreCollector scoreCollector;
+    [SerializeField, ReadOnly] Transform playerEndPoint;
 
     [field: SerializeField, ReadOnly] List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
     [field: SerializeField, ReadOnly] CollectingCandyParam stageParam = null;
@@ -24,12 +25,8 @@ public class CollectingCandyStage : MultiStage
             if (child.TryGetComponent<SpawnPointObject>(out SpawnPointObject spawnPoint))
                 spawnPointList.Add(spawnPoint);
         }
-    }
 
-    private void OnDisable()
-    {
-        if (coSpawnCandyItem != null)
-            StopCoroutine(coSpawnCandyItem);
+        playerEndPoint = Util.FindChild<Transform>(gameObject, "PlayerEndPoint", true);
     }
 
     public override bool Init()
@@ -48,24 +45,33 @@ public class CollectingCandyStage : MultiStage
 
         stageParam = new CollectingCandyParam(ETeamType.Left, new int[(int)ECandyItemType.Max], 0);
 
-        
+        scoreCollector = FindObjectOfType<ScoreCollector>();
+        if(scoreCollector == null)
+            scoreCollector = new GameObject("@ScoreCollector").AddComponent<ScoreCollector>();
     }
 
     public override void StartStage()
     {
         base.StartStage();
 
-        if (coSpawnCandyItem != null)
-            StopCoroutine(coSpawnCandyItem);
+        scoreCollector.OnGameTimerEnd -= GameTimerEndCallBack;
+        scoreCollector.OnGameTimerEnd += GameTimerEndCallBack;
 
-        coSpawnCandyItem = StartCoroutine(CoSpawnCandyItem());
+        // 임시
+        if (TeamType == ETeamType.Left)
+            scoreCollector.StartStage();
     }
 
     public override void EndStage(ETeamType winnerTeam)
     {
         base.EndStage(winnerTeam);
 
+        // 일단 필요없을 거 같고
+    }
 
+    public void GameTimerEndCallBack()
+    { 
+        scoreCollector.SetTotalScore(stageParam);
     }
 
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
@@ -74,7 +80,22 @@ public class CollectingCandyStage : MultiStage
 
         player.ConnectCollectingCandyStage(OnCollectCandyItems, OnChangeScoreBuff);
 
-        // 게임 종료 조건 세팅 해야 함 ??
+        if (scoreCollector != null)
+        {
+            scoreCollector.OnEndGameCallBack -= onEndGameCallBack;
+            scoreCollector.OnEndGameCallBack += onEndGameCallBack;
+        }
+#if DEBUG
+        else
+            Debug.LogWarning("scoreCollector is Null!!");
+#endif
+    }
+
+    public void SpawnCandyItems()
+    {
+        float distance = MathF.Abs(playerStartPoint.position.z - playerEndPoint.position.z);
+        Vector3 currPoint = playerStartPoint.position;
+
     }
 
     public void OnCollectCandyItems(List<ECandyItemType> candyItemTypes)
@@ -120,22 +141,5 @@ public class CollectingCandyStage : MultiStage
     public void OnChangeScoreBuff(bool isScoreBuff)
     {
         this.isScoreBuff = isScoreBuff;
-    }
-
-    Coroutine coSpawnCandyItem = null;
-    private IEnumerator CoSpawnCandyItem()
-    {
-        while(Managers.Game.IsGamePlay)
-        {
-            yield return new WaitForSeconds(5f); // 임시
-
-        }
-
-        coSpawnCandyItem = null;
-    }
-
-    private void SpawnCandyItem()
-    {
-
     }
 }

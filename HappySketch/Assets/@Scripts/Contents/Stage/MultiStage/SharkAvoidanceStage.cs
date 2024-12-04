@@ -84,8 +84,10 @@ public class SharkAvoidanceStage : MultiStage
             finishLineObject.OnArriveFinishLine -= onEndGameCallBack;
             finishLineObject.OnArriveFinishLine += onEndGameCallBack;
         }
+#if DEBUG
         else
             Debug.LogWarning($"FinishLineObject is Null!!");
+#endif
     }
 
     public void OnAddBoosterItem()

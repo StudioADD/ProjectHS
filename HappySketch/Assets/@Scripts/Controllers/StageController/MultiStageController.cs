@@ -44,7 +44,7 @@ public class MultiStageController : BaseStageController
 
 
     }
-
+    
     public override void StartStage()
     {
         leftStage.StartStage();

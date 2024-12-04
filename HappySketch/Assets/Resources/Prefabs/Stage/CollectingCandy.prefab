@@ -1904,6 +1904,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3525779613434505053}
+  - {fileID: 3593505132119432734}
   m_Father: {fileID: 9099866726909400319}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1028155819813187705
@@ -8786,6 +8787,7 @@ MonoBehaviour:
   <StageType>k__BackingField: 0
   <TeamType>k__BackingField: 0
   player: {fileID: 0}
+  scoreCollector: {fileID: 0}
   spawnPointList:
   - {fileID: 789196270329293412}
   - {fileID: 7144520208931080281}
@@ -8793,6 +8795,12 @@ MonoBehaviour:
   - {fileID: 6329587737541447969}
   - {fileID: 907114495363019668}
   - {fileID: 4338422638512564313}
+  stageParam:
+    TeamType: 0
+    CandyItems: 
+    CurrScore: 0
+  playerEndPoint: {fileID: 3593505132119432734}
+  isScoreBuff: 0
 --- !u!1 &3785526355244998619
 GameObject:
   m_ObjectHideFlags: 0
@@ -11335,6 +11343,37 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0037802458, y: -0.0010923147, z: -0.000036805868}
     m_Extent: {x: 3.1121864, y: 3.1176167, z: 0.90287733}
   m_DirtyAABB: 0
+--- !u!1 &4662976757973380276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3593505132119432734}
+  m_Layer: 0
+  m_Name: PlayerEndPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3593505132119432734
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4662976757973380276}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2726027158575474452}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4691570732367070620
 GameObject:
   m_ObjectHideFlags: 0
