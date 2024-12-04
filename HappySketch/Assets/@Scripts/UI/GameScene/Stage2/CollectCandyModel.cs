@@ -46,8 +46,7 @@ public class CollectCandyModel : ModelBase
 
     public Vector3 GetUIPos(Camera camera, Vector3 worldPos)
     {
-        camera.WorldToViewportPoint(worldPos);
-        return Vector2.zero;
+        return camera.WorldToViewportPoint(worldPos);
     }
 
     public string GetFormattedTime()

@@ -27,18 +27,14 @@ public class CollectCandyView : ViewBase
         this.score.text = score.ToString();
     }
 
-    public void UpdateItemCount(EItemType itemType, int itemCount)
+    public void SetUIScore(Vector3 pos, int score)
     {
-        if (itemType < 0 && (int)itemType >= this.itemCount.Length)
-            throw new ArgumentOutOfRangeException($"{itemCount}");
 
-        this.itemCount[(int)itemType].text = itemCount.ToString();
     }
 
     public void UpdateItemCount(int[] itemCounts)
     {
-        // 아이템 갯수 3
-        for(int i = 0; i < 3; ++i)
+        for(int i = 0; i < itemCount.Length; ++i)
         {
             itemCount[i].text = itemCounts[i].ToString();
         }

@@ -49,14 +49,6 @@ public class CollectCandyPresenter : PresenterBase
         }
     }
 
-    public void SetItemCount(EItemType itemType, int itemCount)
-    {
-        if(view is CollectCandyView candyView)
-        {
-            candyView.UpdateItemCount(itemType, itemCount);
-        }
-    }
-
     public void SetItemCount(int[] itemCounts)
     {
         if (view is CollectCandyView candyView)
@@ -99,6 +91,11 @@ public class CollectCandyPresenter : PresenterBase
                 candyView.UpdateTime(candyModel.GetFormattedTime());
             }
         }
+    }
+
+    public void SetUIScore(Vector3 pos, int score)
+    {
+
     }
 
     public override void Clear()
