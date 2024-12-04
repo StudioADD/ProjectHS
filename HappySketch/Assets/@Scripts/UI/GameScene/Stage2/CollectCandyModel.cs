@@ -36,10 +36,10 @@ public class CollectCandyModel : ModelBase
         return string.Format("{0:D2}:{1:D2}", minute, second);
     }
 
-    public void StartTimer(int minute, int second, Action onEndTimer = null)
+    public void StartTimer(int seconds, Action onEndTimer = null)
     {
-        this.minute = minute;
-        this.second = second;
+        this.minute = seconds / 60;
+        this.second = seconds % 60;
 
         if (timeCoroutine != null)
             CoroutineHelper.StopCoroutine(timeCoroutine);
