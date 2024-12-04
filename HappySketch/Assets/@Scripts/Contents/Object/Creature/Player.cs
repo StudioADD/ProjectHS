@@ -309,7 +309,7 @@ public class Player : Creature
                 candy.OnCollected();
                 if (candy.CandyItemType == ECandyItemType.StarCandyItem)
                 {
-                    IsCandyBuff = true;
+                    _isCandyBuff = true;
                 }
             }
             else if (isleft == false && pos.x >= transform.position.x)
@@ -318,7 +318,7 @@ public class Player : Creature
                 candy.OnCollected();
                 if (candy.CandyItemType == ECandyItemType.StarCandyItem)
                 {
-                    IsCandyBuff = true;
+                    _isCandyBuff = true;
                 }
             }
 
@@ -1484,7 +1484,7 @@ public class Player : Creature
     {
         float time = 0f;
         CandyBuffEffect?.PlayEffect();
-        while (time <= 5f)
+        while (time <= 10f)
         {
             time += Time.deltaTime;
             yield return null;
