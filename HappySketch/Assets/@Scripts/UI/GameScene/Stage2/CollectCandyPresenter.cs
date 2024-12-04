@@ -6,6 +6,8 @@ using static Define;
 
 public class CollectCandyPresenter : PresenterBase
 {
+    private Camera camera;
+
     public CollectCandyPresenter(ViewBase view, ModelBase model, ETeamType teamType) : base(view, model, teamType)
     {
         if(model is CollectCandyModel candyModel)
@@ -95,7 +97,13 @@ public class CollectCandyPresenter : PresenterBase
 
     public void SetUIScore(Vector3 pos, int score)
     {
-
+        if(view is CollectCandyView candyView)
+        {
+            if(model is CollectCandyModel candyModel)
+            {
+                candyView.UpdateUIScore(candyModel.GetUIPos(camera, pos), score);
+            }
+        }
     }
 
     public override void Clear()

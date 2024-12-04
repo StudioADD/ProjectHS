@@ -71,12 +71,16 @@ public class UI_WinLose : UI_BaseObject
 
     public void Win(int winCount)
     {
+        if (winCount >= this.winCount.Length)
+            Debug.LogError("Debug 할때 인덱스 범위 넘어가는 에러임!!!");
         StartCoroutine(FadeOutCoroutine(winImage, FADE_TIME));
         StartCoroutine(FadeOutCoroutine(this.winCount[winCount], FADE_TIME));
     }
 
     public void Lose(int winCount)
     {
+        if (winCount >= this.winCount.Length)
+            Debug.LogError("Debug 할때 인덱스 범위 넘어가는 에러임!!!");
         StartCoroutine(FadeOutCoroutine(loseImage, FADE_TIME));
         StartCoroutine(FadeOutCoroutine(this.winCount[winCount], FADE_TIME));
     }

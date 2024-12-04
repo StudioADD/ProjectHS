@@ -33,6 +33,7 @@ public class UI_GameScene : UI_BaseScene
     public void SetInfo(EStageType stageType)
     {
         currStageType = stageType;
+        stageInstructionWindow.SetInfo(stageType);
     }
 
     public void StartStage()

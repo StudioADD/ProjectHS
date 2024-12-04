@@ -8,14 +8,32 @@ using static Define;
 
 public class CollectCandyView : ViewBase
 {
-    [SerializeField]
+    [SerializeField, ReadOnly]
     private TextMeshProUGUI time;
 
-    [SerializeField]
+    [SerializeField, ReadOnly]
     private TextMeshProUGUI score;
 
-    [SerializeField]
-    private TextMeshProUGUI[] itemCount;
+    [SerializeField, ReadOnly]
+    private TextMeshProUGUI[] itemCounts;
+
+    // Pool?
+    [SerializeField, ReadOnly]
+    private TextMeshProUGUI[] scorePool;
+    private int poolIndex = 0;
+
+    private void Reset()
+    {
+        time = Util.FindChild<TextMeshProUGUI>(gameObject, "Text_Timer", true);
+        score = Util.FindChild<TextMeshProUGUI>(gameObject, "Text_Score", true);
+
+        itemCounts = new TextMeshProUGUI[3];
+        itemCounts[0] = Util.FindChild<TextMeshProUGUI>(gameObject, "Text_Red", true);
+        itemCounts[1] = Util.FindChild<TextMeshProUGUI>(gameObject, "Text_Green", true);
+        itemCounts[2] = Util.FindChild<TextMeshProUGUI>(gameObject, "Text_Blue", true);
+
+        scorePool = Util.FindChild<Transform>(gameObject, "TextPool", true).GetComponentsInChildren<TextMeshProUGUI>(true);
+    }
 
     public void UpdateTime(string time)
     {
@@ -27,16 +45,20 @@ public class CollectCandyView : ViewBase
         this.score.text = score.ToString();
     }
 
-    public void SetUIScore(Vector3 pos, int score)
+    public void UpdateUIScore(Vector3 pos, int score)
     {
+        scorePool[poolIndex].gameObject.SetActive(true);
+        scorePool[poolIndex].text = score.ToString();
+        scorePool[poolIndex].rectTransform.position = pos;
 
+        poolIndex = (poolIndex + 1) % scorePool.Length;
     }
 
     public void UpdateItemCount(int[] itemCounts)
     {
-        for(int i = 0; i < itemCount.Length; ++i)
+        for (int i = 0; i < this.itemCounts.Length; ++i)
         {
-            itemCount[i].text = itemCounts[i].ToString();
+            this.itemCounts[i].text = itemCounts[i].ToString();
         }
     }
 }

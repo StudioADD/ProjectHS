@@ -5,6 +5,8 @@ using static Define;
 
 public class SharkAvoidancePresenter : PresenterBase
 {
+    private Camera camera;
+
     public SharkAvoidancePresenter(ViewBase view, ModelBase model, ETeamType teamType) : base(view, model, teamType)
     {
         if(model is SharkAvoidanceModel sharkModel)
@@ -23,6 +25,9 @@ public class SharkAvoidancePresenter : PresenterBase
 
                     sharkModel.OnLeftItemRatioChanged -= SetItemRatio;
                     sharkModel.OnLeftItemRatioChanged += SetItemRatio;
+
+                    // 카메라 설정!
+                    // (Managers.Scene.CurrScene as GameScene)
                     break;
 
                 case ETeamType.Right:
