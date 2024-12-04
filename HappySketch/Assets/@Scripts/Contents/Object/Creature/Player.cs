@@ -40,7 +40,7 @@ public enum EPlayerState
     LeftCollect, //수집
     RightCollect, //수집
 
-    Victorty, // 승리
+    Victory, // 승리
 
     Dead
 }
@@ -140,7 +140,7 @@ public class Player : Creature
                 case EPlayerState.LeftCollect:
                 case EPlayerState.RightCollect: isChangeState = CollectStateCondition(); break;
                 case EPlayerState.Run: isChangeState = RunStateCondition(); break;
-                case EPlayerState.Victorty: isChangeState = true; break;
+                case EPlayerState.Victory: isChangeState = true; break;
             }
             if (isChangeState == false)
             {
@@ -246,7 +246,7 @@ public class Player : Creature
         UnConnectEvent();
         if(victory)
         {
-            PlayerState = EPlayerState.Victorty;
+            PlayerState = EPlayerState.Victory;
         }
         IsPlayerInputControll = false;
         if (coPlayerStateController != null)
@@ -674,6 +674,7 @@ public class Player : Creature
     //test
     private void test()
     {
+        OnEndStage(true);
         //onAddBoosterItem?.Invoke();
         //if (boosterTimer == -1)
         //{
@@ -690,7 +691,7 @@ public class Player : Creature
                 //OnHit(test);
                 break;
             case EStageType.CollectingCandy:
-                _isCandyBuff = true;
+                //_isCandyBuff = true;
                 //candys.Add((ECandyItemType)UnityEngine.Random.Range(0, (int)ECandyItemType.Max));
                 break;
         }
@@ -1474,6 +1475,7 @@ public class Player : Creature
             }
         }
     }
+
     protected IEnumerator CoCandyBuffEffect()
     {
         float time = 0f;
