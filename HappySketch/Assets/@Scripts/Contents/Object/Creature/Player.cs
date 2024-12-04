@@ -47,6 +47,8 @@ public enum EPlayerState
 
 public class Player : Creature
 {
+    static float stage2Time = 90f;
+
     [SerializeField]
     private EStageType stageType;
 
@@ -451,11 +453,17 @@ public class Player : Creature
         Managers.Input.OnWASDKeyEntered -= OnArrowKeySharkAvoidance;
         Managers.Input.OnEndKeyEntered -= OnBoosterKeySharkAvoidance;
 
-        Managers.Input.OnArrowKeyEntered -= OnArrowKeyStage2;
-        Managers.Input.OnSpaceKeyEntered -= OnJumpKey;
-
         Managers.Input.OnWASDKeyEntered -= OnArrowKeyStage2;
+
+        Managers.Input.OnArrowKeyEntered -= OnArrowKeyStage2;
+
+        Managers.Input.OnWASDKeyEntered -= OnArrowKeyStage3;
+        Managers.Input.OnSpaceKeyEntered -= OnJumpKey;
+        Managers.Input.OnFKeyEntered -= OnUseGoggleItem;
+
+        Managers.Input.OnArrowKeyEntered -= OnArrowKeyStage3;
         Managers.Input.OnEndKeyEntered -= OnJumpKey;
+        Managers.Input.OnPageDownKeyEntered -= OnUseGoggleItem;
 
         Managers.Input.OnNum1KeyEntered -= test;
 
@@ -551,11 +559,12 @@ public class Player : Creature
         {
             if (TeamType == ETeamType.Left)
             {
-                Managers.Input.OnArrowKeyEntered += OnArrowKeyStage2;
+                Managers.Input.OnWASDKeyEntered += OnArrowKeyStage2;
             }
             else
             {
-                Managers.Input.OnWASDKeyEntered += OnArrowKeyStage2;
+                Managers.Input.OnArrowKeyEntered += OnArrowKeyStage2;
+                
             }
         }
 
@@ -594,11 +603,13 @@ public class Player : Creature
             {
                 Managers.Input.OnWASDKeyEntered += OnArrowKeyStage3;
                 Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+                Managers.Input.OnFKeyEntered += OnUseGoggleItem;
             }
             else
             {
                 Managers.Input.OnArrowKeyEntered += OnArrowKeyStage3;
                 Managers.Input.OnEndKeyEntered += OnJumpKey;
+                Managers.Input.OnPageDownKeyEntered += OnUseGoggleItem;
             }
         }
 
@@ -692,7 +703,7 @@ public class Player : Creature
                 break;
             case EStageType.CollectingCandy:
                 //_isCandyBuff = true;
-                //candys.Add((ECandyItemType)UnityEngine.Random.Range(0, (int)ECandyItemType.Max));
+                candys.Add((ECandyItemType)UnityEngine.Random.Range(0, (int)ECandyItemType.Max));
                 break;
         }
 
@@ -1254,9 +1265,9 @@ public class Player : Creature
         //Running();
     }
 
-    protected virtual void UpdateRunState()
+    protected virtual void UpdateRunState(float timer)
     {
-        Running();
+        Running(timer);
 
         if (transform.position == targetPosition)
         {
@@ -1270,11 +1281,13 @@ public class Player : Creature
     {
         InitRigidVelocity();
     }
-    protected void Running()
+    protected void Running(float timer)
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.01f * moveDistance); // 추후 2스테이지 data로 뺄것
+        float distance = targetPosition.z - beforePosition.z;
+        float progress = timer / stage2Time;
+        transform.position = new Vector3(transform.position.x, transform.position.y, beforePosition.z + distance * progress);
     }
-
+    
 
     #endregion
 
@@ -1288,12 +1301,11 @@ public class Player : Creature
     }
 
 
-    protected virtual void UpdateCollectState()
+    protected virtual void UpdateCollectState(float timer)
     {
 
 
-        Running();
-        //수집 시 필요한거 
+        Running(timer);
         if (IsEndCurrentState(PlayerState))
         {
             PlayerState = EPlayerState.Run;
@@ -1344,11 +1356,6 @@ public class Player : Creature
         while (IsPlayerInputControll)
         {
             timer += Time.deltaTime;
-            if (timer >= 1.0f)
-            {
-                timer -= 1.0f;
-            }
-
 
             if (inputTime < inputCooldown)
             {
@@ -1369,9 +1376,9 @@ public class Player : Creature
                 case EPlayerState.Hit: UpdateHitState(); break;
                 case EPlayerState.Dizz: UpdateDizzState(); break;
                 case EPlayerState.GoBack: UpdateGoBackState(); break;
-                case EPlayerState.Run: UpdateRunState(); break;
+                case EPlayerState.Run: UpdateRunState(timer); break;
                 case EPlayerState.LeftCollect:
-                case EPlayerState.RightCollect: UpdateCollectState(); break;
+                case EPlayerState.RightCollect: UpdateCollectState(timer); break;
             }
 
 

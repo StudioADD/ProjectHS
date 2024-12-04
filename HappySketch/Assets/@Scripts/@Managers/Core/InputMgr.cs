@@ -37,6 +37,7 @@ public class InputMgr : MonoBehaviour
     public event Action OnNum1KeyEntered;
     public event Action OnNum2KeyEntered;
     public event Action OnEndKeyEntered;
+    public event Action OnPageDownKeyEntered;
 
     public void Init()
     {
@@ -127,6 +128,11 @@ public class InputMgr : MonoBehaviour
     public void OnEndKey()
     {
         OnEndKeyEntered?.Invoke();
+
+    }
+    public void OnPageDownKey()
+    {
+        OnPageDownKeyEntered?.Invoke();
 
     }
     #endregion
