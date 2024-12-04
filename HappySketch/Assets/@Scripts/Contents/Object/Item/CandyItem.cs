@@ -45,6 +45,10 @@ public class CandyItem : BaseItem
 
     public void OnCollected()
     {
-        // 파괴되고, 이펙트 생성
+        EEffectType effectType = (CandyItemType == ECandyItemType.BoomCandyItem) ?
+            EEffectType.BoomCandyBurstEffect : EEffectType.CandyItemBurstEffect;
+
+        ObjectCreator.SpawnEffect<BaseEffectObject>(effectType, transform.position);
+        Managers.Resource.Destroy(gameObject);
     }
 }
