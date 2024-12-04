@@ -244,7 +244,7 @@ public class Player : Creature
     {
         UnConnectInputActions();
         UnConnectEvent();
-        if(victory)
+        if (victory)
         {
             PlayerState = EPlayerState.Victory;
         }
@@ -323,7 +323,7 @@ public class Player : Creature
         }
     }
 
-    
+
     #endregion
 
     #region CrossingBridgeStage Event
@@ -348,7 +348,10 @@ public class Player : Creature
     {
 
         if (getSpawnPoint != null)
+        {
             transform.position = getSpawnPoint.Invoke(TeamType);
+
+        }
 
     }
     #endregion
@@ -562,7 +565,7 @@ public class Player : Creature
             else
             {
                 Managers.Input.OnArrowKeyEntered += OnArrowKeyStage2;
-                
+
             }
         }
 
@@ -584,7 +587,7 @@ public class Player : Creature
 
     }
 
-    
+
 
 
 
@@ -616,14 +619,31 @@ public class Player : Creature
     public void OnArrowKeyStage3(Vector2 value)
     {
 
+        if (IsJump)
+            return;
+
         if (value.x > 0)
         {
             onChangeTarget?.Invoke(TeamType, EDirection.Right);
+            SetPlayerForward();
         }
         else if (value.x < 0)
         {
             onChangeTarget?.Invoke(TeamType, EDirection.Left);
+            SetPlayerForward();
         }
+
+
+    }
+
+    protected void SetPlayerForward()
+    {
+        if (getJumpTargetPos != null)
+        {
+            targetPosition = getJumpTargetPos.Invoke(TeamType);
+            this.transform.forward = (targetPosition - this.transform.position).normalized;
+        }
+
 
 
     }
@@ -647,7 +667,7 @@ public class Player : Creature
     }
 
     #endregion
-    
+
     #endregion
 
     #region PlayerState
@@ -663,6 +683,9 @@ public class Player : Creature
     protected virtual void IdleStateEnter()
     {
         beforePosition = transform.position;
+
+        SetPlayerForward();
+
     }
 
     protected virtual void UpdateIdleState()
@@ -1067,16 +1090,8 @@ public class Player : Creature
 
     protected virtual void JumpUpStateEnter()
     {
-        targetPosition = transform.position + Vector3.forward * data.MoveSpeed * 2; // 추후 이동거리로 뺄것
-        if (stageType == EStageType.CrossingBridge)
-        {
-            if (getJumpTargetPos != null)
-            {
-                targetPosition = getJumpTargetPos.Invoke(TeamType);
-            }
-        }
 
-        this.transform.forward = (targetPosition - this.transform.position).normalized;
+        SetPlayerForward();
     }
 
     protected virtual void UpdateJumpUpState()
@@ -1176,15 +1191,9 @@ public class Player : Creature
 
         if (IsEndCurrentState(PlayerState))
         {
-            switch (stageType)
-            {
 
+            PlayerState = EPlayerState.Idle;
 
-                case EStageType.CollectingCandy: PlayerState = EPlayerState.Run; break;
-
-                default:
-                    PlayerState = EPlayerState.Idle; break;
-            }
         }
         else
         {
@@ -1199,7 +1208,6 @@ public class Player : Creature
     protected virtual void LandingStateExit()
     {
         //targetPosition = Vector3.zero;
-        transform.forward = new Vector3(0, 0, 1);
         IsJump = false;
     }
     #endregion
@@ -1231,7 +1239,7 @@ public class Player : Creature
     protected virtual void FallStateExit()
     {
         //targetPosition = Vector3.zero;
-        transform.forward = new Vector3(0, 0, 1);
+
         IsJump = false;
     }
 
@@ -1282,7 +1290,7 @@ public class Player : Creature
         float progress = timer / stage2Time;
         transform.position = new Vector3(transform.position.x, transform.position.y, beforePosition.z + distance * progress);
     }
-    
+
 
     #endregion
 
@@ -1321,7 +1329,7 @@ public class Player : Creature
     {
         isleft = true;
         collisionTrigger.SetActive(true);
-        
+
 
     }
 
@@ -1333,7 +1341,7 @@ public class Player : Creature
     {
         isleft = false;
         collisionTrigger.SetActive(true);
-        
+
     }
 
 
@@ -1503,7 +1511,7 @@ public class Player : Creature
         }
     }
 
-    
+
 
     private void OnDisable()
     {
