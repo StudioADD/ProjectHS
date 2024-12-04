@@ -72,8 +72,6 @@ public class CollectingCandyStage : MultiStage
     public override void EndStage(ETeamType winnerTeam)
     {
         base.EndStage(winnerTeam);
-
-        // 일단 필요없을 거 같고
     }
 
     public void GameTimerEndCallBack()

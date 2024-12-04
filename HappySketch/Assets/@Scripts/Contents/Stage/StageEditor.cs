@@ -1,18 +1,7 @@
 #if UNITY_EDITOR
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using static Define;
-
-public enum EMaterialType
-{
-    Red = 0,
-    Blue,
-
-    Max
-}
 
 public class StageEditor : InitBase
 {
@@ -48,7 +37,6 @@ public class StageEditor : InitBase
 
         return true;
     }
-    // 현재 소환된 스테이지를 하나로 보장해줘야 됨.
 
     public void SpawnStage()
     {
