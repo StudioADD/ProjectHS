@@ -41,6 +41,9 @@ public class CollectCandyModel : ModelBase
         this.minute = minute;
         this.second = second;
 
+        if (timeCoroutine != null)
+            CoroutineHelper.StopCoroutine(timeCoroutine);
+
         timeCoroutine = CoroutineHelper.StartCoroutine(TimeCoroutine(onEndTimer));
     }
 
@@ -58,7 +61,7 @@ public class CollectCandyModel : ModelBase
     {
         --second;
 
-        if (second <= 0)
+        if (second < 0)
         {
             second = 59;
             --minute;
