@@ -10,6 +10,14 @@ public class CollectingCandyStage : MultiStage
     [SerializeField, ReadOnly] ScoreCollector scoreCollector;
     [SerializeField, ReadOnly] Transform playerEndPoint;
 
+    [field: SerializeField, ReadOnly]
+    readonly ECandyItemType[] CANDYITEMS =
+        {
+        ECandyItemType.RedCandyItem, ECandyItemType.RedCandyItem,
+        ECandyItemType.GreenCandyItem, ECandyItemType.GreenCandyItem,
+        ECandyItemType.BlueCandyItem, ECandyItemType.BoomCandyItem
+        };
+    
     [field: SerializeField, ReadOnly] List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
     [field: SerializeField, ReadOnly] CollectingCandyParam stageParam = null;
 
@@ -43,20 +51,19 @@ public class CollectingCandyStage : MultiStage
     {
         base.SetInfo(player);
 
-        stageParam = new CollectingCandyParam(ETeamType.Left, new int[(int)ECandyItemType.Max], 0);
+        stageParam = new CollectingCandyParam(TeamType, new int[(int)ECandyItemType.Max], 0);
+        SpawnCandyItemWaves();
 
         scoreCollector = FindObjectOfType<ScoreCollector>();
         if(scoreCollector == null)
             scoreCollector = new GameObject("@ScoreCollector").AddComponent<ScoreCollector>();
+        scoreCollector.OnGameTimerEnd += GameTimerEndCallBack;
     }
 
     public override void StartStage()
     {
         base.StartStage();
-
-        scoreCollector.OnGameTimerEnd -= GameTimerEndCallBack;
-        scoreCollector.OnGameTimerEnd += GameTimerEndCallBack;
-
+        
         // 임시
         if (TeamType == ETeamType.Left)
             scoreCollector.StartStage();
@@ -91,11 +98,37 @@ public class CollectingCandyStage : MultiStage
 #endif
     }
 
-    public void SpawnCandyItems()
+    private void SpawnCandyItemWaves()
     {
         float distance = MathF.Abs(playerStartPoint.position.z - playerEndPoint.position.z);
-        Vector3 currPoint = playerStartPoint.position;
+        float currPos = playerStartPoint.position.z + (distance / 20);
+        distance *= 0.9f;
 
+        for(int i = 0; i < 20; i++)
+        {
+            currPos += distance / 20;
+            SpawnCandyItemWave(currPos);
+        }
+    }
+
+    private void SpawnCandyItemWave(float spawnPosZ)
+    {
+        CANDYITEMS.Shuffle();
+
+        for (int i = 0; i < spawnPointList.Count; i++)
+        {
+            Vector3 spawnPoint = new Vector3(
+                spawnPointList[i].transform.position.x,
+                spawnPointList[i].transform.position.y,
+                spawnPosZ);
+
+            for(int j = 0; j < CANDYITEMS.Length; j++)
+            {
+                // CandyItemParam param = new CandyItemParam(CANDYITEMS[j]);
+                CandyItemParam param = new CandyItemParam(ECandyItemType.StarCandyItem);
+                ObjectCreator.SpawnItem<CandyItem>(param, spawnPoint);
+            }
+        }
     }
 
     public void OnCollectCandyItems(List<ECandyItemType> candyItemTypes)
@@ -115,23 +148,23 @@ public class CollectingCandyStage : MultiStage
     {
         switch (candyItemType)
         {
-            case ECandyItemType.RedCandy:
+            case ECandyItemType.RedCandyItem:
                 stageParam.CurrScore += 100 * (isScoreBuff ? 2 : 1);
 
                 break;
-            case ECandyItemType.GreenCandy:
+            case ECandyItemType.GreenCandyItem:
                 stageParam.CurrScore += 200 * (isScoreBuff ? 2 : 1);
 
                 break;
-            case ECandyItemType.BlueCandy:
+            case ECandyItemType.BlueCandyItem:
                 stageParam.CurrScore += 500 * (isScoreBuff ? 2 : 1);
 
                 break;
-            case ECandyItemType.BoomCandy:
+            case ECandyItemType.BoomCandyItem:
                 stageParam.CurrScore -= 300;
 
                 break;
-            case ECandyItemType.StarCandy:
+            case ECandyItemType.StarCandyItem:
 
                 break;
         }

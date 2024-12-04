@@ -16,13 +16,17 @@ namespace CollectingCandy
         
         public event Action<ETeamType> OnEndGameCallBack;
         public event Action OnGameTimerEnd;
+        public void OnGameTimerEndCallBack()
+        {
+            OnGameTimerEnd?.Invoke();
+        }
 
         public void StartStage()
         {
             if (Managers.UI.SceneUI is UI_GameScene uiGameScene &&
                 uiGameScene.GetStageUI() is CollectCandyModel uiCollectCandy)
             {
-                uiCollectCandy.StartTimer(90, OnGameTimerEnd);
+                uiCollectCandy.StartTimer(90, OnGameTimerEndCallBack);
             }
         }
 

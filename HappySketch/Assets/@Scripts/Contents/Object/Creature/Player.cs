@@ -305,7 +305,7 @@ public class Player : Creature
             {
                 candys.Add(candy.CandyItemType);
                 candy.OnCollected();
-                if (candy.CandyItemType == ECandyItemType.StarCandy)
+                if (candy.CandyItemType == ECandyItemType.StarCandyItem)
                 {
                     IsCandyBuff = true;
                 }
@@ -314,7 +314,7 @@ public class Player : Creature
             {
                 candys.Add(candy.CandyItemType);
                 candy.OnCollected();
-                if (candy.CandyItemType == ECandyItemType.StarCandy)
+                if (candy.CandyItemType == ECandyItemType.StarCandyItem)
                 {
                     IsCandyBuff = true;
                 }
