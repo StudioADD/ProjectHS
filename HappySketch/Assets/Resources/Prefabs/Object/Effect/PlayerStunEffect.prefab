@@ -4920,7 +4920,7 @@ GameObject:
   - component: {fileID: 1763937973439912651}
   - component: {fileID: 2070432099832904871}
   m_Layer: 0
-  m_Name: StunEffect
+  m_Name: PlayerStunEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

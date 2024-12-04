@@ -9,8 +9,8 @@ public enum EEffectType
     CandyItemBurstEffect,
     BoomCandyBurstEffect,
 
-    StunEffect,
-    BuffEffect,
+    PlayerStunEffect,
+    PlayerBuffEffect,
 }
 
 public abstract class BaseEffectObject : BaseObject

@@ -371,12 +371,12 @@ public class Player : Creature
     #region SharkAvoidance Effet
     private void SetSharkAvoidanceEffet()
     {
-        StunEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.StunEffect)).GetComponent<PlayerEffectObject>();
+        StunEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.PlayerStunEffect)).GetComponent<PlayerEffectObject>();
         StunEffect.transform.parent = this.transform;
         StunEffect.transform.localPosition = new Vector3(0, 1.5f, 0);
         StunEffect.StopEffect();
 
-        BuffEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.BuffEffect)).GetComponent<PlayerEffectObject>();
+        BuffEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.PlayerBuffEffect)).GetComponent<PlayerEffectObject>();
         BuffEffect.transform.parent = this.transform;
         BuffEffect.transform.localPosition = new Vector3(0, 0, 0);
         BuffEffect.StopEffect();
@@ -387,7 +387,7 @@ public class Player : Creature
     #region SetCollectingCandy Effet
     private void SetCollectingCandyEffet()
     {
-        BuffEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.BuffEffect)).GetComponent<PlayerEffectObject>();
+        BuffEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.PlayerBuffEffect)).GetComponent<PlayerEffectObject>();
         BuffEffect.transform.parent = this.transform;
         BuffEffect.transform.localPosition = new Vector3(0, 0f, 0);
         BuffEffect.StopEffect();
