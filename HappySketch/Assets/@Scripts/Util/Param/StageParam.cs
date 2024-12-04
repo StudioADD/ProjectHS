@@ -38,7 +38,7 @@ public class CollectingCandyParam : StageParam
     public CollectingCandyParam(ETeamType teamType, int[] CandyItems, int CurrScore) 
         : base(teamType)
     {
-        this.CandyItems = CandyItems;
+        this.CandyItems = new int[(int)ECandyItemType.Max];
         this.CurrScore = CurrScore;
     }
 }

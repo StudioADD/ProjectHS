@@ -146,34 +146,31 @@ public class CollectingCandyStage : MultiStage
         if (stageParam.CurrScore < 0)
             stageParam.CurrScore = 0;
 
-        // UI에 이벤트 넘겨주기
+        OnReceiveStageParamCallBack(stageParam);
     }
 
     private void CollectCandyItem(ECandyItemType candyItemType)
     {
+        stageParam.CandyItems[(int)candyItemType]++;
+
         switch (candyItemType)
         {
             case ECandyItemType.RedCandyItem:
                 stageParam.CurrScore += 100 * (isScoreBuff ? 2 : 1);
-
                 break;
             case ECandyItemType.GreenCandyItem:
                 stageParam.CurrScore += 200 * (isScoreBuff ? 2 : 1);
-
                 break;
             case ECandyItemType.BlueCandyItem:
                 stageParam.CurrScore += 500 * (isScoreBuff ? 2 : 1);
-
                 break;
             case ECandyItemType.BoomCandyItem:
                 stageParam.CurrScore -= 300;
-
                 break;
             case ECandyItemType.StarCandyItem:
 
                 break;
         }
-
     }
 
     public void OnChangeScoreBuff(bool isScoreBuff)

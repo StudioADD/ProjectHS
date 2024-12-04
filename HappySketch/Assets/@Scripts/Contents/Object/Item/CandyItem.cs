@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum ECandyItemType
 {
-    RedCandyItem,
+    RedCandyItem = 0,
     GreenCandyItem,
     BlueCandyItem,
     BoomCandyItem,
