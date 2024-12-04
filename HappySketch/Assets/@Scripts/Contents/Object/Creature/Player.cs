@@ -240,7 +240,7 @@ public class Player : Creature
         IsPlayerInputControll = true;
     }
 
-    public void OnEndGame(bool victory)
+    public void OnEndStage(bool victory)
     {
         UnConnectInputActions();
         UnConnectEvent();
