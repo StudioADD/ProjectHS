@@ -19463,7 +19463,7 @@ GameObject:
   - component: {fileID: 5697101180579792179}
   - component: {fileID: 2768606949686576770}
   m_Layer: 0
-  m_Name: UseBoosterEffect
+  m_Name: BuffEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

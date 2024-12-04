@@ -71,10 +71,8 @@ public class Player : Creature
     private PlayerEffectObject StunEffect = null;
 
     [SerializeField, ReadOnly]
-    private PlayerEffectObject BoosterEffect = null;
+    private PlayerEffectObject BuffEffect = null;
 
-    [SerializeField, ReadOnly]
-    private PlayerEffectObject CandyBuffEffect = null;
 
     private float boosterTimer = -1f; // 부스터 현재시간
 
@@ -373,15 +371,15 @@ public class Player : Creature
     #region SharkAvoidance Effet
     private void SetSharkAvoidanceEffet()
     {
-        StunEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/StunEffect").GetComponent<PlayerEffectObject>();
+        StunEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.StunEffect)).GetComponent<PlayerEffectObject>();
         StunEffect.transform.parent = this.transform;
         StunEffect.transform.localPosition = new Vector3(0, 1.5f, 0);
         StunEffect.StopEffect();
 
-        BoosterEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/UseBoosterEffect").GetComponent<PlayerEffectObject>();
-        BoosterEffect.transform.parent = this.transform;
-        BoosterEffect.transform.localPosition = new Vector3(0, 0, 0);
-        BoosterEffect.StopEffect();
+        BuffEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.BuffEffect)).GetComponent<PlayerEffectObject>();
+        BuffEffect.transform.parent = this.transform;
+        BuffEffect.transform.localPosition = new Vector3(0, 0, 0);
+        BuffEffect.StopEffect();
     }
 
     #endregion
@@ -389,10 +387,10 @@ public class Player : Creature
     #region SetCollectingCandy Effet
     private void SetCollectingCandyEffet()
     {
-        CandyBuffEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/CandyBuffEffect").GetComponent<PlayerEffectObject>();
-        CandyBuffEffect.transform.parent = this.transform;
-        CandyBuffEffect.transform.localPosition = new Vector3(0, 0.75f, 0);
-        CandyBuffEffect.StopEffect();
+        BuffEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.BuffEffect)).GetComponent<PlayerEffectObject>();
+        BuffEffect.transform.parent = this.transform;
+        BuffEffect.transform.localPosition = new Vector3(0, 0f, 0);
+        BuffEffect.StopEffect();
     }
 
     #endregion
@@ -542,7 +540,7 @@ public class Player : Creature
 
         if (IsBoosterState)
         {
-            BoosterEffect.PlayEffect();
+            BuffEffect.PlayEffect();
             boosterTimer = 0;
             inputCooldown = 0.25f;
             moveSpeed *= 2;
@@ -685,7 +683,7 @@ public class Player : Creature
     //test
     private void test()
     {
-        OnEndStage(true);
+        //OnEndStage(true);
         //onAddBoosterItem?.Invoke();
         //if (boosterTimer == -1)
         //{
@@ -1448,7 +1446,7 @@ public class Player : Creature
                 moveSpeed = data.MoveSpeed;
                 inputCooldown = 0.5f;
                 animator.speed = 1;
-                BoosterEffect.StopEffect();
+                BuffEffect.StopEffect();
             }
         }
     }
@@ -1473,7 +1471,7 @@ public class Player : Creature
                 return;
             IsCandyBuff = value;
             onChangeScoreBuff(IsCandyBuff);
-            if (IsCandyBuff && !CandyBuffEffect.GetIsPlay())
+            if (IsCandyBuff && !BuffEffect.GetIsPlay())
             {
                 StartCoroutine(CoCandyBuffEffect());
             }
@@ -1483,14 +1481,14 @@ public class Player : Creature
     protected IEnumerator CoCandyBuffEffect()
     {
         float time = 0f;
-        CandyBuffEffect?.PlayEffect();
+        BuffEffect?.PlayEffect();
         while (time <= 10f)
         {
             time += Time.deltaTime;
             yield return null;
         }
         _isCandyBuff = false;
-        CandyBuffEffect?.StopEffect();
+        BuffEffect?.StopEffect();
     }
 
     #endregion
