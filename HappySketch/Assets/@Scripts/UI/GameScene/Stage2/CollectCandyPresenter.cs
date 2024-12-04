@@ -6,20 +6,25 @@ using static Define;
 
 public class CollectCandyPresenter : PresenterBase
 {
-    private int score = 0;
-
     public CollectCandyPresenter(ViewBase view, ModelBase model, ETeamType teamType) : base(view, model, teamType)
     {
-        // 여기서 모델의 이벤트 등록이 필요하다
-        // 모델에서는 이벤트를 발생 시켜야 한다
-
         if(model is CollectCandyModel candyModel)
         {
-            candyModel.OnTimeChangedEvent -= SetTime;
-            candyModel.OnTimeChangedEvent += SetTime;
+            candyModel.OnTimeChanged -= SetTime;
+            candyModel.OnTimeChanged += SetTime;
 
-            candyModel.OnScoreChangedEvent -= SetScoreView;
-            candyModel.OnScoreChangedEvent += SetScoreView;
+            switch (teamType)
+            {
+                case ETeamType.Left:
+                    candyModel.OnLeftScoreChanged -= SetScoreView;
+                    candyModel.OnLeftScoreChanged += SetScoreView;
+                    break;
+
+                case ETeamType.Right:
+                    candyModel.OnRightScoreChanged -= SetScoreView;
+                    candyModel.OnRightScoreChanged += SetScoreView;
+                    break;
+            }
         }
 
         view.SetPresenter(this);
@@ -64,7 +69,16 @@ public class CollectCandyPresenter : PresenterBase
     {
         if (model is CollectCandyModel candyModel)
         {
-            candyModel.SetScore(score);
+            switch(teamType)
+            {
+                case ETeamType.Left:
+                    candyModel.SetLeftScore(score);
+                    break;
+
+                case ETeamType.Right:
+                    candyModel.SetRightScore(score);
+                    break;
+            }
         }
     }
 
@@ -93,8 +107,18 @@ public class CollectCandyPresenter : PresenterBase
 
         if (model is CollectCandyModel candyModel)
         {
-            candyModel.OnTimeChangedEvent -= SetTime;
-            candyModel.OnScoreChangedEvent -= SetScoreView;
+            candyModel.OnTimeChanged -= SetTime;
+
+            switch (teamType)
+            {
+                case ETeamType.Left:
+                    candyModel.OnLeftScoreChanged -= SetScoreView;
+                    break;
+
+                case ETeamType.Right:
+                    candyModel.OnRightScoreChanged -= SetScoreView;
+                    break;
+            }
         }
     }
 }

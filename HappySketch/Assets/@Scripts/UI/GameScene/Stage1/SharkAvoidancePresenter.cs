@@ -82,18 +82,15 @@ public class SharkAvoidancePresenter : PresenterBase
     {
         if (model is SharkAvoidanceModel sharkModel)
         {
-            if (view is SharkAvoidanceView sharkView)
+            switch (teamType)
             {
-                switch (teamType)
-                {
-                    case ETeamType.Left:
-                        sharkModel.SetLeftRatio(ratio);
-                        break;
+                case ETeamType.Left:
+                    sharkModel.SetLeftRatio(ratio);
+                    break;
 
-                    case ETeamType.Right:
-                        sharkModel.SetRightRatio(ratio);
-                        break;
-                }
+                case ETeamType.Right:
+                    sharkModel.SetRightRatio(ratio);
+                    break;
             }
         }
     }

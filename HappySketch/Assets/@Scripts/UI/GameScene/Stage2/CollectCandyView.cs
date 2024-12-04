@@ -37,7 +37,8 @@ public class CollectCandyView : ViewBase
 
     public void UpdateItemCount(int[] itemCounts)
     {
-        for(int i = 0; i < itemCounts.Length; ++i)
+        // 아이템 갯수 3
+        for(int i = 0; i < 3; ++i)
         {
             itemCount[i].text = itemCounts[i].ToString();
         }

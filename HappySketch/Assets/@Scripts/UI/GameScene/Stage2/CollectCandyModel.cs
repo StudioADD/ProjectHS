@@ -4,31 +4,50 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using static Define; 
 
 public class CollectCandyModel : ModelBase
 {
+    private class Score
+    {
+        public int currScore;
+        public int score;
+
+        public Score(int currScore = 0, int score = 0)
+        {
+            this.currScore = currScore;
+            this.score = score;
+        }
+    }
+
     private const float SCORE_COROUTINE_TIME = 1;
 
     private int second = 0;
     private int minute = 0;
 
-    public event UnityAction OnTimeChangedEvent;
+    public event UnityAction OnTimeChanged;
     private Coroutine timeCoroutine;
 
-    private int score;
-    private int currScore;
+    private Score leftScore;
+    private Score rightScore;
 
-    private int leftScore;
-    private int rightScore;
+    public event Action<int> OnLeftScoreChanged;
+    public event Action<int> OnRightScoreChanged;
 
-    public event UnityAction<int> OnScoreChangedEvent;
-    private Coroutine scoreCoroutine;
+    private Coroutine leftScoreCoroutine;
+    private Coroutine rightScoreCoroutine;
 
     public CollectCandyModel() : base()
     {
         
+    }
+
+    public Vector3 GetUIPos(Camera camera, Vector3 worldPos)
+    {
+        camera.WorldToViewportPoint(worldPos);
+        return Vector2.zero;
     }
 
     public string GetFormattedTime()
@@ -38,8 +57,10 @@ public class CollectCandyModel : ModelBase
 
     public void StartTimer(int seconds, Action onEndTimer = null)
     {
-        this.minute = seconds / 60;
-        this.second = seconds % 60;
+        minute = seconds / 60;
+        second = seconds % 60;
+
+        OnTimeChanged?.Invoke();
 
         if (timeCoroutine != null)
             CoroutineHelper.StopCoroutine(timeCoroutine);
@@ -47,14 +68,24 @@ public class CollectCandyModel : ModelBase
         timeCoroutine = CoroutineHelper.StartCoroutine(TimeCoroutine(onEndTimer));
     }
 
-    public void SetScore(int score)
+    public void SetLeftScore(int score)
     {
-        this.score = score;
+        leftScore.score = score;
 
-        if (scoreCoroutine != null)
-            CoroutineHelper.StopCoroutine(scoreCoroutine);
+        if (leftScoreCoroutine != null)
+            CoroutineHelper.StopCoroutine(leftScoreCoroutine);
 
-        scoreCoroutine = CoroutineHelper.StartCoroutine(ScoreCoroutine(currScore));
+        leftScoreCoroutine = CoroutineHelper.StartCoroutine(ScoreCoroutine(leftScore.currScore, leftScore, OnLeftScoreChanged));
+    }
+
+    public void SetRightScore(int score)
+    {
+        rightScore.score = score;
+
+        if (rightScoreCoroutine != null)
+            CoroutineHelper.StopCoroutine(rightScoreCoroutine);
+
+        CoroutineHelper.StartCoroutine(ScoreCoroutine(rightScore.currScore, rightScore, OnRightScoreChanged));
     }
 
     private void DecreaseTime()
@@ -67,7 +98,7 @@ public class CollectCandyModel : ModelBase
             --minute;
         }
 
-        OnTimeChangedEvent?.Invoke();
+        OnTimeChanged?.Invoke();
     }
 
     private bool IsTimerEnd()
@@ -89,7 +120,7 @@ public class CollectCandyModel : ModelBase
         onEndTimer?.Invoke();
     }
 
-    private IEnumerator ScoreCoroutine(int currScore)
+    private IEnumerator ScoreCoroutine(int startScore, Score score, Action<int> onScoreChanged)
     {
         float time = 0f;
 
@@ -97,17 +128,17 @@ public class CollectCandyModel : ModelBase
         {
             time += Time.deltaTime;
 
-            this.currScore = (int)Mathf.Lerp(currScore, score, time / SCORE_COROUTINE_TIME);
+            score.currScore = (int)Mathf.Lerp(startScore, score.score, time / SCORE_COROUTINE_TIME);
 
-            OnScoreChangedEvent?.Invoke(this.currScore);
+            onScoreChanged?.Invoke(score.currScore);
 
             yield return null;
         }
 
-        this.currScore = score;
-        OnScoreChangedEvent?.Invoke(score);
+        score.currScore = score.score;
+        onScoreChanged?.Invoke(score.score);
 
-        scoreCoroutine = null;
+        leftScoreCoroutine = null;
     }
 
     public override void Clear()
@@ -115,7 +146,10 @@ public class CollectCandyModel : ModelBase
         if (timeCoroutine != null)
             CoroutineHelper.StopCoroutine(timeCoroutine);
 
-        if (scoreCoroutine != null)
-            CoroutineHelper.StopCoroutine(scoreCoroutine);
+        if (leftScoreCoroutine != null)
+            CoroutineHelper.StopCoroutine(leftScoreCoroutine);
+
+        if (rightScoreCoroutine != null)
+            CoroutineHelper.StopCoroutine(rightScoreCoroutine);
     }
 }
