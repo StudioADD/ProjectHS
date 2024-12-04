@@ -1260,9 +1260,6 @@ public class Player : Creature
     protected virtual void RunStateEnter()
     {
 
-        beforePosition = transform.position;
-        targetPosition = new Vector3(transform.position.x, transform.position.y, 1000); // 추후 트랙 끝 position 받아올것
-        //Running();
     }
 
     protected virtual void UpdateRunState(float timer)
@@ -1279,7 +1276,7 @@ public class Player : Creature
 
     protected virtual void RunStateExit()
     {
-        InitRigidVelocity();
+
     }
     protected void Running(float timer)
     {
