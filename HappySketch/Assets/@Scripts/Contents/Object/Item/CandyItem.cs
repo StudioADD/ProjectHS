@@ -14,6 +14,7 @@ public enum ECandyItemType
 
 public class CandyItem : BaseItem
 {
+    [field: SerializeField, ReadOnly]
     public ECandyItemType CandyItemType { get; protected set; }
     
     public override bool Init()

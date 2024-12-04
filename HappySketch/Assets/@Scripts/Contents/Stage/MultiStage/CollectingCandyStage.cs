@@ -104,14 +104,19 @@ public class CollectingCandyStage : MultiStage
         float currPos = playerStartPoint.position.z + (distance / 20);
         distance *= 0.9f;
 
+        int starItemSpawnPoint = UnityEngine.Random.Range(9, 16); // 10 ~ 15
+        bool isStarItem = false;
+
         for(int i = 0; i < 20; i++)
         {
+            isStarItem = starItemSpawnPoint == i;
+
             currPos += distance / 20;
-            SpawnCandyItemWave(currPos);
+            SpawnCandyItemWave(currPos, isStarItem);
         }
     }
 
-    private void SpawnCandyItemWave(float spawnPosZ)
+    private void SpawnCandyItemWave(float spawnPosZ, bool isStarItem = false)
     {
         CANDYITEMS.Shuffle();
 
@@ -122,12 +127,12 @@ public class CollectingCandyStage : MultiStage
                 spawnPointList[i].transform.position.y,
                 spawnPosZ);
 
-            for(int j = 0; j < CANDYITEMS.Length; j++)
-            {
-                // CandyItemParam param = new CandyItemParam(CANDYITEMS[j]);
-                CandyItemParam param = new CandyItemParam(ECandyItemType.StarCandyItem);
-                ObjectCreator.SpawnItem<CandyItem>(param, spawnPoint);
-            }
+            CandyItemParam param = new CandyItemParam(CANDYITEMS[i]);
+
+            if (isStarItem == true && param.CandyItemType == ECandyItemType.BoomCandyItem)
+                param.CandyItemType = ECandyItemType.StarCandyItem;
+
+            ObjectCreator.SpawnItem<CandyItem>(param, spawnPoint);
         }
     }
 
