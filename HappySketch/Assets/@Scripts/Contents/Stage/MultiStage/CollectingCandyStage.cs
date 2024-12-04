@@ -103,14 +103,12 @@ public class CollectingCandyStage : MultiStage
         distance *= 0.9f;
 
         int starItemSpawnPoint = UnityEngine.Random.Range(9, 16); // 10 ~ 15
-        bool isStarItem = false;
-
+       
         for(int i = 0; i < 20; i++)
         {
-            isStarItem = starItemSpawnPoint == i;
-
+            bool isStarItem = starItemSpawnPoint == i;
             currPos += distance / 20;
-            SpawnCandyItemWave(currPos, true);
+            SpawnCandyItemWave(currPos, isStarItem);
         }
     }
 
