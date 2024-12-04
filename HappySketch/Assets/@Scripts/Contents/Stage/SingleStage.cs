@@ -55,7 +55,8 @@ public abstract class SingleStage : BaseStage
 
     public override void EndStage(ETeamType winnerTeam)
     {
-        // 플레이어에게 스테이지가 끝남을 전달해야 함
+        leftPlayer.OnEndStage(leftPlayer.TeamType == winnerTeam);
+        rightPlayer.OnEndStage(rightPlayer.TeamType == winnerTeam);
     }
 
     public abstract void ConnectEvents(Action<ETeamType> onEndGameCallBack);

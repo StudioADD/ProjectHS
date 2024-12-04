@@ -45,7 +45,7 @@ public abstract class MultiStage : BaseStage
 
     public override void EndStage(ETeamType winnerTeam)
     {
-        // 플레이어에게 스테이지가 끝남을 전달해야 함
+        player.OnEndStage(player.TeamType == winnerTeam);
     }
 
     public virtual void ConnectEvents(Action<ETeamType> onEndGameCallBack)

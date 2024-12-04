@@ -29,6 +29,11 @@ public class GameMgr
             playedStages[i] = false;
     }
 
+    public ETeamType GetCurrLoseTeam()
+    {
+        return winnerCounts[(int)ETeamType.Left] < winnerCounts[(int)ETeamType.Right] ? ETeamType.Left : ETeamType.Right;
+    }
+
     public int GetWinnerTeamCount(ETeamType teamType)
     {
         return winnerCounts[(int)teamType];

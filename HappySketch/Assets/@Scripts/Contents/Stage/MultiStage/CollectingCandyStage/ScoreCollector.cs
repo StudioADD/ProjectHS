@@ -52,8 +52,12 @@ namespace CollectingCandy
         {
             yield return new WaitUntil(() => isSetLeftScore && isSetRightScore);
 
-            ETeamType winnerTeam = ETeamType.Left; // 승리 조건 판단해야 함
-
+            ETeamType winnerTeam;
+            if (leftStageParam.CurrScore == rightStageParam.CurrScore)
+                winnerTeam = Managers.Game.GetCurrLoseTeam();
+            else
+                winnerTeam = (leftStageParam.CurrScore > rightStageParam.CurrScore) ? 
+                    ETeamType.Left : ETeamType.Right;
 
             OnEndGameCallBack?.Invoke(winnerTeam);
             coCollectTotalScore = null;
