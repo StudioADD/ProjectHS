@@ -30,8 +30,8 @@ public class CollectCandyModel : ModelBase
     public event UnityAction OnTimeChanged;
     private Coroutine timeCoroutine;
 
-    private Score leftScore;
-    private Score rightScore;
+    private Score leftScore = new Score();
+    private Score rightScore = new Score();
 
     public event Action<int> OnLeftScoreChanged;
     public event Action<int> OnRightScoreChanged;
