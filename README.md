@@ -1,5 +1,6 @@
 # StdioADD : HappySketch Project
 
+
 > **인하대학교 미래인재개발원**에서 진행한 **팀 프로젝트**입니다.
 
 > **해피스케치**의 요청에 따라 모션 감지를 이용한 AR게임 **프로토타입 모델**입니다.
@@ -19,4 +20,6 @@
 ---
 
 # Game Flow & Stage
+
+
 ![image](https://github.com/user-attachments/assets/0f74c8d7-5248-41a4-97c4-5a745d24ceb1)
