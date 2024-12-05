@@ -39,24 +39,12 @@ public class UIGameStartCounterParam : UIParam
 
 public class UIWinLoseParam : UIParam
 {
-    public struct WinCount
-    {
-        private ETeamType teamType;
-        private int winCount;
-
-        public WinCount(ETeamType teamType, int winCount)
-        {
-            this.teamType = teamType;
-            this.winCount = winCount;
-        }
-    }
-
     public ETeamType WinTeam { get; private set; }
+    public int LeftWinCount { get; private set; }
+    public int RightWinCount { get; private set; }
+    public Action onEnd { get; private set; }
 
-    public WinCount LeftWinCount { get; private set; }
-    public WinCount RightWinCount { get; private set; }
-
-    public UIWinLoseParam(ETeamType winTeam, WinCount leftWinCount, WinCount rightWinCount)
+    public UIWinLoseParam(ETeamType winTeam, int leftWinCount, int rightWinCount, Action onEnd)
     {
         WinTeam = winTeam;
         LeftWinCount = leftWinCount;

@@ -45,7 +45,17 @@ public class UI_GameScene : UI_BaseScene
     public void EndStage(ETeamType winTeam, int leftWinCount, int rightWinCount, Action onEnd)
     {
         UI_WinLoseController winLoseController = Managers.UI.SpawnObjectUI<UI_WinLoseController>();
-        winLoseController.EndStage(winTeam, leftWinCount, rightWinCount, onEnd);
+
+        switch(currStageType)
+        {
+            case EStageType.CollectingCandy:
+                winLoseController.EndStageNoGoalImg(winTeam, leftWinCount, rightWinCount, onEnd);
+                break;
+
+            default:
+                winLoseController.EndStage(winTeam, leftWinCount, rightWinCount, onEnd);
+                break;
+        }
 
         currPresentLeft.Clear();
         currPresentRight.Clear();

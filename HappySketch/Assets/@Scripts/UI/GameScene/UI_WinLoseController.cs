@@ -31,6 +31,14 @@ public class UI_WinLoseController : UI_BaseObject
             StopCoroutine(fadeOutCoroutine);
     }
 
+    //public override void SetInfo(UIParam param = null)
+    //{
+    //    if(param is UIWinLoseParam winLoseParam)
+    //    {
+            
+    //    }
+    //}
+
     public void EndStage(ETeamType teamType, int leftWinCount, int rightWinCount, Action onEnd)
     {
         switch(teamType)
@@ -44,6 +52,11 @@ public class UI_WinLoseController : UI_BaseObject
                 break;
         }
 
+        fadeOutCoroutine = StartCoroutine(FadeOutCoroutine(FADE_TIME, teamType, leftWinCount, rightWinCount, onEnd));
+    }
+
+    public void EndStageNoGoalImg(ETeamType teamType, int leftWinCount, int rightWinCount, Action onEnd)
+    {
         fadeOutCoroutine = StartCoroutine(FadeOutCoroutine(FADE_TIME, teamType, leftWinCount, rightWinCount, onEnd));
     }
 
