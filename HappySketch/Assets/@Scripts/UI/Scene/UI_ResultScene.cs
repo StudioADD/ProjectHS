@@ -18,6 +18,8 @@ public class UI_ResultScene : UI_BaseScene
 
         SetInfo(Managers.Game.GetGameWinnerTeam());
 
+        ChangeSceneAfterTime(EScene.TitleScene, 5f);
+
         return true;
     }
 
@@ -40,4 +42,3 @@ public class UI_ResultScene : UI_BaseScene
         player.GetComponent<UI_Player>().SetInfo(false);
     }
 }
-
