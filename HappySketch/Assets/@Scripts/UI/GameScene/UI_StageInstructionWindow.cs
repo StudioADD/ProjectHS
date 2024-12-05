@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class UI_StageInstructionWindow : InitBase
 {
+    bool isAnyKeyEntered = false;
+
     public override bool Init()
     {
         if (base.Init() == false)
@@ -18,6 +20,7 @@ public class UI_StageInstructionWindow : InitBase
 
     private void OnEnable()
     {
+        Managers.Input.OnAnyKeyEntered -= OnStartStage;
         Managers.Input.OnAnyKeyEntered += OnStartStage;
     }
 
@@ -34,12 +37,12 @@ public class UI_StageInstructionWindow : InitBase
 
     public void OnStartStage()
     {
+        if (Managers.UI.IsPopupActiveSelf<UI_FadeEffectPopup>())
+            return;
+
+        Managers.Input.OnAnyKeyEntered -= OnStartStage;
+
         UIFadeEffectParam param = new UIFadeEffectParam(() => { return !gameObject.activeSelf; }, StartStage, null);
         Managers.UI.OpenPopupUI<UI_FadeEffectPopup>(param);
-    }
-
-    private void OnDisable()
-    {
-        Managers.Input.OnAnyKeyEntered -= OnStartStage;
     }
 }
