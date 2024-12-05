@@ -248,6 +248,10 @@ public class Player : Creature
         {
             PlayerState = EPlayerState.Victory;
         }
+        else 
+        {
+            PlayerState = EPlayerState.Idle;
+        }
         IsPlayerInputControll = false;
         if (coPlayerStateController != null)
         {
@@ -1421,7 +1425,7 @@ public class Player : Creature
         if (boosterTimer >= 0)
         {
             boosterTimer += Time.deltaTime;
-            if (boosterTimer >= 3)
+            if (boosterTimer >= 5f)
             {
                 IsBoosterState = false;
                 boosterTimer = -1;
