@@ -23,19 +23,20 @@ public class UI_ResultScene : UI_BaseScene
 
     private void SetInfo(ETeamType teamType)
     {
-        string prefabPath = $"{PrefabPath.OBJECT_PLAYER_PATH}/";
+        string prefabPath = $"{PrefabPath.OBJECT_PLAYER_PATH}";
         switch (teamType)
         {
             case ETeamType.Left:
-                prefabPath.Concat("UILeftPlayer");
+                prefabPath = $"{prefabPath}/UILeftPlayer";
                 break;
 
             case ETeamType.Right:
-                prefabPath.Concat("UIRightPlayer");
+                prefabPath = $"{prefabPath}/UIRightPlayer";
                 break;
         }
 
         GameObject player = Managers.Resource.Instantiate(prefabPath);
+        player.transform.position = Vector3.up * -1.15f;
         player.GetComponent<UI_Player>().SetInfo(false);
     }
 }
