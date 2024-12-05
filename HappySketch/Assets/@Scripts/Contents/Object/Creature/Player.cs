@@ -436,7 +436,6 @@ public class Player : Creature
     private void ConnectInputActions(bool isConnect)
     {
         UnConnectInputActions();
-        Managers.Input.OnNum1KeyEntered += test;
         switch (stageType)
         {
 
@@ -465,9 +464,6 @@ public class Player : Creature
         Managers.Input.OnArrowKeyEntered -= OnArrowKeyStage3;
         Managers.Input.OnEndKeyEntered -= OnJumpKey;
         Managers.Input.OnPageDownKeyEntered -= OnUseGoggleItem;
-
-        Managers.Input.OnNum1KeyEntered -= test;
-
     }
 
     #region SharkAvoidance
@@ -703,33 +699,7 @@ public class Player : Creature
     #endregion
 
     #region Hit
-    //test
-    private void test()
-    {
-        //OnEndStage(true);
-        //onAddBoosterItem?.Invoke();
-        //if (boosterTimer == -1)
-        //{
-        //    boosterTimer = 0;
-        //    inputCooldown = 0.25f;
-        //    moveSpeed *= 2; animator.speed *= 2;
-        //}
-
-        switch (stageType)
-        {
-            case EStageType.SharkAvoidance:
-                onAddBoosterItem?.Invoke();
-                //float test = TeamType == ETeamType.Left ? 3 : 2;
-                //OnHit(test);
-                break;
-            case EStageType.CollectingCandy:
-                //_isCandyBuff = true;
-                candys.Add((ECandyItemType)UnityEngine.Random.Range(0, (int)ECandyItemType.Max));
-                break;
-        }
-
-
-    }
+   
     public void OnHit(float hitTime = 3f)
     {
         if (boosterTimer > 0)
@@ -1053,7 +1023,6 @@ public class Player : Creature
 
         targetPosition += new Vector3(x, 0, z);
         this.transform.forward = (targetPosition - this.transform.position).normalized;
-        //Debug.LogWarning($" targetPosition : {targetPosition}");
     }
 
     protected virtual void UpdateMoveSwimmingState()
@@ -1071,7 +1040,6 @@ public class Player : Creature
     {
         isInputRock = false;
         transform.forward = new Vector3(0, 0, 1);
-        //onMoveEvent();
     }
 
 
@@ -1430,7 +1398,6 @@ public class Player : Creature
     {
         if (animator == null)
         {
-            Debug.LogWarning("animator is Null");
             return false;
         }
 
