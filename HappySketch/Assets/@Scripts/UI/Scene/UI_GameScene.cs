@@ -57,8 +57,8 @@ public class UI_GameScene : UI_BaseScene
                 break;
         }
 
-        currPresentLeft.Clear();
-        currPresentRight.Clear();
+        currPresentLeft?.Clear();
+        currPresentRight?.Clear();
     }
 
     public ModelBase GetStageUI()
