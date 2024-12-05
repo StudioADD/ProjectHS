@@ -63,4 +63,16 @@ public class UIWinLoseParam : UIParam
         RightWinCount = rightWinCount;
     }
 }
+
+public class UIScorePoolParam : UIParam
+{
+    public Camera leftCamera;
+    public Camera rightCamera;
+
+    public UIScorePoolParam(Camera leftCamera, Camera rightCamera)
+    {
+        this.leftCamera = leftCamera;
+        this.rightCamera = rightCamera;
+    }
+}
 #endregion

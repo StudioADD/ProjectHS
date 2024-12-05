@@ -14,6 +14,7 @@ public class UI_GameScene : UI_BaseScene
     private PresenterBase currPresentRight;
 
     private UI_WinLoseController winLoseController;
+    private UI_ScorePool scorePool;
 
     private EStageType currStageType = EStageType.None;
 

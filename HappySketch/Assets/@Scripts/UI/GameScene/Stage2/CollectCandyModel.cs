@@ -84,7 +84,7 @@ public class CollectCandyModel : ModelBase
         if (rightScoreCoroutine != null)
             CoroutineHelper.StopCoroutine(rightScoreCoroutine);
 
-        CoroutineHelper.StartCoroutine(ScoreCoroutine(rightScore.currScore, rightScore, OnRightScoreChanged));
+        rightScoreCoroutine = CoroutineHelper.StartCoroutine(ScoreCoroutine(rightScore.currScore, rightScore, OnRightScoreChanged));
     }
 
     private void DecreaseTime()

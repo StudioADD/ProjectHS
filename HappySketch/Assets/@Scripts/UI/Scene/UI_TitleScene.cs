@@ -27,6 +27,12 @@ public class UI_TitleScene : UI_BaseScene
         return true;
     }
 
+    private void Reset()
+    {
+        playButton = Util.FindChild<Button>(gameObject, "Btn_Play", true);
+        playerPopUp = Util.FindChild<GameObject>(gameObject, "Img_BackGround", true);
+    }
+
     private void OnClickPlayButton()
     {
         UIFadeEffectParam param = new UIFadeEffectParam(null, OpenPopup, null);
