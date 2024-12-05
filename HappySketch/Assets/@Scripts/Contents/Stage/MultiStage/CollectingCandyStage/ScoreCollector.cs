@@ -54,7 +54,7 @@ namespace CollectingCandy
 
             ETeamType winnerTeam;
             if (leftStageParam.CurrScore == rightStageParam.CurrScore)
-                winnerTeam = Managers.Game.GetCurrLoseTeam();
+                winnerTeam = Managers.Game.GetGameLoseTeam();
             else
                 winnerTeam = (leftStageParam.CurrScore > rightStageParam.CurrScore) ? 
                     ETeamType.Left : ETeamType.Right;

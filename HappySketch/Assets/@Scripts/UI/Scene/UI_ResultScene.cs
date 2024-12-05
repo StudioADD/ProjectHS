@@ -16,7 +16,7 @@ public class UI_ResultScene : UI_BaseScene
         Managers.UI.SetCanvasNotOverlay(gameObject, false);
         Managers.UI.SetSceneUI(this);
 
-        SetInfo(Managers.Game.GetResultGameWinner());
+        SetInfo(Managers.Game.GetGameWinnerTeam());
 
         return true;
     }

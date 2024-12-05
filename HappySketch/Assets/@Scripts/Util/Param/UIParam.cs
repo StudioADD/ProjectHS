@@ -25,6 +25,19 @@ public class UIFadeEffectParam : UIParam
 #endregion
 
 #region ObjectUI Param
+public class UIScoreTextParam : UIParam
+{
+    public int Score;
+    public Vector3 spawnPoint;
+    public Color textColor;
+
+    public UIScoreTextParam(int score, Vector3 spawnPoint, Color textColor)
+    {
+        Score = score;
+        this.spawnPoint = spawnPoint;
+        this.textColor = textColor;
+    }
+}
 public class UIGameStartCounterParam : UIParam
 {
     public int Time { get; private set; }
