@@ -46,7 +46,7 @@ public class GameMgr
 
     private void EndGame(ETeamType winnerTeam)
     {
-        this.stageWinnerTeam = winnerTeam;
+        this.gameWinnerTeam = winnerTeam;
         Managers.Scene.LoadScene(EScene.ResultScene);
         Clear();
     }
@@ -85,6 +85,7 @@ public class GameMgr
     {
         IsGamePlay = false;
         Managers.Sound.StopBgm();
+        stageWinnerTeam = winnerTeam;
         winnerCounts[(int)winnerTeam] += 1;
 
         if(Managers.UI.SceneUI is UI_GameScene uiGameScene)
