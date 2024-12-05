@@ -11,7 +11,7 @@ public class GameMgr
     bool[] playedStages = new bool[(int)EStageType.Max];
 
     ETeamType winnerTeam;
-    int currStageId = 0;
+    int currStageId = 1;
 
     public void Init()
     {
@@ -30,14 +30,10 @@ public class GameMgr
     }
 
     public ETeamType GetCurrLoseTeam()
-    {
-        return winnerCounts[(int)ETeamType.Left] < winnerCounts[(int)ETeamType.Right] ? ETeamType.Left : ETeamType.Right;
-    }
+        => winnerCounts[(int)ETeamType.Left] < winnerCounts[(int)ETeamType.Right] ? ETeamType.Left : ETeamType.Right;
 
-    public int GetWinnerTeamCount(ETeamType teamType)
-    {
-        return winnerCounts[(int)teamType];
-    }
+    public ETeamType GetResultGameWinner() 
+        => winnerTeam;
 
     public void SetStageId(int stageId = -1)
     {
@@ -52,6 +48,7 @@ public class GameMgr
 
     private void EndGame(ETeamType winnerTeam)
     {
+        this.winnerTeam = winnerTeam;
         Managers.Scene.LoadScene(EScene.ResultScene);
         Clear();
     }
