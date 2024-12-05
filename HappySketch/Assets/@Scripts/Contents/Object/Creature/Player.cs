@@ -304,7 +304,7 @@ public class Player : Creature
             if (isleft == true && pos.x <= transform.position.x)
             {
                 candys.Add(candy.CandyItemType);
-                candy.OnCollected();
+                candy.OnCollected(TeamType);
                 if (candy.CandyItemType == ECandyItemType.StarCandyItem)
                 {
                     _isCandyBuff = true;
@@ -313,7 +313,7 @@ public class Player : Creature
             else if (isleft == false && pos.x >= transform.position.x)
             {
                 candys.Add(candy.CandyItemType);
-                candy.OnCollected();
+                candy.OnCollected(TeamType);
                 if (candy.CandyItemType == ECandyItemType.StarCandyItem)
                 {
                     _isCandyBuff = true;

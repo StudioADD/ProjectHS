@@ -43,7 +43,7 @@ public class CandyItem : BaseItem
         }
     }
 
-    public void OnCollected()
+    public void OnCollected(Define.ETeamType teamType)
     {
         EEffectType effectType = (CandyItemType == ECandyItemType.BoomCandyItem) ?
             EEffectType.BoomCandyBurstEffect : EEffectType.CandyItemBurstEffect;
