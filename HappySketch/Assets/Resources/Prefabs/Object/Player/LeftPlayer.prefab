@@ -4418,8 +4418,7 @@ MonoBehaviour:
   moveDistance: 5
   moveSpeed: 5
   StunEffect: {fileID: 0}
-  BoosterEffect: {fileID: 0}
-  CandyBuffEffect: {fileID: 0}
+  BuffEffect: {fileID: 0}
   hitTimer: -1
   _teamType: 0
   trackNum: 2
@@ -4438,7 +4437,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8377195493853711384}
   serializedVersion: 4
-  m_Mass: 3
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

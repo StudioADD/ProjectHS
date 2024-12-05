@@ -1300,6 +1300,10 @@ public class Player : Creature
     {
         if (PlayerState != EPlayerState.Run)
             return false;
+        if (inputTime < inputCooldown)
+        {
+            return false;
+        }
         return true;
     }
 
@@ -1319,8 +1323,10 @@ public class Player : Creature
     protected virtual void CollectStateExit()
     {
         CollectItem();
-        candys.Clear();
         collisionTrigger.SetActive(false);
+        candys.Clear();
+        inputTime = 0f;
+        
     }
     #region Left Collect
 
@@ -1329,7 +1335,7 @@ public class Player : Creature
     {
         isleft = true;
         collisionTrigger.SetActive(true);
-
+       
 
     }
 
@@ -1341,6 +1347,7 @@ public class Player : Creature
     {
         isleft = false;
         collisionTrigger.SetActive(true);
+
 
     }
 
