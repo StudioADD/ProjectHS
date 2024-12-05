@@ -4,11 +4,18 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Define;
 
 public class UI_ResultScene : UI_BaseScene
 {
     [SerializeField]
     private RuntimeAnimatorController controller;
+
+    [SerializeField]
+    private GameObject player1;
+
+    [SerializeField]
+    private GameObject player2;
 
     public override bool Init()
     {
@@ -21,17 +28,17 @@ public class UI_ResultScene : UI_BaseScene
         return true;
     }
 
-    public void SetInfo(Define.ETeamType teamType)
+    public void SetInfo(ETeamType teamType)
     {
         // 동적생성!
         string prefabPath = $"{PrefabPath.OBJECT_PLAYER_PATH}/";
         switch (teamType)
         {
-            case Define.ETeamType.Left:
+            case ETeamType.Left:
                 prefabPath.Concat("TitleLeftPlayer");
                 break;
 
-            case Define.ETeamType.Right:
+            case ETeamType.Right:
                 prefabPath.Concat("TitleRightPlayer");
                 break;
         }
