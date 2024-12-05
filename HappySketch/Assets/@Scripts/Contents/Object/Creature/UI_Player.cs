@@ -2,13 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class UI_Player : BaseObject
 {
     private Animator animator;
+
     public override bool Init()
     {
-        return base.Init();
+        if (base.Init() == false)
+            return false;
+
+        animator = Util.GetOrAddComponent<Animator>(gameObject);
+
+        return true;
     }
 
     public void SetInfo(bool isTitle)
@@ -21,9 +26,5 @@ public class UI_Player : BaseObject
         {
             animator.SetTrigger("Victoty_Trigger");
         }
-    }
-    private void Reset()
-    {
-        animator = Util.GetOrAddComponent<Animator>(this.gameObject);
     }
 }
