@@ -10,8 +10,9 @@ public class GameMgr
     int[] winnerCounts = new int[2]; // Left, Right
     bool[] playedStages = new bool[(int)EStageType.Max];
 
-    ETeamType winnerTeam;
-    int currStageId = 2;
+    ETeamType stageWinnerTeam;
+    ETeamType gameWinnerTeam;
+    int currStageId = 0;
 
     public void Init()
     {
@@ -29,10 +30,8 @@ public class GameMgr
             playedStages[i] = false;
     }
 
-    public int GetWinnerTeamCount(ETeamType teamType)
-    {
-        return winnerCounts[(int)teamType];
-    }
+    public ETeamType GetGameLoseTeam() => winnerCounts[(int)ETeamType.Left] < winnerCounts[(int)ETeamType.Right] ? ETeamType.Left : ETeamType.Right;
+    public ETeamType GetGameWinnerTeam() => gameWinnerTeam;
 
     public void SetStageId(int stageId = -1)
     {
@@ -47,6 +46,7 @@ public class GameMgr
 
     private void EndGame(ETeamType winnerTeam)
     {
+        this.gameWinnerTeam = winnerTeam;
         Managers.Scene.LoadScene(EScene.ResultScene);
         Clear();
     }
@@ -55,7 +55,7 @@ public class GameMgr
     {
         if(currStageId == 0)
         {
-            Debug.LogWarning("currStage가 세팅되지 않음");
+            Debug.LogWarning("currStage가 �팅�� �음");
             return 0;
         }
 
@@ -85,6 +85,7 @@ public class GameMgr
     {
         IsGamePlay = false;
         Managers.Sound.StopBgm();
+        stageWinnerTeam = winnerTeam;
         winnerCounts[(int)winnerTeam] += 1;
 
         if(Managers.UI.SceneUI is UI_GameScene uiGameScene)
@@ -95,9 +96,9 @@ public class GameMgr
 
     public void EndStageCallBack()
     {
-        if (winnerCounts[(int)winnerTeam] >= ((int)EStageType.Max / 2))
+        if (winnerCounts[(int)stageWinnerTeam] >= ((int)EStageType.Max / 2))
         {
-            EndGame(winnerTeam);
+            EndGame(stageWinnerTeam);
         }
         else
         {

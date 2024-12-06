@@ -84,8 +84,10 @@ public class SharkAvoidanceStage : MultiStage
             finishLineObject.OnArriveFinishLine -= onEndGameCallBack;
             finishLineObject.OnArriveFinishLine += onEndGameCallBack;
         }
+#if DEBUG
         else
             Debug.LogWarning($"FinishLineObject is Null!!");
+#endif
     }
 
     public void OnAddBoosterItem()
@@ -225,13 +227,13 @@ public class SharkAvoidanceStage : MultiStage
                     if (!isBigShark)
                     {
                         int spawnPointNum1 = UnityEngine.Random.Range(0, 3) * 2 + 1;
-                        int spawnPointNum2 = spawnPointNum1 + 1 + UnityEngine.Random.Range(1, 3) * 2;
+                        int spawnPointNum2 = spawnPointNum1 + 1 + UnityEngine.Random.Range(1, 3) * 2; // 2, 4
                         if (spawnPointNum2 >= spawnPointList.Count)
                             spawnPointNum2 -= spawnPointList.Count + 1;
 
                         spawnPointVec.x = spawnPointList[spawnPointNum1].transform.position.x;
                         ObjectCreator.SpawnMonster<Shark>(EMonsterType.BigShark, spawnPointVec);
-                        spawnPointVec.x = spawnPointList[spawnPointNum1].transform.position.x;
+                        spawnPointVec.x = spawnPointList[spawnPointNum2].transform.position.x;
                         ObjectCreator.SpawnMonster<Shark>(EMonsterType.Shark, spawnPointVec);
                     }
                     else

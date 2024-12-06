@@ -65,6 +65,8 @@ public class TeamCamera : InitBase
         this.target = target;
     }
 
+    public Camera GetTeamCamera() => cam;
+
     private void FollowingTarget()
     {
         Vector3 targetPos = target.transform.position;

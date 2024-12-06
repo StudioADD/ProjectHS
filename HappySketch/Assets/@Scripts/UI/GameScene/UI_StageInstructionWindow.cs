@@ -1,19 +1,30 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class UI_StageInstructionWindow : InitBase
 {
+    bool isAnyKeyEntered = false;
+
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
 
+        Managers.Resource.Instantiate($"{PrefabPath.UI_STAGE_PATH}/UI_Rule_{Managers.Game.GetCurrStageType()}", transform);
+
         return true;
     }
 
-    public void SetInfo()
+    private void OnEnable()
+    {
+        Managers.Input.OnAnyKeyEntered -= OnStartStage;
+        Managers.Input.OnAnyKeyEntered += OnStartStage;
+    }
+
+    public void SetInfo(EStageType stageType)
     {
 
     }
@@ -24,11 +35,14 @@ public class UI_StageInstructionWindow : InitBase
         gameObject.SetActive(false);
     }
 
-    #region OnClick Event
-    public void OnClickExit()
+    public void OnStartStage()
     {
+        if (Managers.UI.IsPopupActiveSelf<UI_FadeEffectPopup>())
+            return;
+
+        Managers.Input.OnAnyKeyEntered -= OnStartStage;
+
         UIFadeEffectParam param = new UIFadeEffectParam(() => { return !gameObject.activeSelf; }, StartStage, null);
         Managers.UI.OpenPopupUI<UI_FadeEffectPopup>(param);
     }
-    #endregion
 }

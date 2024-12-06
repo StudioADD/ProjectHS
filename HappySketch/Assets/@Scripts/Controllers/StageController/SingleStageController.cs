@@ -32,6 +32,13 @@ public class SingleStageController : BaseStageController
         singleStage.StartStage();
     }
 
+    public override void EndStage(ETeamType winnerTeam)
+    {
+        base.EndStage(winnerTeam);
+
+        singleStage.EndStage(winnerTeam);
+    }
+
     public override void ConnectEvents()
     {
         singleStage.ConnectEvents(EndStage);

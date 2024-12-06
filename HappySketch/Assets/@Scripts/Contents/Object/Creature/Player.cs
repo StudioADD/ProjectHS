@@ -40,11 +40,15 @@ public enum EPlayerState
     LeftCollect, //수집
     RightCollect, //수집
 
+    Victory, // 승리
+
     Dead
 }
 
 public class Player : Creature
 {
+    static float stage2Time = 90f;
+
     [SerializeField]
     private EStageType stageType;
 
@@ -67,10 +71,8 @@ public class Player : Creature
     private PlayerEffectObject StunEffect = null;
 
     [SerializeField, ReadOnly]
-    private PlayerEffectObject BoosterEffect = null;
+    private PlayerEffectObject BuffEffect = null;
 
-    [SerializeField, ReadOnly]
-    private PlayerEffectObject CandyBuffEffect = null;
 
     private float boosterTimer = -1f; // 부스터 현재시간
 
@@ -110,7 +112,7 @@ public class Player : Creature
         protected set
         {
 
-            if (_playerState == EPlayerState.Dead)
+            if (_playerState == EPlayerState.Dead || value == EPlayerState.None)
             {
                 return;
             }
@@ -138,6 +140,7 @@ public class Player : Creature
                 case EPlayerState.LeftCollect:
                 case EPlayerState.RightCollect: isChangeState = CollectStateCondition(); break;
                 case EPlayerState.Run: isChangeState = RunStateCondition(); break;
+                case EPlayerState.Victory: isChangeState = true; break;
             }
             if (isChangeState == false)
             {
@@ -202,6 +205,7 @@ public class Player : Creature
         SetScale();
         trackNum = 2;
         targetPosition = beforePosition = transform.position;
+        InitRigidVelocity();
         return true;
     }
 
@@ -214,15 +218,19 @@ public class Player : Creature
         targetPosition = beforePosition = transform.position;
         switch (stageType)
         {
+            case EStageType.SharkAvoidance:
+                SetSharkAvoidanceEffet();
+                break;
             case EStageType.CollectingCandy:
                 PlayerState = EPlayerState.Run;
                 //임시 스테이지 endpoint로
                 targetPosition = transform.position;
-                targetPosition.z += 1000;
+                targetPosition.z = 0;
+
                 SetCollectingCandyEffet();
                 break; // 추후 스테이지2 나오면  바꿔야함
-            case EStageType.SharkAvoidance:
-                SetSharkAvoidanceEffet();
+            case EStageType.CrossingBridge:
+
                 break;
             default:
 
@@ -231,6 +239,27 @@ public class Player : Creature
         }
         IsPlayerInputControll = true;
     }
+
+    public void OnEndStage(bool victory)
+    {
+        UnConnectInputActions();
+        UnConnectEvent();
+        if (victory)
+        {
+            PlayerState = EPlayerState.Victory;
+        }
+        else 
+        {
+            PlayerState = EPlayerState.Idle;
+        }
+        IsPlayerInputControll = false;
+        if (coPlayerStateController != null)
+        {
+            StopCoroutine(coPlayerStateController);
+            coPlayerStateController = null;
+        }
+    }
+
     public virtual void SetScale()
     {
         switch (stageType)
@@ -243,6 +272,9 @@ public class Player : Creature
                 break;
         }
     }
+
+    #region Event
+
     #region SharkAvoidanceStage Event
     Action onAddBoosterItem;
     Func<bool> onUseBoosterItem;
@@ -264,6 +296,38 @@ public class Player : Creature
         this.onCollectCandyItems = onCollectCandyItems;
         this.onChangeScoreBuff = onChangeScoreBuff;
     }
+
+    [SerializeField, ReadOnly]
+    List<ECandyItemType> candys = new List<ECandyItemType>();
+    public override void OnCollisionTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == (int)ELayer.Item)
+        {
+            Vector3 pos = other.transform.position;
+            CandyItem candy = other.gameObject.GetComponent<CandyItem>();
+            if (isleft == true && pos.x <= transform.position.x)
+            {
+                candys.Add(candy.CandyItemType);
+                candy.OnCollected(TeamType);
+                if (candy.CandyItemType == ECandyItemType.StarCandyItem)
+                {
+                    _isCandyBuff = true;
+                }
+            }
+            else if (isleft == false && pos.x >= transform.position.x)
+            {
+                candys.Add(candy.CandyItemType);
+                candy.OnCollected(TeamType);
+                if (candy.CandyItemType == ECandyItemType.StarCandyItem)
+                {
+                    _isCandyBuff = true;
+                }
+            }
+
+        }
+    }
+
+
     #endregion
 
     #region CrossingBridgeStage Event
@@ -288,23 +352,41 @@ public class Player : Creature
     {
 
         if (getSpawnPoint != null)
+        {
             transform.position = getSpawnPoint.Invoke(TeamType);
+
+        }
 
     }
     #endregion
 
+    protected void UnConnectEvent()
+    {
+        onAddBoosterItem = null;
+        onUseBoosterItem = null;
+        onCollectCandyItems = null;
+        onChangeScoreBuff = null;
+        getJumpTargetPos = null;
+        getSpawnPoint = null;
+        onUseGoggleItem = null;
+        onChangeTarget = null;
+    }
+    #endregion
+
+    #region Effect
+
     #region SharkAvoidance Effet
     private void SetSharkAvoidanceEffet()
     {
-        StunEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/StunEffect").GetComponent<PlayerEffectObject>();
+        StunEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.PlayerStunEffect)).GetComponent<PlayerEffectObject>();
         StunEffect.transform.parent = this.transform;
         StunEffect.transform.localPosition = new Vector3(0, 1.5f, 0);
         StunEffect.StopEffect();
 
-        BoosterEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/UseBoosterEffect").GetComponent<PlayerEffectObject>();
-        BoosterEffect.transform.parent = this.transform;
-        BoosterEffect.transform.localPosition = new Vector3(0, 0, 0);
-        BoosterEffect.StopEffect();
+        BuffEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.PlayerBuffEffect)).GetComponent<PlayerEffectObject>();
+        BuffEffect.transform.parent = this.transform;
+        BuffEffect.transform.localPosition = new Vector3(0, 0, 0);
+        BuffEffect.StopEffect();
     }
 
     #endregion
@@ -312,12 +394,13 @@ public class Player : Creature
     #region SetCollectingCandy Effet
     private void SetCollectingCandyEffet()
     {
-        CandyBuffEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/CandyBuffEffect").GetComponent<PlayerEffectObject>();
-        CandyBuffEffect.transform.parent = this.transform;
-        CandyBuffEffect.transform.localPosition = new Vector3(0, 0.75f, 0);
-        CandyBuffEffect.StopEffect();
+        BuffEffect = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_EFFECT_PATH}/" + Util.EnumToString(EEffectType.PlayerBuffEffect)).GetComponent<PlayerEffectObject>();
+        BuffEffect.transform.parent = this.transform;
+        BuffEffect.transform.localPosition = new Vector3(0, 0f, 0);
+        BuffEffect.StopEffect();
     }
 
+    #endregion
     #endregion
 
     #region Input
@@ -357,7 +440,6 @@ public class Player : Creature
     private void ConnectInputActions(bool isConnect)
     {
         UnConnectInputActions();
-        Managers.Input.OnNum1KeyEntered += test;
         switch (stageType)
         {
 
@@ -375,14 +457,17 @@ public class Player : Creature
         Managers.Input.OnWASDKeyEntered -= OnArrowKeySharkAvoidance;
         Managers.Input.OnEndKeyEntered -= OnBoosterKeySharkAvoidance;
 
-        Managers.Input.OnArrowKeyEntered -= OnArrowKeyStage2;
-        Managers.Input.OnSpaceKeyEntered -= OnJumpKey;
-
         Managers.Input.OnWASDKeyEntered -= OnArrowKeyStage2;
+
+        Managers.Input.OnArrowKeyEntered -= OnArrowKeyStage2;
+
+        Managers.Input.OnWASDKeyEntered -= OnArrowKeyStage3;
+        Managers.Input.OnSpaceKeyEntered -= OnJumpKey;
+        Managers.Input.OnFKeyEntered -= OnUseGoggleItem;
+
+        Managers.Input.OnArrowKeyEntered -= OnArrowKeyStage3;
         Managers.Input.OnEndKeyEntered -= OnJumpKey;
-
-        Managers.Input.OnNum1KeyEntered -= test;
-
+        Managers.Input.OnPageDownKeyEntered -= OnUseGoggleItem;
     }
 
     #region SharkAvoidance
@@ -458,7 +543,7 @@ public class Player : Creature
 
         if (IsBoosterState)
         {
-            BoosterEffect.PlayEffect();
+            BuffEffect.PlayEffect();
             boosterTimer = 0;
             inputCooldown = 0.25f;
             moveSpeed *= 2;
@@ -475,13 +560,12 @@ public class Player : Creature
         {
             if (TeamType == ETeamType.Left)
             {
-                Managers.Input.OnArrowKeyEntered += OnArrowKeyStage2;
-                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+                Managers.Input.OnWASDKeyEntered += OnArrowKeyStage2;
             }
             else
             {
-                Managers.Input.OnWASDKeyEntered += OnArrowKeyStage2;
-                Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+                Managers.Input.OnArrowKeyEntered += OnArrowKeyStage2;
+
             }
         }
 
@@ -503,6 +587,11 @@ public class Player : Creature
 
     }
 
+
+
+
+
+
     #endregion
 
     #region stage3
@@ -515,11 +604,13 @@ public class Player : Creature
             {
                 Managers.Input.OnWASDKeyEntered += OnArrowKeyStage3;
                 Managers.Input.OnSpaceKeyEntered += OnJumpKey;
+                Managers.Input.OnFKeyEntered += OnUseGoggleItem;
             }
             else
             {
                 Managers.Input.OnArrowKeyEntered += OnArrowKeyStage3;
                 Managers.Input.OnEndKeyEntered += OnJumpKey;
+                Managers.Input.OnPageDownKeyEntered += OnUseGoggleItem;
             }
         }
 
@@ -528,16 +619,42 @@ public class Player : Creature
     public void OnArrowKeyStage3(Vector2 value)
     {
 
+        if (IsJump)
+            return;
+
         if (value.x > 0)
         {
             onChangeTarget?.Invoke(TeamType, EDirection.Right);
+            SetPlayerForward();
         }
         else if (value.x < 0)
         {
             onChangeTarget?.Invoke(TeamType, EDirection.Left);
+            SetPlayerForward();
         }
 
 
+    }
+
+    protected void SetPlayerForward()
+    {
+        if (getJumpTargetPos != null)
+        {
+            targetPosition = getJumpTargetPos.Invoke(TeamType);
+            this.transform.forward = (targetPosition - this.transform.position).normalized;
+        }
+
+
+
+    }
+    public void OnJumpKey()
+    {
+        if (isInputRock)
+        {
+            return;
+        }
+
+        PlayerState = EPlayerState.JumpUp;
     }
 
     protected void OnUseGoggleItem()
@@ -550,15 +667,7 @@ public class Player : Creature
     }
 
     #endregion
-    public void OnJumpKey()
-    {
-        if (isInputRock)
-        {
-            return;
-        }
 
-        PlayerState = EPlayerState.JumpUp;
-    }
     #endregion
 
     #region PlayerState
@@ -574,6 +683,9 @@ public class Player : Creature
     protected virtual void IdleStateEnter()
     {
         beforePosition = transform.position;
+
+        SetPlayerForward();
+
     }
 
     protected virtual void UpdateIdleState()
@@ -591,32 +703,7 @@ public class Player : Creature
     #endregion
 
     #region Hit
-    //test
-    private void test()
-    {
-        //onAddBoosterItem?.Invoke();
-        //if (boosterTimer == -1)
-        //{
-        //    boosterTimer = 0;
-        //    inputCooldown = 0.25f;
-        //    moveSpeed *= 2; animator.speed *= 2;
-        //}
-
-        switch (stageType)
-        {
-            case EStageType.SharkAvoidance:
-                onAddBoosterItem?.Invoke();
-                //float test = TeamType == ETeamType.Left ? 3 : 2;
-                //OnHit(test);
-                break;
-            case EStageType.CollectingCandy:
-                _isCandyBuff = true;
-                //candys.Add((ECandyItemType)UnityEngine.Random.Range(0, (int)ECandyItemType.Max));
-                break;
-        }
-
-
-    }
+   
     public void OnHit(float hitTime = 3f)
     {
         if (boosterTimer > 0)
@@ -940,7 +1027,6 @@ public class Player : Creature
 
         targetPosition += new Vector3(x, 0, z);
         this.transform.forward = (targetPosition - this.transform.position).normalized;
-        //Debug.LogWarning($" targetPosition : {targetPosition}");
     }
 
     protected virtual void UpdateMoveSwimmingState()
@@ -958,7 +1044,6 @@ public class Player : Creature
     {
         isInputRock = false;
         transform.forward = new Vector3(0, 0, 1);
-        //onMoveEvent();
     }
 
 
@@ -977,16 +1062,8 @@ public class Player : Creature
 
     protected virtual void JumpUpStateEnter()
     {
-        targetPosition = transform.position + Vector3.forward * data.MoveSpeed * 2; // 추후 이동거리로 뺄것
-        if (stageType == EStageType.CrossingBridge)
-        {
-            if (getJumpTargetPos != null)
-            {
-                targetPosition = getJumpTargetPos.Invoke(TeamType);
-            }
-        }
 
-        this.transform.forward = (targetPosition - this.transform.position).normalized;
+        SetPlayerForward();
     }
 
     protected virtual void UpdateJumpUpState()
@@ -1086,15 +1163,9 @@ public class Player : Creature
 
         if (IsEndCurrentState(PlayerState))
         {
-            switch (stageType)
-            {
 
+            PlayerState = EPlayerState.Idle;
 
-                case EStageType.CollectingCandy: PlayerState = EPlayerState.Run; break;
-
-                default:
-                    PlayerState = EPlayerState.Idle; break;
-            }
         }
         else
         {
@@ -1109,7 +1180,6 @@ public class Player : Creature
     protected virtual void LandingStateExit()
     {
         //targetPosition = Vector3.zero;
-        transform.forward = new Vector3(0, 0, 1);
         IsJump = false;
     }
     #endregion
@@ -1141,7 +1211,7 @@ public class Player : Creature
     protected virtual void FallStateExit()
     {
         //targetPosition = Vector3.zero;
-        transform.forward = new Vector3(0, 0, 1);
+
         IsJump = false;
     }
 
@@ -1168,14 +1238,11 @@ public class Player : Creature
     protected virtual void RunStateEnter()
     {
 
-        beforePosition = transform.position;
-        targetPosition = new Vector3(transform.position.x, transform.position.y, 1000); // 추후 트랙 끝 position 받아올것
-        //Running();
     }
 
-    protected virtual void UpdateRunState()
+    protected virtual void UpdateRunState(float timer)
     {
-        Running();
+        Running(timer);
 
         if (transform.position == targetPosition)
         {
@@ -1187,11 +1254,13 @@ public class Player : Creature
 
     protected virtual void RunStateExit()
     {
-        InitRigidVelocity();
+
     }
-    protected void Running()
+    protected void Running(float timer)
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.01f * moveDistance); // 추후 2스테이지 data로 뺄것
+        float distance = targetPosition.z - beforePosition.z;
+        float progress = timer / stage2Time;
+        transform.position = new Vector3(transform.position.x, transform.position.y, beforePosition.z + distance * progress);
     }
 
 
@@ -1203,16 +1272,19 @@ public class Player : Creature
     {
         if (PlayerState != EPlayerState.Run)
             return false;
+        if (inputTime < inputCooldown)
+        {
+            return false;
+        }
         return true;
     }
 
 
-    protected virtual void UpdateCollectState()
+    protected virtual void UpdateCollectState(float timer)
     {
 
 
-        Running();
-        //수집 시 필요한거 
+        Running(timer);
         if (IsEndCurrentState(PlayerState))
         {
             PlayerState = EPlayerState.Run;
@@ -1223,8 +1295,10 @@ public class Player : Creature
     protected virtual void CollectStateExit()
     {
         CollectItem();
-        candys.Clear();
         collisionTrigger.SetActive(false);
+        candys.Clear();
+        inputTime = 0f;
+        
     }
     #region Left Collect
 
@@ -1233,7 +1307,7 @@ public class Player : Creature
     {
         isleft = true;
         collisionTrigger.SetActive(true);
-        
+       
 
     }
 
@@ -1245,7 +1319,8 @@ public class Player : Creature
     {
         isleft = false;
         collisionTrigger.SetActive(true);
-        
+
+
     }
 
 
@@ -1263,11 +1338,6 @@ public class Player : Creature
         while (IsPlayerInputControll)
         {
             timer += Time.deltaTime;
-            if (timer >= 1.0f)
-            {
-                timer -= 1.0f;
-            }
-
 
             if (inputTime < inputCooldown)
             {
@@ -1288,9 +1358,9 @@ public class Player : Creature
                 case EPlayerState.Hit: UpdateHitState(); break;
                 case EPlayerState.Dizz: UpdateDizzState(); break;
                 case EPlayerState.GoBack: UpdateGoBackState(); break;
-                case EPlayerState.Run: UpdateRunState(); break;
+                case EPlayerState.Run: UpdateRunState(timer); break;
                 case EPlayerState.LeftCollect:
-                case EPlayerState.RightCollect: UpdateCollectState(); break;
+                case EPlayerState.RightCollect: UpdateCollectState(timer); break;
             }
 
 
@@ -1332,7 +1402,6 @@ public class Player : Creature
     {
         if (animator == null)
         {
-            Debug.LogWarning("animator is Null");
             return false;
         }
 
@@ -1356,14 +1425,14 @@ public class Player : Creature
         if (boosterTimer >= 0)
         {
             boosterTimer += Time.deltaTime;
-            if (boosterTimer >= 3)
+            if (boosterTimer >= 5f)
             {
                 IsBoosterState = false;
                 boosterTimer = -1;
                 moveSpeed = data.MoveSpeed;
                 inputCooldown = 0.5f;
                 animator.speed = 1;
-                BoosterEffect.StopEffect();
+                BuffEffect.StopEffect();
             }
         }
     }
@@ -1388,23 +1457,24 @@ public class Player : Creature
                 return;
             IsCandyBuff = value;
             onChangeScoreBuff(IsCandyBuff);
-            if (IsCandyBuff && !CandyBuffEffect.GetIsPlay())
+            if (IsCandyBuff && !BuffEffect.GetIsPlay())
             {
                 StartCoroutine(CoCandyBuffEffect());
             }
         }
     }
+
     protected IEnumerator CoCandyBuffEffect()
     {
         float time = 0f;
-        CandyBuffEffect?.PlayEffect();
-        while (time <= 5f)
+        BuffEffect?.PlayEffect();
+        while (time <= 10f)
         {
             time += Time.deltaTime;
             yield return null;
         }
         _isCandyBuff = false;
-        CandyBuffEffect?.StopEffect();
+        BuffEffect?.StopEffect();
     }
 
     #endregion
@@ -1419,53 +1489,15 @@ public class Player : Creature
         }
     }
 
-    #region CollisionTrigger (stage2)
-    [SerializeField, ReadOnly]
-    List<ECandyItemType> candys = new List<ECandyItemType>();
 
 
-    public override void OnCollisionTriggerEnter(Collider other)
-    {
-        if (other.gameObject.layer == (int)ELayer.Item)
-        {
-            Vector3 pos = other.transform.position;
-            CandyItem candy = other.gameObject.GetComponent<CandyItem>();
-            if (isleft == true && pos.x <= transform.position.x)
-            {
-                candys.Add(candy.CandyItemType);
-                candy.OnCollected();
-                if(candy.CandyItemType == ECandyItemType.StarCandy)
-                {
-                    IsCandyBuff = true;
-                }
-            }
-            else if (isleft == false && pos.x >= transform.position.x)
-            {
-                candys.Add(candy.CandyItemType);
-                candy.OnCollected();
-                if (candy.CandyItemType == ECandyItemType.StarCandy)
-                {
-                    IsCandyBuff = true;
-                }
-            }
-
-        }
-    }
-
-
-    #endregion
     private void OnDisable()
     {
         UnConnectInputActions();
-        onAddBoosterItem = null;
-        onUseBoosterItem = null;
-        onCollectCandyItems = null;
-        onChangeScoreBuff = null;
-        getJumpTargetPos = null;
-        getSpawnPoint = null;
-        onUseGoggleItem = null;
-        onChangeTarget = null;
+        UnConnectEvent();
     }
+
+
 
 
 }

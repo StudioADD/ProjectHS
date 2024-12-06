@@ -43,4 +43,9 @@ public class CameraGroupController : InitBase
                 break;
         }
     }
+
+    public Camera GetTeamCamera(ETeamType type)
+    {
+        return (type == ETeamType.Left ? leftCamera.GetTeamCamera() : rightCamera.GetTeamCamera());
+    }
 }

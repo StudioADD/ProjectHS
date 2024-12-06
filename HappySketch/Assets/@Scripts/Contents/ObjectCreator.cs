@@ -61,6 +61,10 @@ public static class ObjectCreator
     public static T SpawnItem<T>(ItemParam param, Vector3 spawnPosition) where T : BaseItem
     {
         string name = typeof(T).Name;
+
+        if(param is CandyItemParam candyItemParam)
+            name = Util.EnumToString(candyItemParam.CandyItemType);
+
         BaseItem item = Managers.Resource.Instantiate($"{PrefabPath.OBJECT_ITEM_PATH}/{name}").GetComponent<BaseItem>();
 
         if (item == null)

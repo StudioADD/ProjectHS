@@ -14,6 +14,7 @@ public class UI_GameScene : UI_BaseScene
     private PresenterBase currPresentRight;
 
     private UI_WinLoseController winLoseController;
+    private UI_ScorePool scorePool;
 
     private EStageType currStageType = EStageType.None;
 
@@ -33,6 +34,7 @@ public class UI_GameScene : UI_BaseScene
     public void SetInfo(EStageType stageType)
     {
         currStageType = stageType;
+        stageInstructionWindow.SetInfo(stageType);
     }
 
     public void StartStage()
@@ -43,11 +45,26 @@ public class UI_GameScene : UI_BaseScene
     public void EndStage(ETeamType winTeam, int leftWinCount, int rightWinCount, Action onEnd)
     {
         UI_WinLoseController winLoseController = Managers.UI.SpawnObjectUI<UI_WinLoseController>();
-        winLoseController.EndStage(winTeam, leftWinCount, rightWinCount, onEnd);
 
-        currPresentLeft.Clear();
-        currPresentRight.Clear();
+        switch(currStageType)
+        {
+            case EStageType.CollectingCandy:
+                winLoseController.EndStageNoGoalImg(winTeam, leftWinCount, rightWinCount, onEnd);
+                break;
+
+            default:
+                winLoseController.EndStage(winTeam, leftWinCount, rightWinCount, onEnd);
+                break;
+        }
+
+        currPresentLeft?.Clear();
+        currPresentRight?.Clear();
     }
+
+    public ModelBase GetStageUI()
+    {
+        return currPresentLeft.GetModel();
+    }  
 
     private void SetStageUI()
     {
@@ -85,8 +102,9 @@ public class UI_GameScene : UI_BaseScene
                 break;
 
             case EStageType.CollectingCandy:
-                currPresentLeft = new CollectCandyPresenter(leftView, new CollectCandyModel(), ETeamType.Left);
-                currPresentRight = new CollectCandyPresenter(rightView, new CollectCandyModel(), ETeamType.Right);
+                CollectCandyModel candyModel = new CollectCandyModel();
+                currPresentLeft = new CollectCandyPresenter(leftView, candyModel, ETeamType.Left);
+                currPresentRight = new CollectCandyPresenter(rightView, candyModel, ETeamType.Right);
                 break;
 
             case EStageType.CrossingBridge:

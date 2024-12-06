@@ -42,9 +42,10 @@ public class MultiStageController : BaseStageController
     {
         base.EndStage(winnerTeam);
 
-
+        leftStage.EndStage(winnerTeam);
+        rightStage.EndStage(winnerTeam);
     }
-
+    
     public override void StartStage()
     {
         leftStage.StartStage();

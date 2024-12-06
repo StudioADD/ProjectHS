@@ -15,6 +15,7 @@ public abstract class BaseScene : InitBase
 
         Managers.Init();
         Managers.Scene.SetCurrentScene(this);
+        LightingController.InitLighting();
 
         return true;
     }

@@ -8,7 +8,16 @@ using CollectingCandy;
 public class CollectingCandyStage : MultiStage
 {
     [SerializeField, ReadOnly] ScoreCollector scoreCollector;
+    [SerializeField, ReadOnly] Transform playerEndPoint;
 
+    [field: SerializeField, ReadOnly]
+    readonly ECandyItemType[] CANDYITEMS =
+        {
+        ECandyItemType.RedCandyItem, ECandyItemType.RedCandyItem,
+        ECandyItemType.GreenCandyItem, ECandyItemType.GreenCandyItem,
+        ECandyItemType.BlueCandyItem, ECandyItemType.BoomCandyItem
+        };
+    
     [field: SerializeField, ReadOnly] List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
     [field: SerializeField, ReadOnly] CollectingCandyParam stageParam = null;
 
@@ -24,12 +33,8 @@ public class CollectingCandyStage : MultiStage
             if (child.TryGetComponent<SpawnPointObject>(out SpawnPointObject spawnPoint))
                 spawnPointList.Add(spawnPoint);
         }
-    }
 
-    private void OnDisable()
-    {
-        if (coSpawnCandyItem != null)
-            StopCoroutine(coSpawnCandyItem);
+        playerEndPoint = Util.FindChild<Transform>(gameObject, "PlayerEndPoint", true);
     }
 
     public override bool Init()
@@ -46,26 +51,32 @@ public class CollectingCandyStage : MultiStage
     {
         base.SetInfo(player);
 
-        stageParam = new CollectingCandyParam(ETeamType.Left, new int[(int)ECandyItemType.Max], 0);
+        stageParam = new CollectingCandyParam(TeamType, new int[(int)ECandyItemType.Max], 0);
+        SpawnCandyItemWaves();
 
-        
+        scoreCollector = FindObjectOfType<ScoreCollector>();
+        if(scoreCollector == null)
+            scoreCollector = new GameObject("@ScoreCollector").AddComponent<ScoreCollector>();
+        scoreCollector.OnGameTimerEnd += GameTimerEndCallBack;
     }
 
     public override void StartStage()
     {
         base.StartStage();
-
-        if (coSpawnCandyItem != null)
-            StopCoroutine(coSpawnCandyItem);
-
-        coSpawnCandyItem = StartCoroutine(CoSpawnCandyItem());
+        
+        // 임시
+        if (TeamType == ETeamType.Left)
+            scoreCollector.StartStage();
     }
 
     public override void EndStage(ETeamType winnerTeam)
     {
         base.EndStage(winnerTeam);
+    }
 
-
+    public void GameTimerEndCallBack()
+    { 
+        scoreCollector.SetTotalScore(stageParam);
     }
 
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
@@ -74,7 +85,51 @@ public class CollectingCandyStage : MultiStage
 
         player.ConnectCollectingCandyStage(OnCollectCandyItems, OnChangeScoreBuff);
 
-        // 게임 종료 조건 세팅 해야 함 ??
+        if (scoreCollector != null)
+        {
+            scoreCollector.OnEndGameCallBack -= onEndGameCallBack;
+            scoreCollector.OnEndGameCallBack += onEndGameCallBack;
+        }
+#if DEBUG
+        else
+            Debug.LogWarning("scoreCollector is Null!!");
+#endif
+    }
+
+    private void SpawnCandyItemWaves()
+    {
+        float distance = MathF.Abs(playerStartPoint.position.z - playerEndPoint.position.z);
+        float currPos = playerStartPoint.position.z + (distance / 20);
+        distance *= 0.9f;
+
+        int starItemSpawnPoint = UnityEngine.Random.Range(9, 16); // 10 ~ 15
+       
+        for(int i = 0; i < 20; i++)
+        {
+            bool isStarItem = starItemSpawnPoint == i;
+            currPos += distance / 20;
+            SpawnCandyItemWave(currPos, isStarItem);
+        }
+    }
+
+    private void SpawnCandyItemWave(float spawnPosZ, bool isStarItem = false)
+    {
+        CANDYITEMS.Shuffle();
+
+        for (int i = 0; i < spawnPointList.Count; i++)
+        {
+            Vector3 spawnPoint = new Vector3(
+                spawnPointList[i].transform.position.x,
+                spawnPointList[i].transform.position.y,
+                spawnPosZ);
+
+            CandyItemParam param = new CandyItemParam(CANDYITEMS[i]);
+
+            if (isStarItem == true && param.CandyItemType == ECandyItemType.BoomCandyItem)
+                param.CandyItemType = ECandyItemType.StarCandyItem;
+
+            ObjectCreator.SpawnItem<CandyItem>(param, spawnPoint);
+        }
     }
 
     public void OnCollectCandyItems(List<ECandyItemType> candyItemTypes)
@@ -87,55 +142,35 @@ public class CollectingCandyStage : MultiStage
         if (stageParam.CurrScore < 0)
             stageParam.CurrScore = 0;
 
-        // UI에 이벤트 넘겨주기
+        OnReceiveStageParamCallBack(stageParam);
     }
 
     private void CollectCandyItem(ECandyItemType candyItemType)
     {
+        stageParam.CandyItems[(int)candyItemType]++;
+
         switch (candyItemType)
         {
-            case ECandyItemType.RedCandy:
+            case ECandyItemType.RedCandyItem:
                 stageParam.CurrScore += 100 * (isScoreBuff ? 2 : 1);
-
                 break;
-            case ECandyItemType.GreenCandy:
+            case ECandyItemType.GreenCandyItem:
                 stageParam.CurrScore += 200 * (isScoreBuff ? 2 : 1);
-
                 break;
-            case ECandyItemType.BlueCandy:
+            case ECandyItemType.BlueCandyItem:
                 stageParam.CurrScore += 500 * (isScoreBuff ? 2 : 1);
-
                 break;
-            case ECandyItemType.BoomCandy:
+            case ECandyItemType.BoomCandyItem:
                 stageParam.CurrScore -= 300;
-
                 break;
-            case ECandyItemType.StarCandy:
+            case ECandyItemType.StarCandyItem:
 
                 break;
         }
-
     }
 
     public void OnChangeScoreBuff(bool isScoreBuff)
     {
         this.isScoreBuff = isScoreBuff;
-    }
-
-    Coroutine coSpawnCandyItem = null;
-    private IEnumerator CoSpawnCandyItem()
-    {
-        while(Managers.Game.IsGamePlay)
-        {
-            yield return new WaitForSeconds(5f); // 임시
-
-        }
-
-        coSpawnCandyItem = null;
-    }
-
-    private void SpawnCandyItem()
-    {
-
     }
 }

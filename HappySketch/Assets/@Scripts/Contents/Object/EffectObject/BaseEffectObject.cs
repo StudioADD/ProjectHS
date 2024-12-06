@@ -6,11 +6,11 @@ using static UnityEngine.ParticleSystem;
 public enum EEffectType
 {
     ItemBurstEffect = 0,
-    CandyItemBurstEffect, 
+    CandyItemBurstEffect,
+    BoomCandyBurstEffect,
 
-    StunEffect,
-    UseBoosterEffect,
-    CandyBuffEffect,
+    PlayerStunEffect,
+    PlayerBuffEffect,
 }
 
 public abstract class BaseEffectObject : BaseObject

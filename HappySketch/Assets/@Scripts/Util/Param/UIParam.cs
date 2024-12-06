@@ -25,6 +25,19 @@ public class UIFadeEffectParam : UIParam
 #endregion
 
 #region ObjectUI Param
+public class UIScoreTextParam : UIParam
+{
+    public int Score;
+    public Vector3 spawnPoint;
+    public Color textColor;
+
+    public UIScoreTextParam(int score, Vector3 spawnPoint, Color textColor)
+    {
+        Score = score;
+        this.spawnPoint = spawnPoint;
+        this.textColor = textColor;
+    }
+}
 public class UIGameStartCounterParam : UIParam
 {
     public int Time { get; private set; }
@@ -39,28 +52,28 @@ public class UIGameStartCounterParam : UIParam
 
 public class UIWinLoseParam : UIParam
 {
-    public struct WinCount
-    {
-        private ETeamType teamType;
-        private int winCount;
-
-        public WinCount(ETeamType teamType, int winCount)
-        {
-            this.teamType = teamType;
-            this.winCount = winCount;
-        }
-    }
-
     public ETeamType WinTeam { get; private set; }
+    public int LeftWinCount { get; private set; }
+    public int RightWinCount { get; private set; }
+    public Action onEnd { get; private set; }
 
-    public WinCount LeftWinCount { get; private set; }
-    public WinCount RightWinCount { get; private set; }
-
-    public UIWinLoseParam(ETeamType winTeam, WinCount leftWinCount, WinCount rightWinCount)
+    public UIWinLoseParam(ETeamType winTeam, int leftWinCount, int rightWinCount, Action onEnd)
     {
         WinTeam = winTeam;
         LeftWinCount = leftWinCount;
         RightWinCount = rightWinCount;
+    }
+}
+
+public class UIScorePoolParam : UIParam
+{
+    public Camera leftCamera;
+    public Camera rightCamera;
+
+    public UIScorePoolParam(Camera leftCamera, Camera rightCamera)
+    {
+        this.leftCamera = leftCamera;
+        this.rightCamera = rightCamera;
     }
 }
 #endregion

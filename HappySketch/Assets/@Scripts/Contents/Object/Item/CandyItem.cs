@@ -4,26 +4,23 @@ using UnityEngine;
 
 public enum ECandyItemType
 {
-    RedCandy,
-    GreenCandy,
-    BlueCandy,
-    BoomCandy,
-    StarCandy,
+    RedCandyItem = 0,
+    GreenCandyItem,
+    BlueCandyItem,
+    BoomCandyItem,
+    StarCandyItem,
     Max
 }
 
 public class CandyItem : BaseItem
 {
+    [field: SerializeField, ReadOnly]
     public ECandyItemType CandyItemType { get; protected set; }
-
-    Rigidbody rigid;
-
+    
     public override bool Init()
     {
         if (base.Init() == false)
             return false;
-
-        rigid = GetComponent<Rigidbody>();
 
         return true;
     }
@@ -36,9 +33,6 @@ public class CandyItem : BaseItem
         {
             itemType = EItemType.CandyItem;
             CandyItemType = candyItemParam.CandyItemType;
-
-            rigid.velocity = new Vector3(0, 0, 5); // 임시
-            StartCoroutine(CoDestroyCheck());
         }
         else
         {
@@ -49,24 +43,44 @@ public class CandyItem : BaseItem
         }
     }
 
-    public void OnCollected()
+    public void OnCollected(Define.ETeamType teamType)
     {
-        // 코루틴 멈추고
-        // 파괴되고, 이펙트 생성
+        EEffectType effectType = (CandyItemType == ECandyItemType.BoomCandyItem) ?
+            EEffectType.BoomCandyBurstEffect : EEffectType.CandyItemBurstEffect;
 
-
-    }
-
-    private IEnumerator CoDestroyCheck()
-    {
-        while (true)
+        if (Managers.Scene.CurrScene is GameScene gameScene)
         {
-            if (this.transform.position.z < -660)
-                break;
+            int score;
+            switch (CandyItemType)
+            {
+                case ECandyItemType.RedCandyItem:
+                    score = 100;
+                    break;
+                case ECandyItemType.GreenCandyItem:
+                    score = 300;
+                    break;
+                case ECandyItemType.BlueCandyItem:
+                    score = 500;
+                    break;
+                case ECandyItemType.BoomCandyItem:
+                    score = -500;
+                    break;
+                default:
+                    score = -1;
+                    break;
+            }
 
-            yield return new WaitForSeconds(1);
+            if(score != -1)
+            {
+                UIScoreTextParam param = new UIScoreTextParam(score,
+                gameScene.GetTeamCamera(teamType).WorldToScreenPoint(transform.position),
+                new Color(0, 0, 0, 255));
+
+                Managers.UI.SpawnObjectUI<UI_ScoreText>(param, Managers.UI.SceneUI.transform);
+            }
         }
 
-        Managers.Resource.Destroy(this.gameObject);
+        ObjectCreator.SpawnEffect<BaseEffectObject>(effectType, transform.position);
+        Managers.Resource.Destroy(gameObject);
     }
 }
