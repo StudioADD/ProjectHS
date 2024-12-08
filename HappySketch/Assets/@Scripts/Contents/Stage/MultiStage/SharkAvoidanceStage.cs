@@ -18,6 +18,8 @@ public class SharkAvoidanceStage : MultiStage
     [field: SerializeField, ReadOnly] List<SpawnPointObject> spawnPointList = new List<SpawnPointObject>();
     [field: SerializeField, ReadOnly]  SharkAvoidanceParam stageParam = null;
 
+
+#if UNITY_EDITOR
     protected override void Reset()
     {
         base.Reset();
@@ -31,6 +33,7 @@ public class SharkAvoidanceStage : MultiStage
                 spawnPointList.Add(spawnPoint);
         }
     }
+#endif
 
     public override bool Init()
     {

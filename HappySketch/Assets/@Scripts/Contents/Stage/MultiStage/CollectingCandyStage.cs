@@ -23,6 +23,7 @@ public class CollectingCandyStage : MultiStage
 
     [SerializeField, ReadOnly] bool isScoreBuff;
 
+#if UNITY_EDITOR
     protected override void Reset()
     {
         base.Reset();
@@ -36,6 +37,7 @@ public class CollectingCandyStage : MultiStage
 
         playerEndPoint = Util.FindChild<Transform>(gameObject, "PlayerEndPoint", true);
     }
+#endif
 
     public override bool Init()
     {

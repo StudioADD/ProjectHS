@@ -1,22 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.IO.LowLevel.Unsafe;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.XR;
-using UnityEngine.UIElements;
 using System;
 using static Define;
-using TMPro;
-using UnityEngine.Playables;
-using System.Text;
-using static UnityEngine.GraphicsBuffer;
 using Data;
-using System.Data.Common;
-using UnityEditor.Profiling.Memory.Experimental;
-using UnityEditor;
-
 
 public enum EPlayerState
 {

@@ -76,8 +76,9 @@ public class TeamCamera : InitBase
 
     protected bool LoadCameraDataInfo(EStageType stageType)
     {
+#if UNITY_EDITOR
         string loadPath = Application.dataPath + DataPath.STAGE_JSONDATA_PATH + $"/CameraData{(int)stageType}.json";
-
+        
         if (!File.Exists(loadPath))
         {
             Debug.LogWarning($"로드할 데이터가 없습니다.\n경로 : {loadPath}");
@@ -86,7 +87,13 @@ public class TeamCamera : InitBase
 
         string jsonData = File.ReadAllText(loadPath);
         cameraInfoData = JsonUtility.FromJson<CameraInfoData>(jsonData);
-        
+
         return true;
+#else
+        TextAsset jsonData = Managers.Resource.Load<TextAsset>($"Data/StageData/CameraData{(int)stageType}");
+        cameraInfoData = JsonUtility.FromJson<CameraInfoData>(jsonData.text);
+        return true;
+#endif
+
     }
 }

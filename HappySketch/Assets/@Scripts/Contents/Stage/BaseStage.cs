@@ -19,12 +19,14 @@ public abstract class BaseStage : InitBase
     [field: SerializeField, ReadOnly] protected Transform playerStartPoint;
     [field: SerializeField, ReadOnly] public EStageType StageType { get; protected set; }
 
+#if UNITY_EDITOR
     protected virtual void Reset()
     {
         playerStartPoint = Util.FindChild<Transform>(this.gameObject, "PlayerStartPoint", true);
         playerStartPoint ??= Util.Editor_InstantiateObject(this.transform).transform;
         playerStartPoint.gameObject.name = "PlayerStartPoint";
     }
+#endif
 
     public override bool Init()
     {

@@ -26,6 +26,7 @@ public class CrossingBridgeStage : SingleStage
 
     Action<ETeamType> onEndGameCallBack = null;
 
+#if UNITY_EDITOR
     protected override void Reset()
     {
         base.Reset();
@@ -34,6 +35,7 @@ public class CrossingBridgeStage : SingleStage
         playerSavePoint = Util.FindChild<Transform>(this.gameObject, "PlayerSavePoint", true);
         platformGroupController = Util.FindChild<PlatformGroupController>(gameObject);
     }
+#endif
 
     public override bool Init()
     {
