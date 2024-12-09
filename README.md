@@ -20,6 +20,6 @@
 
 ---
 
-# Game Flow & Stage
+# 스테이지 설계도 (Class)
 
 ![image](https://github.com/user-attachments/assets/0f74c8d7-5248-41a4-97c4-5a745d24ceb1)
