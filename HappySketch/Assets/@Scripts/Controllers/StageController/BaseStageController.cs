@@ -25,6 +25,7 @@ public abstract class BaseStageController : InitBase
 
     public virtual void EndStage(ETeamType winnerTeam)
     {
+        Managers.Sound.StopBgm();
         Managers.Game.EndStage(winnerTeam);
     }
 
