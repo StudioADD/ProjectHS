@@ -19,7 +19,3 @@
 > **프로그래머(3)** : 허준혁(Game Flow, Stage), 라용엽(Player), 엄희용(UI)
 
 ---
-
-> **Stage Class 설계도**
-> 
-![image](https://github.com/user-attachments/assets/0f74c8d7-5248-41a4-97c4-5a745d24ceb1)
