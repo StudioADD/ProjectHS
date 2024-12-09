@@ -63,7 +63,9 @@ public static class Define
     {
         None = 0,
 
-        // 전부 임시로 깔아둠
+        Title,
+        GameDescription,
+
         SharkAvoidance,
         CollectingCandy,
         CrossingBridge,
@@ -87,16 +89,22 @@ public static class Define
         UI_StartGame,
 
         // UI_InGamePublic
-        
+        UI_CountDown, // 3, 2, 1
+        UI_CountStart, // Go!
 
         // Stage1 - SharkAvoidanceStage
         UseBooster,
+        PlayerHit,
 
         // Stage2 - CollectingCandyStage
-
+        GetCandyItem,
+        GetStarCandyItem,
+        GetBoomCandyItem,
 
         // Stage3 - CrossingBridgeStage
         SavePoint,
+        UseTelescope,
+        PlayerJump,
 
 
         Max,
