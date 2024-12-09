@@ -72,7 +72,6 @@ public class SoundMgr
         audioSources[(int)ESoundType.SFX].PlayOneShot(audioClip);
     }
 
-    // BGM 배속 실행 넣자~
     public void ChangeBGMSpeed(float speed, float time)
     {
         if (coChangeBGMSpeed != null)

@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Define;
 
 public class SceneMgr
 {
     public BaseScene CurrScene { get; private set; }
 
-    private Define.EScene nextScene = Define.EScene.Unknown;
+    private EScene nextScene = EScene.Unknown;
 
     private int loadingProgress = 100; // 0 ~ 100
 
@@ -16,8 +17,8 @@ public class SceneMgr
     {
         CurrScene = currScene;
 
-        if (CurrScene.SceneType == Define.EScene.GameScene)
-            Managers.Game.Init();
+        if (CurrScene.SceneType == EScene.GameScene)
+            Managers.Game.Init();   
     }
 
     public bool IsCompleteLoadingScene() => loadingProgress == 100;

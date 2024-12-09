@@ -28,7 +28,6 @@ public class GameScene : BaseScene
     public void SetStageInfo(EStageType stageType)
     {
         Managers.Sound.PlayBgm(Util.ParseEnum<EBgmSoundType>(Util.EnumToString(stageType)));
-        Managers.Sound.ChangeBGMSpeed(1.2f, 5f);
 
         // StageController
         Type type = Type.GetType($"{stageType}Stage");

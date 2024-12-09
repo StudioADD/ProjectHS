@@ -95,6 +95,7 @@ public class CrossingBridgeStage : SingleStage
 
             if (leftPlayerPosNum == (int)EPlatformType.SavePoint && isLeftPlayerSaved == false)
             {
+                Managers.Sound.PlaySfx(ESfxSoundType.SavePoint);
                 isLeftPlayerSaved = true;
                 leftStageParam.isHaveGoggle = true;
                 OnLeftReceiveStageParamCallBack(leftStageParam);
@@ -106,6 +107,7 @@ public class CrossingBridgeStage : SingleStage
 
             if(rightPlayerPosNum == (int)EPlatformType.SavePoint && isRightPlayerSaved == false)
             {
+                Managers.Sound.PlaySfx(ESfxSoundType.SavePoint);
                 isRightPlayerSaved = true;
                 rightStageParam.isHaveGoggle = true;
                 OnRightReceiveStageParamCallBack(rightStageParam);

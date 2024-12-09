@@ -109,6 +109,7 @@ public class SharkAvoidanceStage : MultiStage
         {
             stageParam.BoosterCount = 0;
             OnReceiveStageParamCallBack(stageParam);
+            Managers.Sound.ChangeBGMSpeed(1.2f, 5f);
             return true;
         }
 

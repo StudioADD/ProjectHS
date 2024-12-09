@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class Shark : BaseMonster
 {
@@ -42,7 +43,16 @@ public class Shark : BaseMonster
     {
         if(other.TryGetComponent(out Player player))
         {
-            anim.Play((player.IsBoosterState) ? Define.STRING_Hit : Define.STRING_ATTACK);
+            if(player.IsBoosterState)
+            {
+                anim.Play(STRING_Hit);
+                Managers.Sound.PlaySfx(ESfxSoundType.SharkHit);
+            }
+            else
+            {
+                anim.Play(STRING_ATTACK);
+                Managers.Sound.PlaySfx(ESfxSoundType.PlayerHit);
+            }
 
             player.OnHit(data.SternTime);
         }

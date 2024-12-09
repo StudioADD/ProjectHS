@@ -82,19 +82,19 @@ public static class Define
     {
         None = 0,
 
-        EndStage,
-        EndGame,
-
         // UI_OutGame
-        UI_StartGame,
+        UI_StartGame, // Title씬 Play 버튼 클릭 시
+        UI_EndGame, // Result씬 폭죽 효과랑 같이 나오면 될듯
 
         // UI_InGamePublic
         UI_CountDown, // 3, 2, 1
         UI_CountStart, // Go!
+        UI_EndStage, // Win, Lose
 
         // Stage1 - SharkAvoidanceStage
-        UseBooster,
+        UseBoosterItem,
         PlayerHit,
+        SharkHit,
 
         // Stage2 - CollectingCandyStage
         GetCandyItem,
@@ -103,9 +103,8 @@ public static class Define
 
         // Stage3 - CrossingBridgeStage
         SavePoint,
-        UseTelescope,
+        UseTelescopeItem,
         PlayerJump,
-
 
         Max,
     }
