@@ -8,6 +8,8 @@ using static Define;
 
 public class UI_ResultScene : UI_BaseScene
 {
+    private GameObject firework;
+
     public override bool Init()
     {
         if (base.Init() == false)

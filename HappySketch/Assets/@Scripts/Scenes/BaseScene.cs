@@ -8,7 +8,7 @@ public abstract class BaseScene : InitBase
 {
     public EScene SceneType { get; protected set; } = EScene.Unknown;
 
-    private void Start()
+    protected virtual void Start()
     {
         switch (SceneType)
         {
