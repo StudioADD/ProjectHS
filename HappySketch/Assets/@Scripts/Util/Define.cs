@@ -92,7 +92,6 @@ public static class Define
         UI_EndStage, // Win, Lose
 
         // Stage1 - SharkAvoidanceStage
-        GetBoosterItem,
         UseBoosterItem,
         PlayerHit,
         SharkHit,
