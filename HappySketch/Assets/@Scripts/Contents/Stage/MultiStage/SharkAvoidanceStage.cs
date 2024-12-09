@@ -95,6 +95,7 @@ public class SharkAvoidanceStage : MultiStage
 
     public void OnAddBoosterItem()
     {
+        Managers.Sound.PlaySfx(ESfxSoundType.GetBoosterItem);
         stageParam.BoosterCount++;
 
         if (stageParam.BoosterCount > 3)
