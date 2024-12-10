@@ -62,6 +62,8 @@ public class UI_WinLoseController : UI_BaseObject
 
     private void WinLose(ETeamType teamType, int leftWinCount, int rightWinCount, Action onEnd)
     {
+        Managers.Sound.PlaySfx(Define.ESfxSoundType.UI_EndStage);
+
         switch (teamType)
         {
             case ETeamType.Left:

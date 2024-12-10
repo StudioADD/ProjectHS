@@ -59,6 +59,7 @@ public class UI_GameStartCounter : UI_BaseObject
     {
         for(int i = 0; i < 3; ++i)
         {
+            Managers.Sound.PlaySfx(Define.ESfxSoundType.UI_CountDown);
             leftTime[i].OpenImageEffectUI();
             rightTime[i].OpenImageEffectUI();
 
@@ -68,6 +69,7 @@ public class UI_GameStartCounter : UI_BaseObject
             rightTime[i].CloseTextEffectUI();
         }
 
+        Managers.Sound.PlaySfx(Define.ESfxSoundType.UI_CountStart);
         leftGoImage.OpenImageEffectUI();
         rightGoImage.OpenImageEffectUI();
 
