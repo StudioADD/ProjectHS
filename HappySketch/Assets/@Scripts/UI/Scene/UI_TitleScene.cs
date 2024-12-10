@@ -32,6 +32,7 @@ public class UI_TitleScene : UI_BaseScene
 
     private void OnClickPlayButton()
     {
+        Managers.Sound.PlaySfx(Define.ESfxSoundType.UI_StartGame);
         UIFadeEffectParam param = new UIFadeEffectParam(null, OpenPopup, null);
         Managers.UI.OpenPopupUI<UI_FadeEffectPopup>(param);
     }
