@@ -34,7 +34,7 @@ public enum EPlayerState
 
 public class Player : Creature
 {
-    static float stage2Time = 90f;
+    static float stage2Time = 60f;
 
     [SerializeField]
     private EStageType stageType;
