@@ -121,6 +121,13 @@ public abstract class Creature : BaseObject
     {
         rigid.velocity = Vector3.zero;
     }
+    protected void SetRigidbodyConstraints()
+    {
+        rigid.constraints = RigidbodyConstraints.FreezePositionX |
+                             RigidbodyConstraints.FreezePositionZ |
+                             RigidbodyConstraints.FreezeRotation;
+
+    }
     #endregion
 
 }
