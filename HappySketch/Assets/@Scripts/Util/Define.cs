@@ -90,6 +90,7 @@ public static class Define
         UI_CountDown, // 3, 2, 1
         UI_CountStart, // Go!
         UI_EndStage, // Win, Lose
+        UI_Goal, // Goal
 
         // Stage1 - SharkAvoidanceStage
         GetBoosterItem,

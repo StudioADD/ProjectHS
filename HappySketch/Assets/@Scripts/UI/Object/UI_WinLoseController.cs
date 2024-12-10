@@ -41,7 +41,9 @@ public class UI_WinLoseController : UI_BaseObject
 
     public void EndStage(ETeamType teamType, int leftWinCount, int rightWinCount, Action onEnd)
     {
-        switch(teamType)
+        Managers.Sound.PlaySfx(Define.ESfxSoundType.UI_Goal);
+
+        switch (teamType)
         {
             case ETeamType.Left:
                 leftWinLose.ShowGoalImage();
