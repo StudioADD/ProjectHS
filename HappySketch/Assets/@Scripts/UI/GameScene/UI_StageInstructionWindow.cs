@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class UI_StageInstructionWindow : InitBase
 {
-    bool isAnyKeyEntered = false;
-
     public override bool Init()
     {
         if (base.Init() == false)
