@@ -18,6 +18,7 @@ public class SoundMgr
     Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>(); // 키 : 파일경로
 
     readonly float FADETIME = 1f;
+    readonly float bgmSound = 0.5f;
 
     public void Init()
     {
@@ -165,7 +166,6 @@ public class SoundMgr
         yield return new WaitUntil(() => coStopBGM == null);
 
         float time = 0f;
-        float _currBgmVolume = 1f;
         float currVolume = audioSources[(int)ESoundType.BGM].volume;
 
         string path = $"{LoadPath.SOUND_BGM_PATH}/{bgmType}";
@@ -198,16 +198,16 @@ public class SoundMgr
             audioSources[(int)ESoundType.BGM].Play();
 
             // FadeIn
-            while (currVolume < _currBgmVolume)
+            while (currVolume < bgmSound)
             {
                 time += Time.deltaTime / FADETIME;
-                currVolume = Mathf.Lerp(0, _currBgmVolume, time);
+                currVolume = Mathf.Lerp(0, bgmSound, time);
                 SetBgmAudioSource(currVolume);
 
                 yield return null;
             }
 
-            currVolume = _currBgmVolume;
+            currVolume = bgmSound;
             SetBgmAudioSource(currVolume);
         }
         else // Bgm이 None인 경우
