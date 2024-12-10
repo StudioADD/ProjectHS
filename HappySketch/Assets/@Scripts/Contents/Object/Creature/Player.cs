@@ -680,7 +680,7 @@ public class Player : Creature
         if (onUseGoggleItem != null)
         {
             onUseGoggleItem.Invoke(TeamType);
-            Managers.Sound.PlaySfx(ESfxSoundType.UseTelescopeItem);
+            Managers.Sound.PlaySfx(ESfxSoundType.UseGoggleItem);
         }
 
     }

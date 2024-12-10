@@ -46,6 +46,11 @@ namespace CrossingBridge
             }
         }
 
+        public Vector3 IsLandablePosition(int platformId)
+        {
+            return platformGroupList[platformId].IsLandablePosition();
+        }
+
         public Vector3 GetPlatformPos(int id, ETeamType teamType, EDirection jumpDir = EDirection.Left)
         {
             if (0 > id || id >= platformGroupList.Count)

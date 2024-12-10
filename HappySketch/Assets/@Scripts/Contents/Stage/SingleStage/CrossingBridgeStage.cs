@@ -7,6 +7,9 @@ using CrossingBridge;
 
 public class CrossingBridgeStage : SingleStage
 {
+    [field: SerializeField, ReadOnly]
+    List<(ParticleEffectObject, int)> GoggleItemEffectList = new List<(ParticleEffectObject, int)>();
+
     [SerializeField, ReadOnly] PlatformGroupController platformGroupController;
 
     [field: SerializeField, ReadOnly] protected Transform playerSavePoint;
@@ -89,6 +92,12 @@ public class CrossingBridgeStage : SingleStage
             return;
         }
 
+        for(int i = 0; i < GoggleItemEffectList.Count; i++)
+        {
+            if (GoggleItemEffectList[i].Item2 == platformId)
+                Managers.Resource.Destroy(GoggleItemEffectList[i].Item1.gameObject);
+        }
+
         if (teamType == ETeamType.Left)
         {
             leftPlayerPosNum = platformId;
@@ -162,15 +171,32 @@ public class CrossingBridgeStage : SingleStage
 
     public void OnUseGoggleItem(ETeamType teamType)
     {
-        if (teamType == ETeamType.Left && leftStageParam.isHaveGoggle)
+        if (teamType == ETeamType.Left && leftStageParam.isHaveGoggle
+            && !IsCheckSpecialPlatform(leftPlayerPosNum + 1))
         {
+            SpawnGoggleItemEffect(leftPlayerPosNum + 1);
             leftStageParam.isHaveGoggle = false;
+            OnLeftReceiveStageParamCallBack(leftStageParam);
         }
-        else if (teamType == ETeamType.Right && rightStageParam.isHaveGoggle)
+        else if (teamType == ETeamType.Right && rightStageParam.isHaveGoggle
+            && !IsCheckSpecialPlatform(rightPlayerPosNum + 1))
         {
+            SpawnGoggleItemEffect(rightPlayerPosNum + 1);
             rightStageParam.isHaveGoggle = false;
+            OnRightReceiveStageParamCallBack(rightStageParam);
         }
+    }
 
+    private bool IsCheckSpecialPlatform(int platformId)
+    {
+        return (platformId == (int)EPlatformType.SavePoint || platformId == (int)EPlatformType.EndPoint);
+    }
+
+    private void SpawnGoggleItemEffect(int platformId)
+    {
+        Vector3 spawnPos = platformGroupController.IsLandablePosition(platformId);
+        ParticleEffectObject goggleItemEffect = ObjectCreator.SpawnEffect<ParticleEffectObject>(EEffectType.GoggleItemEffect, spawnPos);
+        GoggleItemEffectList.Add((goggleItemEffect, platformId));
     }
 
     public void OnChangeTarget(ETeamType teamType, EDirection dir)

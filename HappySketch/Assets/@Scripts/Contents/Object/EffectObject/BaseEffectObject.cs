@@ -8,6 +8,7 @@ public enum EEffectType
     ItemBurstEffect = 0,
     CandyItemBurstEffect,
     BoomCandyBurstEffect,
+    GoggleItemEffect,
 
     PlayerStunEffect,
     PlayerBuffEffect,
@@ -15,7 +16,6 @@ public enum EEffectType
 
 public abstract class BaseEffectObject : BaseObject
 {
-
     public override bool Init()
     {
         if (base.Init() == false)
@@ -27,5 +27,4 @@ public abstract class BaseEffectObject : BaseObject
     }
 
     public virtual void SetInfo() { }
-
 }

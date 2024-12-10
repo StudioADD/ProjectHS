@@ -12,7 +12,7 @@ public class GameMgr
 
     ETeamType stageWinnerTeam;
     ETeamType gameWinnerTeam;
-    int currStageId = 0;
+    int currStageId = 2;
 
     public void Init()
     {
@@ -55,7 +55,7 @@ public class GameMgr
     {
         if(currStageId == 0)
         {
-            Debug.LogWarning("currStage가 �팅�� �음");
+            Debug.LogWarning("currStage媛 명똿섏 딆쓬");
             return 0;
         }
 

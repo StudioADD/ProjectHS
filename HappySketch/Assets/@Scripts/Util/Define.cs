@@ -104,7 +104,7 @@ public static class Define
 
         // Stage3 - CrossingBridgeStage
         SavePoint,
-        UseTelescopeItem,
+        UseGoggleItem,
         PlayerJump,
 
         Max,

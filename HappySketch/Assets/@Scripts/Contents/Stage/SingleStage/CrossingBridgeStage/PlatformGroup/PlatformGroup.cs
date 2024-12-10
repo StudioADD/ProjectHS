@@ -46,5 +46,10 @@ namespace CrossingBridge
 #endif
             return Vector3.zero;
         }
+
+        public override Vector3 IsLandablePosition()
+        {
+            return (leftPlatform.IsLandable) ? leftPlatformTr.position : rightPlatformTr.position;
+        }
     }
 }

@@ -29,6 +29,11 @@ namespace CrossingBridge
 #endif
             return platformElement.transform.position;
         }
+
+        public override Vector3 IsLandablePosition()
+        {
+            return platformElement.transform.position;
+        }
     }
 }
     
