@@ -1161,9 +1161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f741180565340b84f9c3d1684ca3f0eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  changeDirTime: 2
-  moveSpeed: 30
-  floatAmplitude: 45
+  floatAmplitude: 15
   floatFrequency: 1
 --- !u!1 &1563257194
 GameObject:
