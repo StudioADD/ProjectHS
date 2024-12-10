@@ -18,7 +18,7 @@ public class SoundMgr
     Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>(); // 키 : 파일경로
 
     readonly float FADETIME = 1f;
-    readonly float bgmSound = 0.1f;
+    readonly float bgmSound = 0.5f;
 
     public void Init()
     {
