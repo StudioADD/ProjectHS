@@ -296,6 +296,21 @@ public class Player : Creature
             {
                 candys.Add(candy.CandyItemType);
                 candy.OnCollected(TeamType);
+                switch(candy.CandyItemType)
+                {
+                    case ECandyItemType.StarCandyItem:
+                        Managers.Sound.PlaySfx(ESfxSoundType.GetStarCandyItem);
+                        break;
+                    case ECandyItemType.BoomCandyItem:
+                        Managers.Sound.PlaySfx(ESfxSoundType.GetBoomCandyItem);
+                        break;
+                    case ECandyItemType.Max:
+                        break;
+                    default:
+                        Managers.Sound.PlaySfx(ESfxSoundType.GetCandyItem);
+                        break;
+
+                }
                 if (candy.CandyItemType == ECandyItemType.StarCandyItem)
                 {
                     _isCandyBuff = true;
@@ -308,6 +323,21 @@ public class Player : Creature
                 if (candy.CandyItemType == ECandyItemType.StarCandyItem)
                 {
                     _isCandyBuff = true;
+                }
+                switch (candy.CandyItemType)
+                {
+                    case ECandyItemType.StarCandyItem:
+                        Managers.Sound.PlaySfx(ESfxSoundType.GetStarCandyItem);
+                        break;
+                    case ECandyItemType.BoomCandyItem:
+                        Managers.Sound.PlaySfx(ESfxSoundType.GetBoomCandyItem);
+                        break;
+                    case ECandyItemType.Max:
+                        break;
+                    default:
+                        Managers.Sound.PlaySfx(ESfxSoundType.GetCandyItem);
+                        break;
+
                 }
             }
 
@@ -530,6 +560,7 @@ public class Player : Creature
 
         if (IsBoosterState)
         {
+            Managers.Sound.PlaySfx(ESfxSoundType.UseBoosterItem);
             BuffEffect.PlayEffect();
             boosterTimer = 0;
             inputCooldown = 0.25f;
@@ -649,6 +680,7 @@ public class Player : Creature
         if (onUseGoggleItem != null)
         {
             onUseGoggleItem.Invoke(TeamType);
+            Managers.Sound.PlaySfx(ESfxSoundType.UseTelescopeItem);
         }
 
     }
@@ -1049,7 +1081,7 @@ public class Player : Creature
 
     protected virtual void JumpUpStateEnter()
     {
-
+        
         SetPlayerForward();
     }
 
@@ -1081,6 +1113,7 @@ public class Player : Creature
     protected virtual void JumpStateEnter()
     {
         beforePosition = transform.position;
+        Managers.Sound.PlaySfx(ESfxSoundType.PlayerJump);
     }
 
     protected virtual void UpdateJumpState()
