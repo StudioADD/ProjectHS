@@ -207,16 +207,17 @@ public class Player : Creature
         {
             case EStageType.SharkAvoidance:
                 SetSharkAvoidanceEffet();
+                
                 break;
             case EStageType.CollectingCandy:
                 PlayerState = EPlayerState.Run;
                 //임시 스테이지 endpoint로
                 targetPosition = transform.position;
                 targetPosition.z = 0;
-
                 SetCollectingCandyEffet();
-                break; // 추후 스테이지2 나오면  바꿔야함
+                break; 
             case EStageType.CrossingBridge:
+
 
                 break;
             default:
@@ -224,6 +225,7 @@ public class Player : Creature
                 break;
 
         }
+        SetRigidbodyConstraints();
         IsPlayerInputControll = true;
     }
 
