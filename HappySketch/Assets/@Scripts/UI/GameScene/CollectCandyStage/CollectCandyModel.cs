@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ public class CollectCandyModel : ModelBase
     }
 
     private const float SCORE_COROUTINE_TIME = 1;
+
+    private int totalTime;
 
     private int second = 0;
     private int minute = 0;
@@ -54,8 +57,20 @@ public class CollectCandyModel : ModelBase
         return string.Format("{0:D2}:{1:D2}", minute, second);
     }
 
+    public float GetTimeRatio()
+    {
+        int currTime = minute * 60 + second;
+        float ratio = 1f - (float)currTime / totalTime;
+
+        Debug.Log(ratio);
+
+        return ratio;
+    }
+
     public void StartTimer(int seconds, Action onEndTimer = null)
     {
+        totalTime = seconds;
+
         minute = seconds / 60;
         second = seconds % 60;
 

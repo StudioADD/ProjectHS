@@ -16,7 +16,7 @@ public class UI_WinLoseController : UI_BaseObject
     [SerializeField, ReadOnly]
     private Image backGround;
 
-    private const float FADE_TIME = 1.5f;
+    private const float FADE_TIME = 2f;
 
     private void Reset()
     {

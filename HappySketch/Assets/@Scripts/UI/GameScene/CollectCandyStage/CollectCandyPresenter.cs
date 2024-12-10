@@ -89,6 +89,7 @@ public class CollectCandyPresenter : PresenterBase
             if (model is CollectCandyModel candyModel)
             {
                 candyView.UpdateTime(candyModel.GetFormattedTime());
+                candyView.UpdateTimeRatio(candyModel.GetTimeRatio());
             }
         }
     }
