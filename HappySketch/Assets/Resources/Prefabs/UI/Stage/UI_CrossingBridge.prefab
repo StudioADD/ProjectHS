@@ -129,7 +129,7 @@ MonoBehaviour:
   - {fileID: 807378966661107036}
   - {fileID: 1406804079938993}
   - {fileID: 915913823055425615}
-  arrowImage: {fileID: 0}
+  effect: {fileID: 1406804079938993}
 --- !u!1 &2098605423300688443
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 2356554249157413516}
   - component: {fileID: 6724183193011663607}
   - component: {fileID: 1406804079938993}
-  - component: {fileID: 3754867605329793747}
+  - component: {fileID: 4510139717974177925}
   m_Layer: 5
   m_Name: goggle_activate_effect
   m_TagString: Untagged
@@ -206,7 +206,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3754867605329793747
+--- !u!114 &4510139717974177925
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -215,11 +215,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2098605423300688443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f741180565340b84f9c3d1684ca3f0eb, type: 3}
+  m_Script: {fileID: 11500000, guid: 98b80a6efe228274ca324958df7288bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  changeDirTime: 0
-  moveSpeed: 0
+  rotSpeed: 20
 --- !u!1 &5610797199915011320
 GameObject:
   m_ObjectHideFlags: 0

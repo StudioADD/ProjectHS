@@ -12,7 +12,7 @@ public class GameMgr
 
     ETeamType stageWinnerTeam;
     ETeamType gameWinnerTeam;
-    int currStageId = 0;
+    int currStageId = 2;
 
     public void Init()
     {

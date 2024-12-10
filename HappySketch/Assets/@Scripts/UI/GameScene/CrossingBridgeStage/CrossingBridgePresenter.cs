@@ -59,6 +59,9 @@ public class CrossingBridgePresenter : PresenterBase
                 }
 
                 crossingBridgeModel.SetColor(crossingBridgeView.GetColor(), targetColor);
+
+                if (isActive) crossingBridgeView.RotateEffect();
+                else crossingBridgeView.StopEffect();
             }
         }
     }
