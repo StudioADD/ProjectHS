@@ -36,9 +36,10 @@ public class InputMgr : MonoBehaviour
     public event Action OnVKeyEntered;
     public event Action OnNum1KeyEntered;
     public event Action OnNum2KeyEntered;
-    public event Action OnEndKeyEntered;
-    public event Action OnPageDownKeyEntered;
+    public event Action OnEnterKeyEntered;
+    public event Action OnRightShiftKeyEntered;
     public event Action OnAnyKeyEntered;
+    
     public void Init()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -125,14 +126,14 @@ public class InputMgr : MonoBehaviour
     {
         OnNum2KeyEntered?.Invoke();
     }
-    public void OnEndKey()
+    public void OnEnterKey()
     {
-        OnEndKeyEntered?.Invoke();
+        OnEnterKeyEntered?.Invoke();
 
     }
-    public void OnPageDownKey()
+    public void OnRightShiftKey()
     {
-        OnPageDownKeyEntered?.Invoke();
+        OnRightShiftKeyEntered?.Invoke();
 
     }
     public void OnAnyKey()

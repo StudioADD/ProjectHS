@@ -474,7 +474,7 @@ public class Player : Creature
         Managers.Input.OnSpaceKeyEntered -= OnBoosterKeySharkAvoidance;
 
         Managers.Input.OnWASDKeyEntered -= OnArrowKeySharkAvoidance;
-        Managers.Input.OnEndKeyEntered -= OnBoosterKeySharkAvoidance;
+        Managers.Input.OnEnterKeyEntered -= OnBoosterKeySharkAvoidance;
 
         Managers.Input.OnWASDKeyEntered -= OnArrowKeyStage2;
 
@@ -485,8 +485,8 @@ public class Player : Creature
         Managers.Input.OnFKeyEntered -= OnUseGoggleItem;
 
         Managers.Input.OnArrowKeyEntered -= OnArrowKeyStage3;
-        Managers.Input.OnEndKeyEntered -= OnJumpKey;
-        Managers.Input.OnPageDownKeyEntered -= OnUseGoggleItem;
+        Managers.Input.OnRightShiftKeyEntered -= OnJumpKey;
+        Managers.Input.OnEnterKeyEntered -= OnUseGoggleItem;
     }
 
     #region SharkAvoidance
@@ -503,7 +503,7 @@ public class Player : Creature
             else
             {
                 Managers.Input.OnArrowKeyEntered += OnArrowKeySharkAvoidance;
-                Managers.Input.OnEndKeyEntered += OnBoosterKeySharkAvoidance;
+                Managers.Input.OnEnterKeyEntered += OnBoosterKeySharkAvoidance;
             }
         }
     }
@@ -629,8 +629,8 @@ public class Player : Creature
             else
             {
                 Managers.Input.OnArrowKeyEntered += OnArrowKeyStage3;
-                Managers.Input.OnEndKeyEntered += OnJumpKey;
-                Managers.Input.OnPageDownKeyEntered += OnUseGoggleItem;
+                Managers.Input.OnRightShiftKeyEntered += OnJumpKey;
+                Managers.Input.OnEnterKeyEntered += OnUseGoggleItem;
             }
         }
 
