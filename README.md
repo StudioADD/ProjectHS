@@ -17,3 +17,29 @@
 > **프로그래머(3)** : 허준혁(Game Flow, Stage), 라용엽(Player), 엄희용(UI)
 
 ---
+
+# 스테이지 흐름도
+
+![image](https://github.com/user-attachments/assets/11af4c32-d412-4c47-8978-eab836b5b87f)
+
+>
+
+- 설명 블라블라
+
+---
+
+# 스테이지 구조도
+
+![image](https://github.com/user-attachments/assets/8cc2ef99-737a-4a22-a317-a60782530ad5)
+
+> 스테이지를 멀티, 싱글 스테이지로 분리
+
+- 싱글 스테이지 : 하나의 스테이지에 2명의 플레이어가 소환되어 플레이하는 환경
+
+- 멀티 스테이지 : 동일한 스테이지 2개의 각각의 플레이어가 소환되어 플레이하는 환경 
+
+- (StageName)스테이지 : 스테이지 이름의 namespace로 묶어 세부 콘텐츠를 구현
+
+- 각 스테이지와 상호작용이 필요한 객체는 StageParam을 통해 정보를 주고 받음
+
+---
