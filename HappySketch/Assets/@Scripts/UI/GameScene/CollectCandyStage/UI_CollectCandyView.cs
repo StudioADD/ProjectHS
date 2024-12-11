@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using System;
 using static Define;
 
-public class CollectCandyView : ViewBase
+public class UI_CollectCandyView : UI_ViewBase
 {
     [SerializeField, ReadOnly]
     private TextMeshProUGUI time;

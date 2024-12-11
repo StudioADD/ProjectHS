@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Define;
 
-public abstract class ModelBase
+public abstract class UI_ModelBase
 {
     public abstract void Clear();
 }

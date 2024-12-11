@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
-public class CrossingBridgePresenter : PresenterBase
+public class UI_CrossingBridgePresenter : UI_PresenterBase
 {
-    public CrossingBridgePresenter(ViewBase view, ModelBase model, ETeamType teamType) : base(view, model, teamType)
+    public UI_CrossingBridgePresenter(UI_ViewBase view, UI_ModelBase model, ETeamType teamType) : base(view, model, teamType)
     {
-        if(model is CrossingBridgeModel crossingBridgeModel)
+        if(model is UI_CrossingBridgeModel crossingBridgeModel)
         {
             crossingBridgeModel.OnColorChangedEvent -= SetColor;
             crossingBridgeModel.OnColorChangedEvent += SetColor;
@@ -22,7 +22,7 @@ public class CrossingBridgePresenter : PresenterBase
             // 내 팀타입 필요 (희용)
             // singleStage.OnLeftReceiveStageParam
 
-            switch (teamType)
+            switch (TeamType)
             {
                 case ETeamType.Left:
                     singleStage.OnLeftReceiveStageParam -= OnStageInfoUpdate;
@@ -47,9 +47,9 @@ public class CrossingBridgePresenter : PresenterBase
 
     public void SetIsActive(bool isActive)
     {
-        if(model is CrossingBridgeModel crossingBridgeModel)
+        if(model is UI_CrossingBridgeModel crossingBridgeModel)
         {
-            if(view is CrossingBridgeView crossingBridgeView)
+            if(view is UI_CrossingBridgeView crossingBridgeView)
             {
                 Color targetColor = Color.white;
 
@@ -68,7 +68,7 @@ public class CrossingBridgePresenter : PresenterBase
 
     private void SetColor(Color color)
     {
-        if(view is CrossingBridgeView crossingBridgeView)
+        if(view is UI_CrossingBridgeView crossingBridgeView)
         {
             crossingBridgeView.SetColor(color);
         }
@@ -76,7 +76,7 @@ public class CrossingBridgePresenter : PresenterBase
 
     public override void Clear()
     {
-        if (model is CrossingBridgeModel crossingBridgeModel)
+        if (model is UI_CrossingBridgeModel crossingBridgeModel)
         {
             crossingBridgeModel.OnColorChangedEvent -= SetColor;
         }

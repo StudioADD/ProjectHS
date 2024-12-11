@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static Define;
 
-public class SharkAvoidanceView : ViewBase
+public class UI_SharkAvoidanceView : UI_ViewBase
 {
     // Progress
     [SerializeField]

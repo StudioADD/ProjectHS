@@ -4,23 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
-public abstract class PresenterBase
+public abstract class UI_PresenterBase
 {
-    protected ETeamType teamType { get; private set; }
+    protected ETeamType TeamType { get; private set; }
 
-    protected ViewBase view;
-    protected ModelBase model;
+    protected UI_ViewBase view;
+    protected UI_ModelBase model;
 
-    public PresenterBase(ViewBase view, ModelBase model, ETeamType teamType)
+    public UI_PresenterBase(UI_ViewBase view, UI_ModelBase model, ETeamType teamType)
     {
         this.view = view;
         this.model = model;
-        this.teamType = teamType;
-
-        view.SetPresenter(this);
+        TeamType = teamType;
     }
 
-    public ModelBase GetModel() { return model; }
+    public UI_ModelBase GetModel() { return model; }
 
     public abstract void OnStageInfoUpdate(StageParam param);
 

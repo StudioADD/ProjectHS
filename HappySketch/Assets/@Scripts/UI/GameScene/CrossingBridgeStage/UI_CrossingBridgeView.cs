@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CrossingBridgeView : ViewBase
+public class UI_CrossingBridgeView : UI_ViewBase
 {
     [SerializeField, ReadOnly]
     private Image[] goggleImages;

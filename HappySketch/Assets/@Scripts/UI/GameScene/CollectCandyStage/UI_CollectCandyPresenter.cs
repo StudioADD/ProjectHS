@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using static Define;
 
-public class CollectCandyPresenter : PresenterBase
+public class UI_CollectCandyPresenter : UI_PresenterBase
 {
-    public CollectCandyPresenter(ViewBase view, ModelBase model, ETeamType teamType) : base(view, model, teamType)
+    public UI_CollectCandyPresenter(UI_ViewBase view, UI_ModelBase model, ETeamType teamType) : base(view, model, teamType)
     {
-        if(model is CollectCandyModel candyModel)
+        if(model is UI_CollectCandyModel candyModel)
         {
             candyModel.OnTimeChanged -= SetTime;
             candyModel.OnTimeChanged += SetTime;
@@ -26,8 +26,6 @@ public class CollectCandyPresenter : PresenterBase
                     break;
             }
         }
-
-        view.SetPresenter(this);
     }
 
     public override void ConnectStageEvents(BaseStage stage)
@@ -51,7 +49,7 @@ public class CollectCandyPresenter : PresenterBase
 
     public void SetItemCount(int[] itemCounts)
     {
-        if (view is CollectCandyView candyView)
+        if (view is UI_CollectCandyView candyView)
         {
             candyView.UpdateItemCount(itemCounts);
         }
@@ -59,9 +57,9 @@ public class CollectCandyPresenter : PresenterBase
 
     public void SetScore(int score)
     {
-        if (model is CollectCandyModel candyModel)
+        if (model is UI_CollectCandyModel candyModel)
         {
-            switch(teamType)
+            switch(TeamType)
             {
                 case ETeamType.Left:
                     candyModel.SetLeftScore(score);
@@ -76,7 +74,7 @@ public class CollectCandyPresenter : PresenterBase
 
     public void SetScoreView(int score)
     {
-        if(view is CollectCandyView candyView)
+        if(view is UI_CollectCandyView candyView)
         {
             candyView.UpdateScore(score);
         }
@@ -84,9 +82,9 @@ public class CollectCandyPresenter : PresenterBase
 
     public void SetTime()
     {
-        if(view is CollectCandyView candyView)
+        if(view is UI_CollectCandyView candyView)
         {
-            if (model is CollectCandyModel candyModel)
+            if (model is UI_CollectCandyModel candyModel)
             {
                 candyView.UpdateTime(candyModel.GetFormattedTime());
                 candyView.UpdateTimeRatio(candyModel.GetTimeRatio());
@@ -98,11 +96,11 @@ public class CollectCandyPresenter : PresenterBase
     {
         base.Clear();
 
-        if (model is CollectCandyModel candyModel)
+        if (model is UI_CollectCandyModel candyModel)
         {
             candyModel.OnTimeChanged -= SetTime;
 
-            switch (teamType)
+            switch (TeamType)
             {
                 case ETeamType.Left:
                     candyModel.OnLeftScoreChanged -= SetScoreView;

@@ -10,8 +10,8 @@ public class UI_GameScene : UI_BaseScene
 {
     [SerializeField, ReadOnly] UI_StageInstructionWindow stageInstructionWindow;
 
-    private PresenterBase currPresentLeft;
-    private PresenterBase currPresentRight;
+    private UI_PresenterBase currPresentLeft;
+    private UI_PresenterBase currPresentRight;
 
     private UI_WinLoseController winLoseController;
     private UI_ScorePool scorePool;
@@ -61,7 +61,7 @@ public class UI_GameScene : UI_BaseScene
         currPresentRight?.Clear();
     }
 
-    public ModelBase GetStageUI()
+    public UI_ModelBase GetStageUI()
     {
         return currPresentLeft.GetModel();
     }  
@@ -90,26 +90,26 @@ public class UI_GameScene : UI_BaseScene
         rectTransform.pivot = anchor;
         rectTransform.anchoredPosition = Vector3.zero;
 
-        ViewBase leftView = leftObject.GetComponent<ViewBase>();
-        ViewBase rightView = rightObject.GetComponent<ViewBase>();
+        UI_ViewBase leftView = leftObject.GetComponent<UI_ViewBase>();
+        UI_ViewBase rightView = rightObject.GetComponent<UI_ViewBase>();
 
         switch (currStageType)
         {
             case EStageType.SharkAvoidance:
-                SharkAvoidanceModel sharkModel = new SharkAvoidanceModel();
-                currPresentLeft = new SharkAvoidancePresenter(leftView, sharkModel, ETeamType.Left);
-                currPresentRight = new SharkAvoidancePresenter(rightView, sharkModel, ETeamType.Right);
+                UI_SharkAvoidanceModel sharkModel = new UI_SharkAvoidanceModel();
+                currPresentLeft = new UI_SharkAvoidancePresenter(leftView, sharkModel, ETeamType.Left);
+                currPresentRight = new UI_SharkAvoidancePresenter(rightView, sharkModel, ETeamType.Right);
                 break;
 
             case EStageType.CollectingCandy:
-                CollectCandyModel candyModel = new CollectCandyModel();
-                currPresentLeft = new CollectCandyPresenter(leftView, candyModel, ETeamType.Left);
-                currPresentRight = new CollectCandyPresenter(rightView, candyModel, ETeamType.Right);
+                UI_CollectCandyModel candyModel = new UI_CollectCandyModel();
+                currPresentLeft = new UI_CollectCandyPresenter(leftView, candyModel, ETeamType.Left);
+                currPresentRight = new UI_CollectCandyPresenter(rightView, candyModel, ETeamType.Right);
                 break;
 
             case EStageType.CrossingBridge:
-                currPresentLeft = new CrossingBridgePresenter(leftView, new CrossingBridgeModel(), ETeamType.Left);
-                currPresentRight = new CrossingBridgePresenter(rightView, new CrossingBridgeModel(), ETeamType.Right);
+                currPresentLeft = new UI_CrossingBridgePresenter(leftView, new UI_CrossingBridgeModel(), ETeamType.Left);
+                currPresentRight = new UI_CrossingBridgePresenter(rightView, new UI_CrossingBridgeModel(), ETeamType.Right);
                 break;
         }
     }

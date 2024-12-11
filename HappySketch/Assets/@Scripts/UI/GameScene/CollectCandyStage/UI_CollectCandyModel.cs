@@ -9,7 +9,7 @@ using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using static Define; 
 
-public class CollectCandyModel : ModelBase
+public class UI_CollectCandyModel : UI_ModelBase
 {
     private class Score
     {
@@ -42,7 +42,7 @@ public class CollectCandyModel : ModelBase
     private Coroutine leftScoreCoroutine;
     private Coroutine rightScoreCoroutine;
 
-    public CollectCandyModel() : base()
+    public UI_CollectCandyModel() : base()
     {
         
     }

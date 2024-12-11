@@ -4,15 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class ViewBase : UI_BaseObject
+public abstract class UI_ViewBase : UI_BaseObject
 {
-    protected PresenterBase presenter;
-
-    public void SetPresenter(PresenterBase presenter)
-    {
-        this.presenter = presenter;
-    }
-
     public void FadeOut(Image fadeOutImage, float duration)
     {
         StartCoroutine(FadeOutCoroutine(fadeOutImage, duration));

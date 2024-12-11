@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Define;
 
-public class SharkAvoidancePresenter : PresenterBase
+public class UI_SharkAvoidancePresenter : UI_PresenterBase
 {
     private Camera camera;
 
-    public SharkAvoidancePresenter(ViewBase view, ModelBase model, ETeamType teamType) : base(view, model, teamType)
+    public UI_SharkAvoidancePresenter(UI_ViewBase view, UI_ModelBase model, ETeamType teamType) : base(view, model, teamType)
     {
-        if(model is SharkAvoidanceModel sharkModel)
+        if(model is UI_SharkAvoidanceModel sharkModel)
         {
             sharkModel.OnLeftRatioChanged -= SetLeftRatio;
             sharkModel.OnLeftRatioChanged += SetLeftRatio;
@@ -61,9 +61,9 @@ public class SharkAvoidancePresenter : PresenterBase
 
     private void SetItemCount(int itemCount)
     {
-        if (model is SharkAvoidanceModel sharkModel)
+        if (model is UI_SharkAvoidanceModel sharkModel)
         {
-            switch(teamType)
+            switch(TeamType)
             {
                 case ETeamType.Left:
                     sharkModel.SetLeftItemCount(itemCount);
@@ -75,7 +75,7 @@ public class SharkAvoidancePresenter : PresenterBase
             }
         }
 
-        if (view is SharkAvoidanceView sharkView)
+        if (view is UI_SharkAvoidanceView sharkView)
             sharkView.UpdateItemCount(itemCount);
     }
 
@@ -85,7 +85,7 @@ public class SharkAvoidancePresenter : PresenterBase
     /// <param name="ratio">비율: 0 ~ 1 </param>
     private void SetProgressRatio(ETeamType teamType, float ratio)
     {
-        if (model is SharkAvoidanceModel sharkModel)
+        if (model is UI_SharkAvoidanceModel sharkModel)
         {
             switch (teamType)
             {
@@ -102,25 +102,25 @@ public class SharkAvoidancePresenter : PresenterBase
 
     private void SetProgressRatio(float ratio)
     {
-        if (view is SharkAvoidanceView sharkView)
+        if (view is UI_SharkAvoidanceView sharkView)
             sharkView.UpdateProgressingBarRatio(ratio);
     }
 
     private void SetLeftRatio(float ratio)
     {
-        if (view is SharkAvoidanceView sharkView)
+        if (view is UI_SharkAvoidanceView sharkView)
             sharkView.UpdateLeftRatio(ratio);
     }
 
     private void SetRightRatio(float ratio)
     {
-        if (view is SharkAvoidanceView sharkView)
+        if (view is UI_SharkAvoidanceView sharkView)
             sharkView.UpdateRightRatio(ratio);
     }
 
     private void SetItemRatio(float ratio)
     {
-        if (view is SharkAvoidanceView sharkView)
+        if (view is UI_SharkAvoidanceView sharkView)
             sharkView.UpdateItemRatio(ratio);
     }
 
@@ -128,12 +128,12 @@ public class SharkAvoidancePresenter : PresenterBase
     {
         base.Clear();
 
-        if(model is SharkAvoidanceModel sharkModel)
+        if(model is UI_SharkAvoidanceModel sharkModel)
         {
             sharkModel.OnLeftRatioChanged -= SetLeftRatio;
             sharkModel.OnRightRatioChanged -= SetRightRatio;
 
-            switch (teamType)
+            switch (TeamType)
             {
                 case ETeamType.Left:
                     sharkModel.OnLeftRatioChanged -= SetProgressRatio;

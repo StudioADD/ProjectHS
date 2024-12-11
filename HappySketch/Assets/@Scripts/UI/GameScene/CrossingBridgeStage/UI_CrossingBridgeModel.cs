@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using static Define;
 
-public class CrossingBridgeModel : ModelBase
+public class UI_CrossingBridgeModel : UI_ModelBase
 {
     private const float COLOR_TIME = 2f;
 
     public event UnityAction<Color> OnColorChangedEvent;
     private Coroutine colorCoroutine;
 
-    public CrossingBridgeModel() : base()
+    public UI_CrossingBridgeModel() : base()
     {
 
     }

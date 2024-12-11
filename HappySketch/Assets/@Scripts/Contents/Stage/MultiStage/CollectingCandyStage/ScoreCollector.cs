@@ -24,7 +24,7 @@ namespace CollectingCandy
         public void StartStage()
         {
             if (Managers.UI.SceneUI is UI_GameScene uiGameScene &&
-                uiGameScene.GetStageUI() is CollectCandyModel uiCollectCandy)
+                uiGameScene.GetStageUI() is UI_CollectCandyModel uiCollectCandy)
             {
                 uiCollectCandy.StartTimer(60, OnGameTimerEndCallBack);
             }

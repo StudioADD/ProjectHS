@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class SharkAvoidanceModel : ModelBase
+public class UI_SharkAvoidanceModel : UI_ModelBase
 {
     private enum CoroutineType
     {
@@ -45,7 +45,7 @@ public class SharkAvoidanceModel : ModelBase
 
     private const float PROGRESS_TIME = 3f;
 
-    public SharkAvoidanceModel() : base()
+    public UI_SharkAvoidanceModel() : base()
     {
         
     }
