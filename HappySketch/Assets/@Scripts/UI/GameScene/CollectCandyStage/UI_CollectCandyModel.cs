@@ -62,8 +62,6 @@ public class UI_CollectCandyModel : UI_ModelBase
         int currTime = minute * 60 + second;
         float ratio = 1f - (float)currTime / totalTime;
 
-        Debug.Log(ratio);
-
         return ratio;
     }
 
