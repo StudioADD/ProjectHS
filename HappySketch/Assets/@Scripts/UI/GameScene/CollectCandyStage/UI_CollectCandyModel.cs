@@ -30,7 +30,7 @@ public class UI_CollectCandyModel : UI_ModelBase
     private int second = 0;
     private int minute = 0;
 
-    public event UnityAction OnTimeChanged;
+    public event Action OnTimeChanged;
     private Coroutine timeCoroutine;
 
     private Score leftScore = new Score();
@@ -45,11 +45,6 @@ public class UI_CollectCandyModel : UI_ModelBase
     public UI_CollectCandyModel() : base()
     {
         
-    }
-
-    public Vector3 GetUIPos(Camera camera, Vector3 worldPos)
-    {
-        return camera.WorldToViewportPoint(worldPos);
     }
 
     public string GetFormattedTime()

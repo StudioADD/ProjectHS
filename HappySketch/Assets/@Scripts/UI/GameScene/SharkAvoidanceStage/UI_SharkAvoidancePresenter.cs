@@ -5,8 +5,6 @@ using static Define;
 
 public class UI_SharkAvoidancePresenter : UI_PresenterBase
 {
-    private Camera camera;
-
     public UI_SharkAvoidancePresenter(UI_ViewBase view, UI_ModelBase model, ETeamType teamType) : base(view, model, teamType)
     {
         if(model is UI_SharkAvoidanceModel sharkModel)

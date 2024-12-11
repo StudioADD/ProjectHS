@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -38,10 +39,10 @@ public class UI_SharkAvoidanceModel : UI_ModelBase
 
     private Coroutine[] coroutines = new Coroutine[(int)CoroutineType.Last];
 
-    public event UnityAction<float> OnLeftRatioChanged;
-    public event UnityAction<float> OnRightRatioChanged;
-    public event UnityAction<float> OnLeftItemRatioChanged;
-    public event UnityAction<float> OnRightItemRatioChanged;
+    public event Action<float> OnLeftRatioChanged;
+    public event Action<float> OnRightRatioChanged;
+    public event Action<float> OnLeftItemRatioChanged;
+    public event Action<float> OnRightItemRatioChanged;
 
     private const float PROGRESS_TIME = 3f;
 
@@ -96,7 +97,7 @@ public class UI_SharkAvoidanceModel : UI_ModelBase
         coroutines[(int)CoroutineType.Right] = CoroutineHelper.StartCoroutine(SetProgressCoroutine(rightRatio, OnRightRatioChanged, CoroutineType.Right));
     }
 
-    private IEnumerator SetProgressCoroutine(Ratio ratio, UnityAction<float> onRatioChanged, CoroutineType coroutineType)
+    private IEnumerator SetProgressCoroutine(Ratio ratio, Action<float> onRatioChanged, CoroutineType coroutineType)
     {
         float elapsed = 0f;
 

@@ -45,7 +45,7 @@ public class UI_CrossingBridgePresenter : UI_PresenterBase
         }
     }
 
-    public void SetIsActive(bool isActive)
+    private void SetIsActive(bool isActive)
     {
         if(model is UI_CrossingBridgeModel crossingBridgeModel)
         {

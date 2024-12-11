@@ -47,7 +47,7 @@ public class UI_CollectCandyPresenter : UI_PresenterBase
         }
     }
 
-    public void SetItemCount(int[] itemCounts)
+    private void SetItemCount(int[] itemCounts)
     {
         if (view is UI_CollectCandyView candyView)
         {
@@ -55,7 +55,7 @@ public class UI_CollectCandyPresenter : UI_PresenterBase
         }
     }
 
-    public void SetScore(int score)
+    private void SetScore(int score)
     {
         if (model is UI_CollectCandyModel candyModel)
         {
@@ -72,7 +72,7 @@ public class UI_CollectCandyPresenter : UI_PresenterBase
         }
     }
 
-    public void SetScoreView(int score)
+    private void SetScoreView(int score)
     {
         if(view is UI_CollectCandyView candyView)
         {
@@ -80,7 +80,7 @@ public class UI_CollectCandyPresenter : UI_PresenterBase
         }
     }
 
-    public void SetTime()
+    private void SetTime()
     {
         if(view is UI_CollectCandyView candyView)
         {
