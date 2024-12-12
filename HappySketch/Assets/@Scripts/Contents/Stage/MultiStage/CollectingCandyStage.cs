@@ -83,8 +83,6 @@ public class CollectingCandyStage : MultiStage
 
     public override void ConnectEvents(Action<ETeamType> onEndGameCallBack)
     {
-        base.ConnectEvents(onEndGameCallBack);
-
         player.ConnectCollectingCandyStage(OnCollectCandyItems, OnChangeScoreBuff);
 
         if (scoreCollector != null)

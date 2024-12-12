@@ -7,14 +7,6 @@ public class SingleStageController : BaseStageController
 {
     [SerializeField, ReadOnly] SingleStage singleStage = null;
 
-    public override bool Init()
-    {
-        if (base.Init() == false)
-            return false;
-
-        return true;
-    }
-
     public override void SetInfo(EStageType stageType, Player leftPlayer, Player rightPlayer)
     {
         base.SetInfo(stageType, leftPlayer, rightPlayer);
@@ -52,10 +44,5 @@ public class SingleStageController : BaseStageController
     public override Vector3 GetStagePlayerStartPos(ETeamType teamType)
     {
         return singleStage.GetStartPoint(teamType);
-    }
-
-    public void Clear()
-    {
-
     }
 }

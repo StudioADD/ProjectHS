@@ -12,14 +12,6 @@ public class MultiStageController : BaseStageController
 
     const int STAGE_DISTANCE = 5000;
     
-    public override bool Init()
-    {
-        if (base.Init() == false)
-            return false;
-        
-        return true;
-    }
-
     public override void SetInfo(EStageType stageType, Player leftPlayer, Player rightPlayer)
     {
         base.SetInfo(stageType, leftPlayer, rightPlayer);
@@ -45,7 +37,7 @@ public class MultiStageController : BaseStageController
         leftStage.EndStage(winnerTeam);
         rightStage.EndStage(winnerTeam);
     }
-    
+     
     public override void StartStage()
     {
         leftStage.StartStage();
@@ -74,10 +66,4 @@ public class MultiStageController : BaseStageController
         Debug.LogWarning("알 수 없는 팀이 들어옴");
         return Vector3.zero;
     }
-
-    public void Clear()
-    {
-
-    }
-
 }

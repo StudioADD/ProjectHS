@@ -31,14 +31,6 @@ public abstract class SingleStage : BaseStage
         OnRightReceiveStageParam?.Invoke(stageParam);
     }
 
-    public override bool Init()
-    {
-        if (base.Init() == false)
-            return false;
-
-        return true;
-    }
-
     public virtual void SetInfo(Player leftPlayer, Player rightPlayer)
     {
         StageType = Managers.Game.GetCurrStageType();

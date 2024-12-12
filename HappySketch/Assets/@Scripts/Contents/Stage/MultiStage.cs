@@ -22,14 +22,6 @@ public abstract class MultiStage : BaseStage
         OnReceiveStageParam?.Invoke(stageParam);
     }
 
-    public override bool Init()
-    {
-        if (base.Init() == false)
-            return false;
-
-        return true;
-    }
-
     public virtual void SetInfo(Player player)
     {
         StageType = Managers.Game.GetCurrStageType();
@@ -48,16 +40,6 @@ public abstract class MultiStage : BaseStage
         player.OnEndStage(player.TeamType == winnerTeam);
     }
 
-    public virtual void ConnectEvents(Action<ETeamType> onEndGameCallBack)
-    {
-
-    }
-
+    public abstract void ConnectEvents(Action<ETeamType> onEndGameCallBack);
     public Vector3 GetStartPoint() => playerStartPoint.position;
-
-    protected Coroutine coReceiveStageParam = null;
-    protected virtual IEnumerator CoReceiveStageParam() 
-    {     
-        yield return null;
-    }
 }

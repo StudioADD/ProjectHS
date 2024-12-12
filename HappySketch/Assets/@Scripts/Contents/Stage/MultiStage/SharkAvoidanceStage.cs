@@ -142,7 +142,8 @@ public class SharkAvoidanceStage : MultiStage
         coSpawnMonster = null;
     }
 
-    protected override IEnumerator CoReceiveStageParam()
+    protected Coroutine coReceiveStageParam = null;
+    protected IEnumerator CoReceiveStageParam()
     {
         while(Managers.Game.IsGamePlay)
         {
