@@ -95,7 +95,10 @@ public class CrossingBridgeStage : SingleStage
         for(int i = 0; i < GoggleItemEffectList.Count; i++)
         {
             if (GoggleItemEffectList[i].Item2 == platformId)
+            {
                 Managers.Resource.Destroy(GoggleItemEffectList[i].Item1.gameObject);
+                GoggleItemEffectList.RemoveAt(i);
+            }
         }
 
         if (teamType == ETeamType.Left)
