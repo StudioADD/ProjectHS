@@ -24,7 +24,7 @@
 
 > **멀티 스테이지** : 동일한 스테이지 2개의 각각의 플레이어가 소환되어 플레이하는 환경
 
-![image](https://github.com/user-attachments/assets/ccfad4bc-f678-4514-86e5-629756027f66)
+![image](https://github.com/user-attachments/assets/03848688-5096-40f0-8676-305d7a28c334)
 
 ---
 
