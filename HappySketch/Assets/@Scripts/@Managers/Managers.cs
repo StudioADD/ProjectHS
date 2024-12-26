@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Resources;
 using System.Runtime.Serialization;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Managers : MonoBehaviour
 {

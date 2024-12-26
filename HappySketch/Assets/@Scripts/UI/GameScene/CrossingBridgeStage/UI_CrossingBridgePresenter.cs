@@ -25,19 +25,19 @@ public class UI_CrossingBridgePresenter : UI_PresenterBase
             switch (TeamType)
             {
                 case ETeamType.Left:
-                    singleStage.OnLeftReceiveStageParam -= OnStageInfoUpdate;
-                    singleStage.OnLeftReceiveStageParam += OnStageInfoUpdate;
+                    singleStage.OnLeftReceiveStageParam -= OnStageInfo;
+                    singleStage.OnLeftReceiveStageParam += OnStageInfo;
                     break;
 
                 case ETeamType.Right:
-                    singleStage.OnRightReceiveStageParam -= OnStageInfoUpdate;
-                    singleStage.OnRightReceiveStageParam += OnStageInfoUpdate;
+                    singleStage.OnRightReceiveStageParam -= OnStageInfo;
+                    singleStage.OnRightReceiveStageParam += OnStageInfo;
                     break;
             }
         }
     }
 
-    public override void OnStageInfoUpdate(StageParam param)
+    public override void OnStageInfo(StageParam param)
     {
         if(param is CrossingBridgeParam crossingParam)
         {

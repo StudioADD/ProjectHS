@@ -43,12 +43,12 @@ public class UI_SharkAvoidancePresenter : UI_PresenterBase
     {
         if (stage is MultiStage multiStage)
         {
-            multiStage.OnReceiveStageParam -= OnStageInfoUpdate;
-            multiStage.OnReceiveStageParam += OnStageInfoUpdate;
+            multiStage.OnReceiveStageParam -= OnStageInfo;
+            multiStage.OnReceiveStageParam += OnStageInfo;
         }
     }
 
-    public override void OnStageInfoUpdate(StageParam param)
+    public override void OnStageInfo(StageParam param)
     {
         if(param is SharkAvoidanceParam sharkAvoidanceParam)
         {

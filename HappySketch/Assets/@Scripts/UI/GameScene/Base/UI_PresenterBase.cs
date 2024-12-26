@@ -20,7 +20,7 @@ public abstract class UI_PresenterBase
 
     public UI_ModelBase GetModel() { return model; }
 
-    public abstract void OnStageInfoUpdate(StageParam param);
+    public abstract void OnStageInfo(StageParam param);
 
     public abstract void ConnectStageEvents(BaseStage stage);
 
